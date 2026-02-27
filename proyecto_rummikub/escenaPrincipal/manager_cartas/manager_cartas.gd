@@ -13,6 +13,7 @@ var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsad
 
 var lista_cartas: Array[Node] # lista de objetos carta
 var indice_lista_cartas: int = 0 # numero de cartas en pantalla
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -50,6 +51,7 @@ func _crear_carta() -> Node:
 	var posibles_cartas = ["corazones", "picas", "treboles", "diamantes"]
 	var carta: Node = Carta.carta(posibles_cartas[randi()%4])
 	add_child(carta)
+	
 	carta.cursor_sobre_carta.connect(_entro_cursor_en_carta)
 	carta.cursor_no_sobre_carta.connect(_salio_cursor_en_carta)
 	return carta
