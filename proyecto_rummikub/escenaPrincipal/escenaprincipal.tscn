@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bxlkgyvjo1kko"]
+
+[ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_cartas/manager_cartas.gd" id="1_fdp1d"]
+[ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_cartas/mano/mano.gd" id="2_l7e7q"]
+
+[node name="escenaPrincipal" type="Node2D" unique_id=255758278]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
+
+[node name="managerCartas" type="Node2D" parent="." unique_id=589849570]
+script = ExtResource("1_fdp1d")
+
+[node name="mano" type="Node2D" parent="managerCartas" unique_id=1443726227]
+script = ExtResource("2_l7e7q")
+
+[node name="tablero" type="Node2D" parent="managerCartas" unique_id=2145572479]
