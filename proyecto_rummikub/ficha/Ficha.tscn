@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://d2m3pflispvhh"]
+
+[ext_resource type="Script" uid="uid://diiqjqmbuekht" path="res://proyecto_rummikub/ficha/Ficha.gd" id="1_en3ta"]
+[ext_resource type="Texture2D" uid="uid://cvx6loh6kb2xv" path="res://imagenes/asspicas.jpg" id="2_vmqyy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0wtaq"]
+size = Vector2(70, 98)
+
+[node name="Carta" type="Node2D" unique_id=1732648488 node_paths=PackedStringArray("area2d")]
+script = ExtResource("1_en3ta")
+area2d = NodePath("Area2D")
+
+[node name="assDePicas" type="Sprite2D" parent="." unique_id=579691819]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_vmqyy")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=105169879]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=238704039]
+shape = SubResource("RectangleShape2D_0wtaq")
