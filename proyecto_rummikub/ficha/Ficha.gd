@@ -1,19 +1,19 @@
-class_name Carta extends Node2D
+class_name Ficha extends Node2D
 @export var area2d: Area2D
 
-static var escena_carta: PackedScene = preload("res://proyecto_rummikub/carta/Carta.tscn")
+static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
 
-signal cursor_sobre_carta
-signal cursor_no_sobre_carta
+signal cursor_sobre_ficha
+signal cursor_no_sobre_ficha
 static var indice: int = -1
 var mi_indice: int
 
-static func carta(color: String) -> Node2D:
-	var carta_creada: Node2D = escena_carta.instantiate()
-	carta_creada.name = str((indice +1 ))
-	carta_creada.cambiar_sprite(color)
-	return carta_creada
-
+static func ficha(color: String) -> Node2D:
+	var ficha_creada: Node2D = escena_ficha.instantiate()
+	ficha_creada.name = str((indice +1 ))
+	ficha_creada.cambiar_sprite(color)
+	return ficha_creada
+# bonasera bambino 
 func cambiar_sprite(color: String):
 	match color:
 		"corazones":
@@ -38,7 +38,7 @@ func _process(_delta: float) -> void:
 	pass
 
 func _emitir_señal_entrada():
-	cursor_sobre_carta.emit(mi_indice)
+	cursor_sobre_ficha.emit(mi_indice)
 
 func _emitir_señal_salida():
-	cursor_no_sobre_carta.emit(mi_indice)
+	cursor_no_sobre_ficha.emit(mi_indice)

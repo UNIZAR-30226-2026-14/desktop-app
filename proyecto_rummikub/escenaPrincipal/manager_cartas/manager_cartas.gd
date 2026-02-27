@@ -11,9 +11,14 @@ var sobre_quien: int = -1 # porta el indice de la carta sobre la que esta el cur
 						  # si no es nadie se pone un -1
 var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsado el clic izquierdo
 
+<<<<<<< HEAD
 var lista_cartas: Array[Node] # lista de objetos carta
 var indice_lista_cartas: int = 0 # numero de cartas en pantalla
 
+=======
+var lista_fichas: Array[Node] # lista de objetos carta
+var indice_lista_fichas: int = 0 # numero de cartas en pantalla
+>>>>>>> refs/remotes/origin/master
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -27,26 +32,27 @@ func _input(event: InputEvent) -> void:
 		# si se pulsa sobre un espacio no vacio 
 			print("clicado sobre carta")
 			posicion_clic = get_global_mouse_position()
-			lista_cartas[sobre_quien].z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
+			lista_fichas[sobre_quien].z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 			clicando = true 
 		elif event.is_released():
 		# si se deja de clicar 
 			print("deja de clicar")
-			lista_cartas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
+			lista_fichas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
 			clicando = false
 		elif (sobre_quien == -1) and event.is_pressed():
 		# si se pulsa sobre un lugar sin cartas se genera una carta nueva
-			lista_cartas.insert(indice_lista_cartas,_crear_carta())
-			lista_cartas[indice_lista_cartas].position = get_global_mouse_position()
-			indice_lista_cartas += 1
+			lista_fichas.insert(indice_lista_fichas,_crear_ficha())
+			lista_fichas[indice_lista_fichas].position = get_global_mouse_position()
+			indice_lista_fichas += 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if (sobre_quien != -1) and clicando:
 		var posicion_raton = get_global_mouse_position()
-		lista_cartas[sobre_quien].position += posicion_raton - posicion_clic
+		lista_fichas[sobre_quien].position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
 
+<<<<<<< HEAD
 func _crear_carta() -> Node:
 	var posibles_cartas = ["corazones", "picas", "treboles", "diamantes"]
 	var carta: Node = Carta.carta(posibles_cartas[randi()%4])
@@ -55,8 +61,17 @@ func _crear_carta() -> Node:
 	carta.cursor_sobre_carta.connect(_entro_cursor_en_carta)
 	carta.cursor_no_sobre_carta.connect(_salio_cursor_en_carta)
 	return carta
+=======
+func _crear_ficha() -> Node:
+	var posibles_fichas = ["corazones", "picas", "treboles", "diamantes"]
+	var ficha: Node = Ficha.ficha(posibles_fichas[randi()%4])
+	add_child(ficha)
+	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
+	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
+	return ficha
+>>>>>>> refs/remotes/origin/master
 
-func _entro_cursor_en_carta(id: int):
+func _entro_cursor_en_ficha(id: int):
 	if not clicando:
 		if sobre_quien == -1:
 			sobre_quien = id
@@ -64,7 +79,7 @@ func _entro_cursor_en_carta(id: int):
 		print("entraron en " + str(id))
 		sobre_quien = id
 
-func _salio_cursor_en_carta(id: int):
+func _salio_cursor_en_ficha(id: int):
 	desresaltar(id)
 	if not clicando:
 		if sobre_quien == id :
@@ -75,7 +90,7 @@ func _salio_cursor_en_carta(id: int):
 			resaltar(sobre_quien)
 
 func resaltar(id: int):
-	lista_cartas[id].scale = escala_aumentada
+	lista_fichas[id].scale = escala_aumentada
 
 func desresaltar(id:int):
-	lista_cartas[id].scale = escala_por_defecto
+	lista_fichas[id].scale = escala_por_defecto
