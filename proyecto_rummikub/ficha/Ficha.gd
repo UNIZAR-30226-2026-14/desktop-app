@@ -1,19 +1,27 @@
 class_name Ficha extends Node2D
 @export var area2d: Area2D
 
-static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
-
 signal cursor_sobre_ficha
 signal cursor_no_sobre_ficha
+
+static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
 static var indice: int = -1
-var mi_indice: int
+
+var mi_indice : int
+var miGrupo : Grupo_fichas = null
 
 static func ficha(color: String) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
 	ficha_creada.name = str((indice +1 ))
 	ficha_creada.cambiar_sprite(color)
 	return ficha_creada
-# bonasera bambino 
+
+func set_grupo(grupo: Grupo_fichas):
+	miGrupo = grupo
+	
+func get_grupo() -> Grupo_fichas:
+	return miGrupo
+
 func cambiar_sprite(color: String):
 	match color:
 		"corazones":
@@ -33,9 +41,6 @@ func _ready() -> void:
 	area2d.mouse_entered.connect(_emitir_señal_entrada)
 	area2d.mouse_exited.connect(_emitir_señal_salida)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
 
 func _emitir_señal_entrada():
 	cursor_sobre_ficha.emit(mi_indice)
