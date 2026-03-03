@@ -13,7 +13,10 @@ static func ficha(color: String) -> Node2D:
 	ficha_creada.name = str((indice +1 ))
 	ficha_creada.cambiar_sprite(color)
 	return ficha_creada
-# bonasera bambino 
+
+func tamano_ficha() -> Vector2:
+	return Vector2($Area2D/CollisionShape2D.shape.get_size())
+
 func cambiar_sprite(color: String):
 	match color:
 		"corazones":
