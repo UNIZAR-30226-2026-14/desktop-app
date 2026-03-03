@@ -16,11 +16,16 @@ static func ficha(color: String) -> Node2D:
 	ficha_creada.cambiar_sprite(color)
 	return ficha_creada
 
+<<<<<<< HEAD
 func set_grupo(grupo: Grupo_fichas):
 	miGrupo = grupo
 	
 func get_grupo() -> Grupo_fichas:
 	return miGrupo
+=======
+func tamano_ficha() -> Vector2:
+	return Vector2($Area2D/CollisionShape2D.shape.get_size())
+>>>>>>> 23f6c2c53ac37b85f96987d8298e64c7fea464ff
 
 func cambiar_sprite(color: String):
 	match color:
