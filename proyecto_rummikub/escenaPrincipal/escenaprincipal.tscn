@@ -2,19 +2,47 @@
 
 [ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/manager_fichas.gd" id="1_fdp1d"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
+<<<<<<< HEAD
 [ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/tablero.gd" id="3_l7e7q"]
+=======
+[ext_resource type="Texture2D" uid="uid://bjt762qw1b5f0" path="res://imagenes/icono_ordenar_cartas/ordenar_por_numero.png" id="4_qada0"]
+[ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/robar_carta.png" id="5_qada0"]
+[ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
+>>>>>>> b20635a8123bd3372cabc35b90b7fa682bfb7a87
 
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 
-[node name="managerFichas" type="Node2D" parent="." unique_id=589849570]
+[node name="managerFichas" type="Node2D" parent="." unique_id=589849570 node_paths=PackedStringArray("mano", "tablero", "robarCarta")]
 script = ExtResource("1_fdp1d")
+mano = NodePath("mano")
+tablero = NodePath("tablero")
+robarCarta = NodePath("robarCarta")
 
-[node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227]
+[node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227 node_paths=PackedStringArray("ordenarNumero", "ordenarColor")]
 script = ExtResource("2_l7e7q")
+ordenarNumero = NodePath("ordenarNumero")
+ordenarColor = NodePath("ordenarColor")
+
+[node name="ordenarColor" type="Button" parent="managerFichas/mano" unique_id=995823319]
+offset_left = 498.99997
+offset_top = 83.99999
+offset_right = 1019.0
+offset_bottom = 604.0
+scale = Vector2(0.1, 0.1)
+icon = ExtResource("6_nj8sc")
+
+[node name="ordenarNumero" type="Button" parent="managerFichas/mano" unique_id=1435978425]
+offset_left = 497.99988
+offset_top = 164.99997
+offset_right = 1017.9999
+offset_bottom = 685.0
+scale = Vector2(0.1, 0.1)
+icon = ExtResource("4_qada0")
 
 [node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
+<<<<<<< HEAD
 script = ExtResource("3_l7e7q")
 
 [node name="guarda" type="Button" parent="." unique_id=826286047]
@@ -34,3 +62,13 @@ text = "agnade carta
 
 [connection signal="pressed" from="guarda" to="managerFichas/tablero" method="_on_guarda_pressed"]
 [connection signal="pressed" from="vuelve" to="managerFichas/tablero" method="_on_vuelve_pressed"]
+=======
+
+[node name="robarCarta" type="Button" parent="managerFichas" unique_id=532416471]
+offset_left = 498.99994
+offset_top = 240.99994
+offset_right = 1018.99994
+offset_bottom = 760.99994
+scale = Vector2(0.1, 0.1)
+icon = ExtResource("5_qada0")
+>>>>>>> b20635a8123bd3372cabc35b90b7fa682bfb7a87

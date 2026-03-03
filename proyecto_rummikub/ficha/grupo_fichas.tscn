@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://d3ibpgbdeivkw"]
+
+[ext_resource type="Script" uid="uid://db4wlw4qkrle4" path="res://Grupo_fichas.gd" id="1_jp8yq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rofny"]
+
+[node name="Node2D" type="Node2D" unique_id=859328375]
+script = ExtResource("1_jp8yq")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1364697814]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=289113106]
+shape = SubResource("RectangleShape2D_rofny")

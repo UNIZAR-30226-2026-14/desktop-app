@@ -1,6 +1,11 @@
 extends Node2D
+@export var mano: Node2D
+@export var tablero: Node2D
 
 @export var escala_aumentada: Vector2 = Vector2(1.2,  1.2) 
+@export var robarCarta: Button
+
+var max_fichas: int = 10 # es para debuggear
 # cuanto aumenta la escala del la carta al poner el cursor sobre ella
 
 @export var escala_por_defecto: Vector2 = Vector2(1.0,  1.0) 
@@ -16,7 +21,8 @@ var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	robarCarta.pressed.connect(robar_carta)
+
 
 # esta funcion se realiza cada vez que hay una entrada de un periferico (creo)
 func _unhandled_input(event: InputEvent) -> void:
@@ -29,16 +35,24 @@ func _unhandled_input(event: InputEvent) -> void:
 			posicion_clic = get_global_mouse_position()
 			lista_fichas[sobre_quien].z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 			clicando = true 
+			mano.quitar_carta(lista_fichas[sobre_quien])
+
 		elif event.is_released():
 		# si se deja de clicar 
-			print("deja de clicar")
-			lista_fichas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
 			clicando = false
-		elif (sobre_quien == -1) and event.is_pressed():
-		# si se pulsa sobre un lugar sin cartas se genera una carta nueva
-			lista_fichas.insert(indice_lista_fichas,_crear_ficha())
-			lista_fichas[indice_lista_fichas].position = get_global_mouse_position()
-			indice_lista_fichas += 1
+			print("deja de clicar")
+			if(lista_fichas.size()!=0):
+				lista_fichas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
+				if(sobre_quien != -1):
+					mano.anadir_ficha(lista_fichas[sobre_quien])
+			
+
+		#elif (sobre_quien == -1) and event.is_pressed() and (indice_lista_fichas < max_fichas):
+		## si se pulsa sobre un lugar sin cartas se genera una carta nueva
+			#lista_fichas.insert(indice_lista_fichas,_crear_ficha())
+			#mano.anadir_ficha(lista_fichas[indice_lista_fichas])
+			##lista_fichas[indice_lista_fichas].position = get_global_mouse_position()
+			#indice_lista_fichas += 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -62,15 +76,15 @@ func _entro_cursor_en_ficha(id: int):
 			sobre_quien = id
 			resaltar(id)
 		print("entraron en " + str(id))
+		print("prioridad: " + str(lista_fichas[id].z_index))
 		sobre_quien = id
 
 func _salio_cursor_en_ficha(id: int):
-	desresaltar(id)
 	if not clicando:
+		desresaltar(id)
 		if sobre_quien == id :
 			print("salio de " + str(id))
 			sobre_quien = -1
-			print(1)
 		elif id != -1:
 			resaltar(sobre_quien)
 
@@ -79,3 +93,15 @@ func resaltar(id: int):
 
 func desresaltar(id:int):
 	lista_fichas[id].scale = escala_por_defecto
+
+func robar_carta() -> void:
+	
+	lista_fichas.insert(indice_lista_fichas,_crear_ficha())
+	mano.anadir_ficha(lista_fichas[indice_lista_fichas])
+
+	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
+	lista_fichas[indice_lista_fichas].z_index -= 1
+	if(indice_lista_fichas > 1):
+		lista_fichas[indice_lista_fichas-1].z_index += 1
+
+	indice_lista_fichas += 1

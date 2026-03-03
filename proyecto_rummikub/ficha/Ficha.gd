@@ -9,7 +9,7 @@ static var indice: int = -1
 const tamano_fichas : Vector2 = Vector2(70.0, 98.0)
 
 var mi_indice : int
-var miGrupo : Grupo_fichas = null
+var miGrupo : Grupo_fichas
 
 static func ficha(color: String) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
