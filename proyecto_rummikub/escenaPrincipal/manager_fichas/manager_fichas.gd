@@ -20,6 +20,7 @@ var lista_fichas: Array[Node] # lista de objetos carta
 var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 
 
+# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	robarCarta.pressed.connect(robar_carta)
 
@@ -61,14 +62,13 @@ func _process(_delta: float) -> void:
 		lista_fichas[sobre_quien].position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
 
+
 func _crear_ficha() -> Node:
 	var posibles_fichas = ["corazones", "picas", "treboles", "diamantes"]
 	var ficha: Node = Ficha.ficha(posibles_fichas[randi()%4])
 	add_child(ficha)
 	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
-	
-	
 	return ficha
 
 func _entro_cursor_en_ficha(id: int):
