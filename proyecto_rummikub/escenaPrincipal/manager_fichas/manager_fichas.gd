@@ -4,7 +4,6 @@ extends Node2D
 
 @export var robarCarta: Button
 
-var max_fichas: int = 10 # es para debuggear
 var escala_aumentada: Vector2 = Vector2(1.2,  1.2) 
 # cuanto aumenta la escala del la carta al poner el cursor sobre ella
 
@@ -19,6 +18,7 @@ var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsad
 var lista_fichas: Array[Node] # lista de objetos carta
 var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 
+var fichaVacia: Node2D = Ficha.ficha("blanco")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -36,17 +36,18 @@ func _input(event: InputEvent) -> void:
 			posicion_clic = get_global_mouse_position()
 			lista_fichas[sobre_quien].z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 			clicando = true 
-			mano.quitar_carta(lista_fichas[sobre_quien])
+			mano.quitar_ficha(lista_fichas[sobre_quien])
 
 		elif event.is_released():
 		# si se deja de clicar 
 			clicando = false
 			print("deja de clicar")
+			
 			if(lista_fichas.size()!=0):
 				lista_fichas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
 				if(sobre_quien != -1):
-					mano.anadir_ficha(lista_fichas[sobre_quien])
-			
+					mano.devolver_ficha(lista_fichas[sobre_quien])
+					
 
 		#elif (sobre_quien == -1) and event.is_pressed() and (indice_lista_fichas < max_fichas):
 		## si se pulsa sobre un lugar sin cartas se genera una carta nueva
@@ -79,6 +80,8 @@ func _entro_cursor_en_ficha(id: int):
 		print("entraron en " + str(id))
 		print("prioridad: " + str(lista_fichas[id].z_index))
 		sobre_quien = id
+	elif sobre_quien != -1:
+		mano.intercambiar(lista_fichas[id])
 
 func _salio_cursor_en_ficha(id: int):
 	if not clicando:
@@ -102,7 +105,7 @@ func robar_carta() -> void:
 
 	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
 	lista_fichas[indice_lista_fichas].z_index -= 1
-	if(indice_lista_fichas > 1):
+	if(indice_lista_fichas >= 1):
 		lista_fichas[indice_lista_fichas-1].z_index += 1
 
 	indice_lista_fichas += 1

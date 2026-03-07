@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dc0sjgflcb6bc"]
+
+[ext_resource type="Script" uid="uid://cbc6r3x84ejtj" path="res://godot-radial-progress-indicator-b9a5263bd41c72cc396344a98a8f11a19e3312bb/addons/radial_progress/RadialProgress.gd" id="1_372ep"]
+[ext_resource type="Script" uid="uid://cb5pfg63d2mpk" path="res://proyecto_rummikub/menuTransicion/menu_transicion.gd" id="1_p2bay"]
+
+[node name="MenuTransicion" type="Control" unique_id=1043502718 node_paths=PackedStringArray("circulo_progreso", "texto_esperando_Oponente")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p2bay")
+circulo_progreso = NodePath("RadialProgress")
+texto_esperando_Oponente = NodePath("textoBuscandoOponentes")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=583971408]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.41960785, 0.078431375, 1)
+
+[node name="RadialProgress" type="Control" parent="." unique_id=1362686982]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = 13.0
+offset_right = 39.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_372ep")
+radius = 90.0
+bg_color = Color(0, 0.41960785, 0.078431375, 1)
+bar_color = Color(0.2, 0.9019608, 0.7490196, 1)
+metadata/_custom_type_script = "uid://cbc6r3x84ejtj"
+
+[node name="textoBuscandoOponentes" type="Label" parent="." unique_id=1968291226]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = -124.0
+offset_right = 88.0
+offset_bottom = -101.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Buscando oponentes..."
