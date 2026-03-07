@@ -12,6 +12,9 @@ var tamano_ficha: Vector2
 var altura_mano: float
 var fichas_por_fila: int = 5
 var fichas_en_mano: Array[Node]
+
+var ficha_en_blanco: Node2D = Ficha.ficha("blanco")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	altura_mano = get_viewport().size.y / 4
@@ -28,8 +31,31 @@ func anadir_ficha(ficha:Node) -> void:
 	fichas_en_mano.append(ficha)
 	actualizar_posicion_mano()
 
-func quitar_carta(ficha:Node) -> void:
-	fichas_en_mano.erase(ficha)
+func quitar_ficha(ficha:Node) -> void:
+	var ficha_sacada: int = fichas_en_mano.find(ficha)
+	fichas_en_mano.set(ficha_sacada,ficha_en_blanco)
+	actualizar_posicion_mano()
+
+func devolver_ficha(ficha:Node) -> void:
+	var estaba_en: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
+	fichas_en_mano.set(estaba_en,ficha)
+	actualizar_posicion_mano()
+
+func intercambiar(ficha:Node) -> void:
+	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
+	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
+	if(indice_donde_estaba < indice_ficha_intercambiar):
+		fichas_en_mano.insert(indice_ficha_intercambiar+1,ficha_en_blanco)
+		fichas_en_mano.remove_at(indice_donde_estaba)
+
+	else:
+		if (indice_ficha_intercambiar-1) < 0:
+			fichas_en_mano.insert(0,ficha_en_blanco)
+			fichas_en_mano.remove_at(indice_donde_estaba+1)
+		else:
+			fichas_en_mano.insert(indice_ficha_intercambiar-1,ficha_en_blanco)
+			fichas_en_mano.remove_at(indice_donde_estaba+1)
+
 	actualizar_posicion_mano()
 
 func actualizar_posicion_mano() -> void:

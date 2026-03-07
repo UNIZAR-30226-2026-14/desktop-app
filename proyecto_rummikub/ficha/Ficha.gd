@@ -10,6 +10,7 @@ const tamano_fichas : Vector2 = Vector2(70.0, 98.0)
 
 var mi_indice : int
 var miGrupo : Grupo_fichas
+var en_blanco : bool
 
 static func ficha(color: String) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
@@ -33,6 +34,7 @@ func tamano_ficha() -> Vector2:
 	return Vector2($Area2D/CollisionShape2D.shape.get_size())
 
 func cambiar_sprite(color: String):
+	en_blanco = false
 	match color:
 		"corazones":
 			$assDePicas.texture = load("res://imagenes/asscorazones.jpg")
@@ -42,6 +44,8 @@ func cambiar_sprite(color: String):
 			$assDePicas.texture = load("res://imagenes/asstreboles.jpg")
 		"diamantes":
 			$assDePicas.texture = load("res://imagenes/assdiamantes.jpg")
+		"blanco":
+			en_blanco = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
