@@ -7,7 +7,17 @@
 [node name="Node2D" type="Node2D" unique_id=859328375]
 script = ExtResource("1_jp8yq")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=1364697814]
+[node name="izquierda" type="Area2D" parent="." unique_id=1364697814]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=289113106]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="izquierda" unique_id=289113106]
 shape = SubResource("RectangleShape2D_rofny")
+
+[node name="derecha" type="Area2D" parent="." unique_id=646874030]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="derecha" unique_id=955843647]
+shape = SubResource("RectangleShape2D_rofny")
+
+[connection signal="mouse_entered" from="izquierda" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="izquierda" to="." method="_on_area_2d_mouse_exited"]
+[connection signal="mouse_entered" from="derecha" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="derecha" to="." method="_on_area_2d_mouse_exited"]

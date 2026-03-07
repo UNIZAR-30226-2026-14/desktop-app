@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/manager_fichas.gd" id="1_fdp1d"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
 [ext_resource type="Texture2D" uid="uid://bjt762qw1b5f0" path="res://imagenes/icono_ordenar_cartas/ordenar_por_numero.png" id="4_qada0"]
+[ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/tablero.gd" id="5_nj8sc"]
 [ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/robar_carta.png" id="5_qada0"]
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
 
@@ -38,6 +39,7 @@ scale = Vector2(0.1, 0.1)
 icon = ExtResource("4_qada0")
 
 [node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
+script = ExtResource("5_nj8sc")
 
 [node name="robarCarta" type="Button" parent="managerFichas" unique_id=532416471]
 offset_left = 498.99994
@@ -46,3 +48,12 @@ offset_right = 1018.99994
 offset_bottom = 760.99994
 scale = Vector2(0.1, 0.1)
 icon = ExtResource("5_qada0")
+
+[node name="Button" type="Button" parent="." unique_id=1707005207]
+offset_left = -397.0
+offset_top = 171.0
+offset_right = -279.0
+offset_bottom = 202.0
+text = "AÑADE CARTA"
+
+[connection signal="pressed" from="Button" to="managerFichas" method="_boton_prueba"]

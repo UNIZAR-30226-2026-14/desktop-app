@@ -15,16 +15,17 @@ func _process(_delta: float) -> void:
 	pass
 
 
-var grupo 
 func _on_guarda_pressed() -> void:
-	grupo = grupoFichas.instantiate()
-	self.add_child(grupo)
+	pass
 	#for ficha in fichas:
 		#fichas_viejas[ficha] = ficha.position
 		#print(fichas_viejas[ficha])
 
 
 func _on_vuelve_pressed() -> void:
-	grupo.anadir_carta(fichas[0])
-	#for ficha in fichas_viejas.keys():
+	pass	#for ficha in fichas_viejas.keys():
 		#ficha.position = fichas_viejas[ficha]
+
+
+func _on_robar_carta_pressed() -> void:
+	pass # Replace with function body.

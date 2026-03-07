@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://brcdtb6l3oho5"]
+
+[ext_resource type="Script" uid="uid://dm484nb63e4og" path="res://proyecto_rummikub/escenaPrincipal/prueba_grupo.gd" id="1_gl13g"]
+[ext_resource type="PackedScene" uid="uid://d3ibpgbdeivkw" path="res://proyecto_rummikub/ficha/grupo_fichas.tscn" id="2_prjjf"]
+
+[node name="escenaPrincipal" type="Node2D" unique_id=255758278]
+script = ExtResource("1_gl13g")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
+
+[node name="agnade carta" type="Button" parent="." unique_id=1432563881]
+offset_left = 43.0
+offset_top = 140.0
+offset_right = 152.0
+offset_bottom = 171.0
+text = "agnade carta"
+
+[node name="grupo" parent="." unique_id=859328375 instance=ExtResource("2_prjjf")]
+
+[connection signal="pressed" from="agnade carta" to="." method="_on_agnade_carta_pressed"]
