@@ -1,7 +1,7 @@
 class_name Grupo_fichas extends Node2D
 
-signal sobre_mi
-signal no_sobre_mi
+signal cursor_sobre_grupo
+signal cuersor_fuera_grupo
 
 
 # Agrupación de cartas, usado para verificar correcta posición de la mesa
