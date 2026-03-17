@@ -1,7 +1,7 @@
 class_name Grupo_fichas extends Node2D
 
-signal cursor_sobre_grupo
-signal cuersor_fuera_grupo
+signal sobre_mi
+signal no_sobre_mi
 
 
 # Agrupación de cartas, usado para verificar correcta posición de la mesa
@@ -9,14 +9,14 @@ signal cuersor_fuera_grupo
 # Se le pueden añadir y quitar fichas, puede partirse en dos (devolviendo el nuevo grupo de fichas creado)
 # Posee dos area2D que permiten a manager_fichas darle una carta o cartas nuevas
 
-const escena = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
+static var escena: PackedScene = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 const tamano_extra = 1.5
 
 var fichas : Array[Ficha] = []
 var anchura_hitbox = Ficha.tamano_ficha_static().x * tamano_extra
 
 static func Grupo_fichas(listaFichas : Array[Ficha]) -> Grupo_fichas:
-	var grupo  : Grupo_fichas = escena.instantiate()
+	var grupo: Grupo_fichas  = escena.instantiate()
 	for ficha in listaFichas :
 		grupo.anadir_ficha_fin(ficha)
 	return grupo

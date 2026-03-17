@@ -1,9 +1,22 @@
 extends Node2D
 
+#Responsabilidad: Guardar estado (grupos de fichas puestos en mesa) al principio de turno
+#					Durante el turno, lleva cuenta de qué fichas nuevas se colocan (para permitir al
+#					manager devolverlas a la mano y de los grupos de fichas actualizados.
+#					Puede comprobar si los grupos de fichas actualizados están en posiciones permitidas
+
 var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
-var fichas = []
-var fichas_viejas = {}
+var grupos: Array[Grupo_fichas] = []
+var gruposViejos = {}
+
+func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:
+	grupos.append(grupo)
+	self.add_child(grupo)
+
+func quitar_grupo_fichas(grupo: Grupo_fichas) -> void:
+	grupos.erase(grupo)
+	self.remove_child(grupo)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

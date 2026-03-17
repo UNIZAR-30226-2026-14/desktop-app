@@ -16,7 +16,7 @@ var max_fichas: int = 10 # es para debuggear
 
 
 var clicando: bool = false # indica si se esta pulsando el clic izquierdo
-var sobre_quien: int = -1 # porta el indice de la carta sobre la que esta el cursor
+var sobre_quien: Node = null#int = -1 # porta el indice de la carta sobre la que esta el cursor
 						  # si no es nadie se pone un -1
 var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsado el clic izquierdo
 
@@ -32,25 +32,33 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
-		if (sobre_quien != -1) and event.is_pressed(): 
+		if (sobre_quien != null) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			print("clicado sobre carta")
+			mano.quitar_ficha(sobre_quien)
 			posicion_clic = get_global_mouse_position()
-			lista_fichas[sobre_quien].z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
+			sobre_quien.z_index += 1#lista_fichas[sobre_quien].z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 			clicando = true 
-
-			mano.quitar_ficha(lista_fichas[sobre_quien])
+			
+			#self.add_child(lista_fichas[sobre_quien])
+			#mano.quitar_ficha(lista_fichas[sobre_quien])
 
 		elif event.is_released():
 		# si se deja de clicar 
 			clicando = false
 			print("deja de clicar")
 			
-			if(lista_fichas.size()!=0):
-				lista_fichas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
-				if(sobre_quien != -1):
-					mano.devolver_ficha(lista_fichas[sobre_quien])
-					
+			#if(lista_fichas.size()!=0):
+			if(sobre_quien != null):
+				sobre_quien.z_index -= 1 #lista_fichas[sobre_quien].z_index -= 1 # se le baja la prioridad a la carta
+				self.remove_child(sobre_quien)
+				# if hitbox de mano
+				#mano.devolver_ficha(sobre_quien)#lista_fichas[sobre_quien])
+				#else
+				# 
+				var grupo: Grupo_fichas = Grupo_fichas.Grupo_fichas([sobre_quien])
+				$tablero.anadir_grupo_fichas(grupo)
+				
 
 		#elif (sobre_quien == -1) and event.is_pressed() and (indice_lista_fichas < max_fichas):
 		## si se pulsa sobre un lugar sin cartas se genera una carta nueva
@@ -61,18 +69,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if (sobre_quien != -1) and clicando:
-		var movido = lista_fichas[sobre_quien]
+	if (sobre_quien != null) and clicando:
+		var movido = sobre_quien
 		if movido.get_grupo() != null: movido = movido.get_grupo()
 		var posicion_raton = get_global_mouse_position()
 		movido.position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
 
-func _crear_ficha() -> Node:
+func _crear_ficha() -> Ficha:
 	var posibles_fichas = ["corazones", "picas", "treboles", "diamantes"]
-	var ficha: Node = Ficha.ficha(posibles_fichas[randi()%4])
+	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4])
 	add_child(ficha)
-	$tablero.fichas.append(ficha)
 	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
 	lista_fichas.insert(indice_lista_fichas, ficha)
@@ -80,39 +87,39 @@ func _crear_ficha() -> Node:
 
 	return ficha
 
-func _entro_cursor_en_ficha(id: int):
+func _entro_cursor_en_ficha(ficha: Ficha):
 	if not clicando:
-		if sobre_quien == -1:
-			sobre_quien = id
-			resaltar(id)
-		print("entraron en " + str(id))
-		print("prioridad: " + str(lista_fichas[id].z_index))
-		sobre_quien = id
-	elif sobre_quien != -1:
-		mano.intercambiar(lista_fichas[id])
+		if sobre_quien == null:
+			sobre_quien = ficha
+			resaltar(ficha)
+		print("entraron en " + str(ficha.name))
+		print("prioridad: " + str(ficha.z_index))
+		sobre_quien = ficha
+	elif sobre_quien != null:
+		mano.intercambiar(ficha)
 
-func _salio_cursor_en_ficha(id: int):
+func _salio_cursor_en_ficha(ficha: Ficha):
 	if not clicando:
-		desresaltar(id)
-		if sobre_quien == id :
-			print("salio de " + str(id))
-			sobre_quien = -1
-		elif id != -1:
+		desresaltar(ficha)
+		if sobre_quien == ficha :
+			print("salio de " + str(ficha.name))
+			sobre_quien = null
+		elif ficha != null:
 			resaltar(sobre_quien)
 
-func resaltar(id: int):
-	lista_fichas[id].scale = escala_aumentada
+func resaltar(ficha: Ficha):
+	ficha.scale = escala_aumentada
 
-func desresaltar(id:int):
-	lista_fichas[id].scale = escala_por_defecto
+func desresaltar(ficha: Ficha):
+	ficha.scale = escala_por_defecto
 
 func robar_carta() -> void:
-	_crear_ficha()
-	mano.anadir_ficha(lista_fichas[indice_lista_fichas])
+	var fich = _crear_ficha()
+	mano.anadir_ficha(fich)
 	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
-	lista_fichas[indice_lista_fichas].z_index -= 1
-	if(indice_lista_fichas >= 1):
-		lista_fichas[indice_lista_fichas-1].z_index += 1
+	fich.z_index = 0
+	#if(indice_lista_fichas >= 1):
+		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 
 
@@ -126,23 +133,23 @@ func robar_carta() -> void:
 
 
 
-var unGrupo = null
-func _boton_prueba() -> void:
-	var ficha = _crear_ficha()
-	self.remove_child(ficha)
-	if unGrupo == null:
-		unGrupo = crea_grupo_fichas(ficha)
-	else: 
-		unGrupo.anadir_ficha(ficha)
-
-
-func crea_grupo_fichas(ficha : Ficha) -> Grupo_fichas:
-	var _grupo : Grupo_fichas = grupo.instantiate()
-	self.add_child(_grupo) 
-	_grupo.sobre_mi.connect(_sobre_grupo_fichas)
-	_grupo.no_sobre_mi.connect(_out_grupo_fichas)
-	_grupo.anadir_ficha(ficha)
-	return _grupo
+#var unGrupo = null
+#func _boton_prueba() -> void:
+	#var ficha = _crear_ficha()
+	#self.remove_child(ficha)
+	#if unGrupo == null:
+		#unGrupo = crea_grupo_fichas(ficha)
+	#else: 
+		#unGrupo.anadir_ficha(ficha)
+#
+#
+#func crea_grupo_fichas(ficha : Ficha) -> Grupo_fichas:
+	#var _grupo : Grupo_fichas = grupo.instantiate()
+	#self.add_child(_grupo) 
+	#_grupo.sobre_mi.connect(_sobre_grupo_fichas)
+	#_grupo.no_sobre_mi.connect(_out_grupo_fichas)
+	#_grupo.anadir_ficha(ficha)
+	#return _grupo
 
 func _sobre_grupo_fichas(grupo_sobrepasado : Grupo_fichas) -> void:
 	pass

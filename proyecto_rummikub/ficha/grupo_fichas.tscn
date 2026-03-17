@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d3ibpgbdeivkw"]
 
-[ext_resource type="Script" uid="uid://db4wlw4qkrle4" path="res://Grupo_fichas.gd" id="1_jp8yq"]
+[ext_resource type="Script" uid="uid://db4wlw4qkrle4" path="res://proyecto_rummikub/ficha/Grupo_fichas.gd" id="1_jp8yq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rofny"]
 

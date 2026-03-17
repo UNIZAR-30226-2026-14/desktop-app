@@ -1,5 +1,7 @@
 extends Node2D
 
+#Responsabilidad: Lleva cuenta de las fichas en la mano y les da su posición
+
 @export var ordenarNumero: Button
 @export var ordenarColor: Button
 
@@ -24,8 +26,6 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
 
 func anadir_ficha(ficha:Node) -> void:
 	fichas_en_mano.append(ficha)
