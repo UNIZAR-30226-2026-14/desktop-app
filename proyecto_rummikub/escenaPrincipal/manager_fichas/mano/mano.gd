@@ -28,10 +28,12 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 func anadir_ficha(ficha:Node) -> void:
+	self.add_child(ficha)
 	fichas_en_mano.append(ficha)
 	actualizar_posicion_mano()
 
 func quitar_ficha(ficha:Node) -> void:
+	self.remove_child(ficha)
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
 	fichas_en_mano.set(ficha_sacada,ficha_en_blanco)
 	actualizar_posicion_mano()

@@ -12,7 +12,6 @@ extends Node2D
 const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
 var max_fichas: int = 10 # es para debuggear
-# cuanto aumenta la escala del la carta al poner el cursor sobre ella
 
 
 var clicando: bool = false # indica si se esta pulsando el clic izquierdo
