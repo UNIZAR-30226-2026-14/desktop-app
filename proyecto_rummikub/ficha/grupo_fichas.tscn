@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://db4wlw4qkrle4" path="res://proyecto_rummikub/ficha/Grupo_fichas.gd" id="1_jp8yq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rofny"]
+resource_local_to_scene = true
 
 [node name="Node2D" type="Node2D" unique_id=859328375]
 script = ExtResource("1_jp8yq")

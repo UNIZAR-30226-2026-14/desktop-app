@@ -15,12 +15,14 @@ var max_fichas: int = 10 # es para debuggear
 
 
 var clicando: bool = false # indica si se esta pulsando el clic izquierdo
-var sobre_quien: Node = null # porta el indice de la carta sobre la que esta el cursor, si no es nadie se pone un -1
+var grupo_arrastrado: Grupo_fichas = null
+var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el cursor, si no es nadie se pone un -1
+var sobre_grupo: Grupo_fichas = null
+var sobre_lado_grupo
+
 var estado_cursor # puede ser: MANO, TABLERO, LIMBO
 var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsado el clic izquierdo
 
-var sobre_grupo: Node = null
-var sobre_lado_grupo
 var lista_fichas: Array[Ficha] # lista de objetos carta
 var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 var fichaVacia: Node2D = Ficha.ficha("blanco")
@@ -32,46 +34,45 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
-		if (sobre_quien != null) and event.is_pressed() : 
+		if (sobre_ficha != null) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			posicion_clic = get_global_mouse_position()
-			sobre_quien.z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 			clicando = true 
-			sacar(sobre_quien)
-
+			click_izquierdo(sobre_ficha)
+			grupo_arrastrado.z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 
 		elif event.is_released():
-		# si se deja de clicar 
-			clicando = false
-			
-			#if(lista_fichas.size()!=0):
-			if(sobre_quien != null):
-				sobre_quien.z_index -= 1 # se le baja la prioridad a la carta
-				#self.remove_child(sobre_quien)
+		# si se deja de clicar
+			if(grupo_arrastrado != null && clicando):
+				grupo_arrastrado.z_index -= 1 # se le baja la prioridad a la carta
 				if(globales.estado_cursor==globales.ESTADO_CURSOR.MANO 
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO):
 					print("Intento devolver")
-					mano.devolver_ficha(sobre_quien)
+					for ficha in grupo_arrastrado.fichas :
+						mano.devolver_ficha(ficha)
+					grupo_arrastrado.queue_free()
 				elif(sobre_grupo == null):
-					var nuevo_grupo = Grupo_fichas.Grupo_fichas([sobre_quien])
-					nuevo_grupo.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
-					nuevo_grupo.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
-					$tablero.anadir_grupo_fichas(nuevo_grupo)
-				else:
+					print("deja grupo, pq arrastra sobre no grupo")
+					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
+					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
+					$tablero.anadir_grupo_fichas(grupo_arrastrado)
+				else: # arrastra algo a grupo
+					print("arrastra sobre grupo")
 					if(sobre_lado_grupo == globales.IZQUIERDA):
-						sobre_grupo.anadir_ficha_principio(sobre_quien)
+						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
-						sobre_grupo.anadir_ficha_fin(sobre_quien)
-					
+						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
+				clicando = false
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if (sobre_quien != null) and clicando:
+	if (grupo_arrastrado != null) and clicando:
 		#var movido = sobre_quien
 		#if movido.get_grupo() != null: 
 		#	movido = movido.get_grupo()
 		var posicion_raton = get_global_mouse_position()
-		sobre_quien.position += posicion_raton - posicion_clic
+		grupo_arrastrado.position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
 
 func _crear_ficha() -> Ficha:
@@ -87,24 +88,22 @@ func _crear_ficha() -> Ficha:
 
 func _entro_cursor_en_ficha(ficha: Ficha):
 	if not clicando:
-		if sobre_quien == null:
-			sobre_quien = ficha
+		sobre_ficha = ficha
+		if sobre_ficha == null:
 			resaltar(ficha)
 		print("entraron en " + str(ficha.name))
-		print()
 		print("prioridad: " + str(ficha.z_index))
-		sobre_quien = ficha
-	elif sobre_quien != null:
+	elif sobre_ficha != null:
 		mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
 	if not clicando:
 		desresaltar(ficha)
-		if sobre_quien == ficha :
+		if sobre_ficha == ficha:
 			print("salio de " + str(ficha.name))
-			sobre_quien = null
+			sobre_ficha = null
 		elif ficha != null:
-			resaltar(sobre_quien)
+			resaltar(sobre_ficha)
 
 func resaltar(ficha: Ficha):
 	ficha.scale = escala_aumentada
@@ -120,19 +119,24 @@ func robar_carta() -> void:
 	#if(indice_lista_fichas >= 1):
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
-func sacar(ficha: Ficha) -> void:
+func click_izquierdo(ficha: Ficha) -> void:
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
-		mano.quitar_ficha(sobre_quien)
-		globales.apropiar_hijo(self, ficha)
-
+		mano.quitar_ficha(sobre_ficha)
+		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
+		globales.apropiar_hijo(self, grupo_arrastrado)
 	else:
 		var grupo_ficha = ficha.miGrupo
-		globales.apropiar_hijo(self, sobre_quien)
+		grupo_arrastrado = grupo_ficha
+		grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
+		grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
+		sobre_grupo = null
+		globales.apropiar_hijo(self, grupo_arrastrado)
+		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo
-		ficha.position += grupo_ficha.position
-		if(grupo_ficha.fichas.size()==1): # si solo les queda una ficha se elimina el grupo
-			grupo_ficha.get_parent().remove_child(grupo_ficha)
+		#ficha.position += grupo_ficha.position
+		#if(grupo_ficha.fichas.size()==1): # si solo les queda una ficha se elimina el grupo
+		#	grupo_ficha.get_parent().remove_child(grupo_ficha)
 
 
 
