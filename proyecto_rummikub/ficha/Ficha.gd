@@ -20,6 +20,7 @@ var en_blanco : bool
 
 static func ficha(color: String) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
+	ficha_creada.z_index = 0
 	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.name = str((indice +1 ))
 	ficha_creada.cambiar_sprite(color)

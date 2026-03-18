@@ -89,8 +89,7 @@ func _crear_ficha() -> Ficha:
 func _entro_cursor_en_ficha(ficha: Ficha):
 	if not clicando:
 		sobre_ficha = ficha
-		if sobre_ficha == null:
-			resaltar(ficha)
+		resaltar(ficha)
 		print("entraron en " + str(ficha.name))
 		print("prioridad: " + str(ficha.z_index))
 	elif sobre_ficha != null:
@@ -102,13 +101,15 @@ func _salio_cursor_en_ficha(ficha: Ficha):
 		if sobre_ficha == ficha:
 			print("salio de " + str(ficha.name))
 			sobre_ficha = null
-		elif ficha != null:
-			resaltar(sobre_ficha)
+		#elif ficha != null:
+			#resaltar(sobre_ficha)
 
 func resaltar(ficha: Ficha):
+	ficha.z_index += 1
 	ficha.scale = escala_aumentada
 
 func desresaltar(ficha: Ficha):
+	ficha.z_index -= 1
 	ficha.scale = escala_por_defecto
 
 func robar_carta() -> void:
