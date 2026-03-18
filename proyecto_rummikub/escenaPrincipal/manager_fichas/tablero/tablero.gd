@@ -12,16 +12,16 @@ var gruposViejos = {}
 
 func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:
 	grupos.append(grupo)
-	self.add_child(grupo)
+	globales.apropiar_hijo(self, grupo)
 
 func quitar_grupo_fichas(grupo: Grupo_fichas) -> void:
 	grupos.erase(grupo)
-	self.remove_child(grupo)
+	#self.remove_child(grupo)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
+	$AreaTablero.mouse_entered.connect(actualizar_estado_cursor_tablero)
+	$AreaTablero.mouse_exited.connect(actualizar_estado_cursor_limbo)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -42,3 +42,10 @@ func _on_vuelve_pressed() -> void:
 
 func _on_robar_carta_pressed() -> void:
 	pass # Replace with function body.
+
+
+func actualizar_estado_cursor_limbo() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.LIMBO
+
+func actualizar_estado_cursor_tablero() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO

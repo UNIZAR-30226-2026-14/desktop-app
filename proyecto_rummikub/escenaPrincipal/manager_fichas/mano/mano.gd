@@ -23,24 +23,29 @@ func _ready() -> void:
 	centro_pantalla_x =  0.0
 	ordenarNumero.pressed.connect(ordenar_por_numero)
 	ordenarColor.pressed.connect(ordenar_por_color)
+	$AreaMano.mouse_entered.connect(actualizar_estado_cursor_mano)
+	$AreaMano.mouse_exited.connect(actualizar_estado_cursor_limbo)
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 
 func anadir_ficha(ficha:Node) -> void:
-	self.add_child(ficha)
+	globales.apropiar_hijo(self, ficha)
+	ficha.estado = globales.ESTADO_FICHA.MANO
 	fichas_en_mano.append(ficha)
 	actualizar_posicion_mano()
 
 func quitar_ficha(ficha:Node) -> void:
-	self.remove_child(ficha)
+	#self.remove_child(ficha)
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
 	fichas_en_mano.set(ficha_sacada,ficha_en_blanco)
 	actualizar_posicion_mano()
 
 func devolver_ficha(ficha:Node) -> void:
+	globales.apropiar_hijo(self, ficha)
 	var estaba_en: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
+	print(estaba_en)
+	print()
 	fichas_en_mano.set(estaba_en,ficha)
+	ficha.estado = globales.ESTADO_FICHA.MANO
 	actualizar_posicion_mano()
 
 func intercambiar(ficha:Node) -> void:
@@ -68,11 +73,10 @@ func actualizar_posicion_mano() -> void:
 		var indice:float = 0
 		var fila:float = 0
 		var altura_inicial: float = altura_mano
-		print(anchura_ficha)
 		for ficha in fichas_en_mano:
-			print(indice)
 			ficha.position.x = anchura_ficha/2 + centro_pantalla_x + (distancia_entre_fichas_horizontal + anchura_ficha) * indice - tamano_mano/2
 			ficha.position.y = altura_inicial + (distancia_entre_fichas_vertical + altura_ficha)*fila
+			print("se pone en:" + str(ficha.position.x) + " "+ str(ficha.position.y))
 			indice += 1
 			if(indice == fichas_por_fila):
 				indice = 0
@@ -85,3 +89,9 @@ func ordenar_por_color() -> void:
 func ordenar_por_numero() -> void:
 	fichas_en_mano.sort_custom(func(a, b): return a.mi_indice <= b.mi_indice)
 	actualizar_posicion_mano()
+
+func actualizar_estado_cursor_limbo() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.LIMBO
+
+func actualizar_estado_cursor_mano() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.MANO

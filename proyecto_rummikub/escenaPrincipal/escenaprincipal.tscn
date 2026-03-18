@@ -3,9 +3,15 @@
 [ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/manager_fichas.gd" id="1_fdp1d"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
 [ext_resource type="Texture2D" uid="uid://bjt762qw1b5f0" path="res://imagenes/icono_ordenar_cartas/ordenar_por_numero.png" id="4_qada0"]
-[ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/tablero.gd" id="5_nj8sc"]
+[ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/tablero/tablero.gd" id="5_nj8sc"]
 [ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/robar_carta.png" id="5_qada0"]
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
+size = Vector2(426, 208)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2dt5"]
+size = Vector2(1148, 389)
 
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 
@@ -21,6 +27,13 @@ robarCarta = NodePath("robarCarta")
 script = ExtResource("2_l7e7q")
 ordenarNumero = NodePath("ordenarNumero")
 ordenarColor = NodePath("ordenarColor")
+
+[node name="AreaMano" type="Area2D" parent="managerFichas/mano" unique_id=1105991474]
+position = Vector2(64, -6)
+
+[node name="CollisionShapeMano" type="CollisionShape2D" parent="managerFichas/mano/AreaMano" unique_id=1873937284]
+position = Vector2(-76, 211)
+shape = SubResource("RectangleShape2D_nj8sc")
 
 [node name="ordenarColor" type="Button" parent="managerFichas/mano" unique_id=995823319]
 offset_left = 498.99997
@@ -40,6 +53,12 @@ icon = ExtResource("4_qada0")
 
 [node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
 script = ExtResource("5_nj8sc")
+
+[node name="AreaTablero" type="Area2D" parent="managerFichas/tablero" unique_id=667252577]
+
+[node name="CollisionShapeTablero" type="CollisionShape2D" parent="managerFichas/tablero/AreaTablero" unique_id=118488214]
+position = Vector2(1, -128.5)
+shape = SubResource("RectangleShape2D_j2dt5")
 
 [node name="robarCarta" type="Button" parent="managerFichas" unique_id=532416471]
 offset_left = 498.99994

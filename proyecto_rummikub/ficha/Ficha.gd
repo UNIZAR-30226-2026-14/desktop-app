@@ -11,6 +11,8 @@ static var indice: int = -1
 const tamano_fichas : Vector2 = Vector2(70.0, 98.0)
 
 var mi_indice : int
+# estado puede ser: MANO, TABLERO_FIJADA, TABLERO_NO_FIJADA
+var estado 
 var miGrupo : Grupo_fichas
 ## jugada o en la mano
 var jugada: bool
@@ -18,6 +20,7 @@ var en_blanco : bool
 
 static func ficha(color: String) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
+	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.name = str((indice +1 ))
 	ficha_creada.cambiar_sprite(color)
 	ficha_creada.get_child(1).get_child(0).shape.size = tamano_fichas
@@ -25,6 +28,7 @@ static func ficha(color: String) -> Node2D:
 	return ficha_creada
 
 func set_grupo(grupo: Grupo_fichas):
+	estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
 	miGrupo = grupo
 	
 func get_grupo() -> Grupo_fichas:
@@ -54,7 +58,6 @@ func cambiar_sprite(color: String):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("patata")
 	indice += 1
 	mi_indice = indice 
 	area2d.mouse_entered.connect(_emitir_señal_entrada)
