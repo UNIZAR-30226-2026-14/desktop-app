@@ -15,6 +15,7 @@ const tamano_extra = 1.5
 var fichas : Array[Ficha] = []
 var anchura_hitbox = Ficha.tamano_ficha_static().x * tamano_extra
 
+## Constructor
 static func Grupo_fichas(listaFichas : Array[Ficha]) -> Grupo_fichas:
 	var grupo: Grupo_fichas  = escena.instantiate()
 
@@ -27,13 +28,10 @@ static func Grupo_fichas(listaFichas : Array[Ficha]) -> Grupo_fichas:
 		#grupo.position += listaFichas[0].tamano_ficha().x / 2
 
 	for ficha in listaFichas :
-		ficha.position = Vector2(0.0,0.0)
-		ficha.estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
-		grupo.anadir_ficha_fin(ficha)
+		grupo.anadir_grupo_fin(ficha)
 	return grupo
 
 func _recalcula_anchura() -> void:
-	
 	$izquierda/CollisionShape2D.shape.size.x = anchura_hitbox / 2
 	$derecha/CollisionShape2D.shape.size.x = anchura_hitbox / 2
 	$izquierda/CollisionShape2D.position.x = -anchura_hitbox / 4
@@ -47,29 +45,54 @@ func _ready() -> void:
 	$izquierda.mouse_exited.connect(_emitir_señal_salida_izquierda)
 	$derecha.mouse_entered.connect(_emitir_señal_entrada_derecha)
 	$derecha.mouse_exited.connect(_emitir_señal_salida_derecha)
-	#_recalcula_anchura()
-
-func anadir_lista_fin() -> void:
-	pass
-
-func anadir_ficha_fin(ficha : Ficha) -> void:
-	globales.apropiar_hijo(self, ficha)
-	fichas.push_back(ficha)
-	ficha.set_grupo(self)
-	ficha.position.y = 0.0
-	anchura_hitbox += ficha.tamano_ficha().x
 	_recalcula_anchura()
-	#ficha.transform = Transform2D()
+
+## Quien llama a esta funcion debe encargarse de quien es el padre de la ficha
+func eliminar_ficha(ficha: Ficha) -> void:
+	fichas.erase(ficha)
+	anchura_hitbox -= ficha.tamano_ficha().x
+	_recalcula_anchura()
+
+func anadir_grupo_fin(grupo_o_ficha : Node2D) -> void:
+	var lista: Array[Ficha]
+	# modifica parametro de entrada
+	if grupo_o_ficha is Grupo_fichas:
+		lista = grupo_o_ficha.fichas
+		grupo_o_ficha.queue_free()
+	elif grupo_o_ficha is Ficha:
+		lista.append(grupo_o_ficha)
+	else:
+		push_error("Añadir grupo fin con parametro incorrecto")
+	
+	# comportamiento
+	for ficha in lista:
+		globales.apropiar_hijo(self, ficha)
+		print("erroooor", self.name, ficha.name)
+		ficha.set_grupo(self)
+		ficha.position = Vector2(0.0,0.0)
+		anchura_hitbox += ficha.tamano_ficha().x
+	fichas.append_array(lista)
+	_recalcula_anchura()
 	_posicionar_fichas()
 
-func anadir_ficha_principio(ficha : Ficha)-> void:
-	globales.apropiar_hijo(self, ficha)
-	fichas.push_front(ficha)
-	ficha.set_grupo(self)
-	ficha.position.y = 0.0
-	anchura_hitbox += ficha.tamano_ficha().x
+func anadir_grupo_principio(grupo_o_ficha : Node2D)-> void:
+	var lista: Array[Ficha]
+	if grupo_o_ficha is Grupo_fichas:
+		lista = grupo_o_ficha.fichas
+		grupo_o_ficha.queue_free()
+	elif grupo_o_ficha is Ficha:
+		lista.append(grupo_o_ficha)
+	else:
+		push_error("Añadir grupo fin con parametro incorrecto")
+
+	for ficha in lista:
+		globales.apropiar_hijo(self, ficha)
+		ficha.set_grupo(self)
+		ficha.position = Vector2(0.0,0.0)
+		anchura_hitbox += ficha.tamano_ficha().x
+	lista.append_array(fichas)
+	fichas = lista
 	_recalcula_anchura()
-	#ficha.transform = Transform2D()
 	_posicionar_fichas()
 
 
@@ -79,13 +102,16 @@ func anadir_ficha_principio(ficha : Ficha)-> void:
 # devuelve el nuevo grupo
 # IMPORTANTE: asume que ficha está en el grupo y que el grupo no está vacío
 func partir(ficha: Ficha) -> Grupo_fichas:
-	var grupo: Grupo_fichas = escena.instantiate()
+	var indice_ficha
 	for i in fichas.size():
-		if fichas[i] == ficha: return grupo
-		grupo.anadir_ficha_fin(fichas[i])
-		fichas[i].set_grupo(grupo)
-		fichas.remove_at(i)
-	return grupo
+		if fichas[i] == ficha: 
+			indice_ficha = i
+			break
+	var lista_ficha_derecha = fichas.slice(indice_ficha,fichas.size())
+	lista_ficha_derecha.map(eliminar_ficha)
+	fichas = fichas.slice(0,indice_ficha)
+	return Grupo_fichas(lista_ficha_derecha)
+	
 	
 func _posicionar_fichas() -> void:
 	var indice = 0
