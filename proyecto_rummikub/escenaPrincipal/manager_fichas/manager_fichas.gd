@@ -54,7 +54,12 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO):
 					print("Intento devolver")
 					for ficha in grupo_arrastrado.fichas :
-						mano.devolver_ficha(ficha)
+						if(sobre_ficha.en_blanco):
+							print("AAAAAAAAAAA")
+							mano.insertar_ficha(ficha, sobre_ficha)
+						else:
+							print("aaaaaaaaaaaaaa")
+							mano.devolver_ficha(ficha)
 					grupo_arrastrado.queue_free()
 				elif(sobre_grupo == null):
 					print("deja grupo, pq arrastra sobre no grupo")
@@ -92,13 +97,14 @@ func _crear_ficha() -> Ficha:
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):
-	if not clicando:
+	if (not clicando or ficha.en_blanco):
 		sobre_ficha = ficha
 		resaltar(ficha)
 		print("entraron en " + str(ficha.name))
 		print("prioridad: " + str(ficha.z_index))
 	elif sobre_ficha != null:
-		mano.intercambiar(ficha)
+		if(not sobre_ficha.en_blanco):
+			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
 	if not clicando:

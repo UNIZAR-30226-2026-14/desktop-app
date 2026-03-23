@@ -37,6 +37,13 @@ func anadir_ficha(ficha:Node) -> void:
 	fichas_en_mano.append(ficha)
 	actualizar_posicion_mano()
 
+func insertar_ficha(ficha_origen: Ficha, ficha_destino: Ficha) -> void:
+	globales.apropiar_hijo(self, ficha_origen)
+	var insertar_en: int = fichas_en_mano.find(ficha_destino)
+	fichas_en_mano.set(insertar_en,ficha_origen)
+	ficha_origen.estado = globales.ESTADO_FICHA.MANO
+	actualizar_posicion_mano()
+
 func quitar_ficha(ficha:Node) -> void:
 	#self.remove_child(ficha)
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
