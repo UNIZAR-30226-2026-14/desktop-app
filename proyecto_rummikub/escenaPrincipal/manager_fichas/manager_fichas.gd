@@ -62,7 +62,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
 				else: # arrastra algo a grupo
 					print("arrastra sobre grupo")
-					if(sobre_lado_grupo == globales.IZQUIERDA):
+					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
@@ -123,20 +123,7 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
-<<<<<<< HEAD
-	if(ficha.estado == globales.ESTADO_FICHA.MANO):
-		mano.quitar_ficha(sobre_ficha)
-		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
-		globales.apropiar_hijo(self, grupo_arrastrado)
-	else:
-		var grupo_original = ficha.miGrupo
-		grupo_arrastrado = grupo_original.partir(ficha)
-		grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
-		grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
-		sobre_grupo = null
 
-		globales.apropiar_hijo(self, grupo_arrastrado)
-=======
 	print("click ", ficha.name)
 	if(not ficha.en_blanco):
 		if(ficha.estado == globales.ESTADO_FICHA.MANO):
@@ -144,13 +131,12 @@ func click_izquierdo(ficha: Ficha) -> void:
 			grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
 			globales.apropiar_hijo(self, grupo_arrastrado)
 		else:
-			var grupo_ficha = ficha.miGrupo
-			grupo_arrastrado = grupo_ficha
+			var grupo_original = ficha.miGrupo
+			grupo_arrastrado = grupo_original.partir(ficha)
 			grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
 			grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
 			sobre_grupo = null
 			globales.apropiar_hijo(self, grupo_arrastrado)
->>>>>>> 2df15dca5eb2d8336d1c9ad2ec8a9eecb022965e
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo

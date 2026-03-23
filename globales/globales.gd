@@ -1,7 +1,7 @@
 # variables globales del proyecto:
 extends Node
 
-enum {IZQUIERDA, DERECHA}
+enum LADOS {IZQUIERDA, DERECHA}
 
 enum ESTADO_FICHA {MANO, TABLERO_FIJADA, TABLERO_NO_FIJADA}
 
