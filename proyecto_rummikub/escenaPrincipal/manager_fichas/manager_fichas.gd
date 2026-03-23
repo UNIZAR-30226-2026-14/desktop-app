@@ -38,6 +38,8 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
+		if(sobre_ficha != null && sobre_ficha.en_blanco):
+			print("sobre blanco")
 		if (sobre_ficha != null && not sobre_ficha.en_blanco) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			posicion_clic = get_global_mouse_position()
@@ -54,10 +56,8 @@ func _unhandled_input(event: InputEvent) -> void:
 					print("Intento devolver", )
 					for ficha in grupo_arrastrado.fichas :
 						if(sobre_ficha.en_blanco):
-							print("AAAAAAAAAAA")
 							mano.insertar_ficha(ficha, sobre_ficha)
 						else:
-							print("aaaaaaaaaaaaaa")
 							mano.devolver_ficha(ficha)
 					grupo_arrastrado.queue_free()
 				elif(sobre_grupo == null):
@@ -71,7 +71,7 @@ func _unhandled_input(event: InputEvent) -> void:
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
-				clicando = false
+			clicando = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -96,7 +96,10 @@ func _crear_ficha() -> Ficha:
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):
-	if (not clicando or ficha.en_blanco):
+	if(ficha.en_blanco):
+		sobre_ficha = ficha
+
+	if (not clicando):
 		sobre_ficha = ficha
 		resaltar(ficha)
 		print("entraron en " + str(ficha.name))
@@ -106,7 +109,7 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
-	if (not clicando or ficha.en_blanco):
+	if ((not clicando) or ficha.en_blanco):
 		desresaltar(ficha)
 		if sobre_ficha == ficha:
 			print("salio de " + str(ficha.name))
@@ -129,6 +132,7 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
+	print("Se hace clic")
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
