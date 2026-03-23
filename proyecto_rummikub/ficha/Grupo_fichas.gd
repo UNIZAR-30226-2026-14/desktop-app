@@ -106,11 +106,18 @@ func partir(ficha: Ficha) -> Grupo_fichas:
 		if fichas[i] == ficha: 
 			indice_ficha = i
 			break
+	
+	if indice_ficha == 0: return self
+	
 	var lista_ficha_derecha = fichas.slice(indice_ficha,fichas.size())
 	lista_ficha_derecha.map(eliminar_ficha)
 	fichas = fichas.slice(0,indice_ficha)
-	return Grupo_fichas(lista_ficha_derecha)
-	
+	_recalcula_anchura()
+	_posicionar_fichas()
+	var posicion_nueva : Vector2 = position + ficha.position 
+	var res = Grupo_fichas(lista_ficha_derecha)
+	res.position = posicion_nueva
+	return res
 	
 func _posicionar_fichas() -> void:
 	var indice = 0

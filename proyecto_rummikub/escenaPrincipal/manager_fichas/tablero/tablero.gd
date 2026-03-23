@@ -20,8 +20,9 @@ func quitar_grupo_fichas(grupo: Grupo_fichas) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$AreaTablero.mouse_entered.connect(actualizar_estado_cursor_tablero)
-	$AreaTablero.mouse_exited.connect(actualizar_estado_cursor_limbo)
+	pass
+	#$AreaTablero.mouse_entered.connect(actualizar_estado_cursor_tablero)
+	#$AreaTablero.mouse_exited.connect(actualizar_estado_cursor_limbo)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -45,7 +46,9 @@ func _on_robar_carta_pressed() -> void:
 
 
 func actualizar_estado_cursor_limbo() -> void:
+	print("sale de tablero")
 	globales.estado_cursor = globales.ESTADO_CURSOR.LIMBO
 
 func actualizar_estado_cursor_tablero() -> void:
+	print("entra en tablero")
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO

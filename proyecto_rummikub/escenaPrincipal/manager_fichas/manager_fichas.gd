@@ -13,7 +13,6 @@ const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
 var max_fichas: int = 10 # es para debuggear
 
-
 var clicando: bool = false # indica si se esta pulsando el clic izquierdo
 var grupo_arrastrado: Grupo_fichas = null
 var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el cursor, si no es nadie se pone un -1
@@ -52,7 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				grupo_arrastrado.z_index -= 1 # se le baja la prioridad a la carta
 				if(globales.estado_cursor==globales.ESTADO_CURSOR.MANO 
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO):
-					print("Intento devolver")
+					print("Intento devolver", )
 					for ficha in grupo_arrastrado.fichas :
 						if(sobre_ficha.en_blanco):
 							print("AAAAAAAAAAA")
@@ -130,6 +129,20 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
+<<<<<<< HEAD
+	if(ficha.estado == globales.ESTADO_FICHA.MANO):
+		mano.quitar_ficha(sobre_ficha)
+		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
+		globales.apropiar_hijo(self, grupo_arrastrado)
+	else:
+		var grupo_original = ficha.miGrupo
+		grupo_arrastrado = grupo_original.partir(ficha)
+		grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
+		grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
+		sobre_grupo = null
+
+		globales.apropiar_hijo(self, grupo_arrastrado)
+=======
 	print("click ", ficha.name)
 	if(not ficha.en_blanco):
 		if(ficha.estado == globales.ESTADO_FICHA.MANO):
@@ -143,43 +156,13 @@ func click_izquierdo(ficha: Ficha) -> void:
 			grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
 			sobre_grupo = null
 			globales.apropiar_hijo(self, grupo_arrastrado)
+>>>>>>> 2df15dca5eb2d8336d1c9ad2ec8a9eecb022965e
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo
 		#ficha.position += grupo_ficha.position
 		#if(grupo_ficha.fichas.size()==1): # si solo les queda una ficha se elimina el grupo
 		#	grupo_ficha.get_parent().remove_child(grupo_ficha)
-
-
-
-
-
-
-
-
-
-
-
-
-#var unGrupo = null
-#func _boton_prueba() -> void:
-	#var ficha = _crear_ficha()
-	#self.remove_child(ficha)
-	#if unGrupo == null:
-		#unGrupo = crea_grupo_fichas(ficha)
-	#else: 
-		#unGrupo.anadir_ficha(ficha)
-#
-#
-#func crea_grupo_fichas(ficha : Ficha) -> Grupo_fichas:
-	#var _grupo : Grupo_fichas = grupo.instantiate()
-	#self.add_child(_grupo) 
-	#_grupo.sobre_mi.connect(_sobre_grupo_fichas)
-	#_grupo.no_sobre_mi.connect(_out_grupo_fichas)
-	#_grupo.anadir_ficha(ficha)
-	#return _grupo
-
-
 
 
 func _entro_cursor_en_grupo(grupo_sobrepasado : Grupo_fichas, lado) -> void:

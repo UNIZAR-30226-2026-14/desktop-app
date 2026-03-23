@@ -10,9 +10,6 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
 size = Vector2(426, 208)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_j2dt5"]
-size = Vector2(1148, 389)
-
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
@@ -30,6 +27,7 @@ ordenarColor = NodePath("ordenarColor")
 
 [node name="AreaMano" type="Area2D" parent="managerFichas/mano" unique_id=1105991474]
 position = Vector2(64, -6)
+collision_layer = 2
 
 [node name="CollisionShapeMano" type="CollisionShape2D" parent="managerFichas/mano/AreaMano" unique_id=1873937284]
 position = Vector2(-76, 211)
@@ -54,12 +52,6 @@ icon = ExtResource("4_qada0")
 [node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
 script = ExtResource("5_nj8sc")
 
-[node name="AreaTablero" type="Area2D" parent="managerFichas/tablero" unique_id=667252577]
-
-[node name="CollisionShapeTablero" type="CollisionShape2D" parent="managerFichas/tablero/AreaTablero" unique_id=118488214]
-position = Vector2(1, -128.5)
-shape = SubResource("RectangleShape2D_j2dt5")
-
 [node name="robarCarta" type="Button" parent="managerFichas" unique_id=532416471]
 offset_left = 498.99994
 offset_top = 240.99994
@@ -67,12 +59,3 @@ offset_right = 1018.99994
 offset_bottom = 760.99994
 scale = Vector2(0.1, 0.1)
 icon = ExtResource("5_qada0")
-
-[node name="Button" type="Button" parent="." unique_id=1707005207]
-offset_left = -397.0
-offset_top = 171.0
-offset_right = -279.0
-offset_bottom = 202.0
-text = "AÑADE CARTA"
-
-[connection signal="pressed" from="Button" to="managerFichas" method="_boton_prueba"]
