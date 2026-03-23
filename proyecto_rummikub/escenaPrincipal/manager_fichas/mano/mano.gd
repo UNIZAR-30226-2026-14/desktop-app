@@ -13,6 +13,7 @@ var distancia_entre_fichas_horizontal: float = 10.0
 var distancia_entre_fichas_vertical: float = 5.0
 
 var num_maximo_fichas: int = 10
+var num_minimo_fichas: int = num_maximo_fichas
 var num_filas: int = 2
 
 var tamano_ficha: Vector2
@@ -55,7 +56,7 @@ func quitar_ficha(ficha:Node) -> void:
 	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0) 
 	globales.apropiar_hijo(self, ficha_blanca)
 	fichas_en_mano.set(ficha_sacada,ficha_blanca)
-	
+	disminuir()
 	actualizar_posicion_mano()
 
 func devolver_ficha(ficha:Node) -> void:
@@ -137,12 +138,38 @@ func aumentar_tamano_mano() -> void:
 	hitbox_mano.shape.size.x += (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
 	num_maximo_fichas += num_filas
 	for i in num_filas :
+		print("poner blanca")
 		var nueva_ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
+		globales.apropiar_hijo(self, nueva_ficha_blanca)
 		manager_fichas.conectar_ficha(nueva_ficha_blanca)
 		fichas_en_mano.push_back(nueva_ficha_blanca)
 	actualizar_posicion_mano()
+
 
 func actualizar_espacio() -> void:
 	if( not hay_espacio()):
 		print("aumentar")
 		aumentar_tamano_mano()
+
+func disminuir()->void:
+	if((_contar_blancas()>=2) and (num_maximo_fichas > num_minimo_fichas)):
+		num_maximo_fichas -=2
+		hitbox_mano.shape.size.x -= (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
+		fichas_por_fila -= 1
+		for i in num_filas :
+			var posicion_blanca_eliminar: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
+			var blanca_eliminar: Ficha = fichas_en_mano[posicion_blanca_eliminar]
+			manager_fichas.desconectar_ficha(blanca_eliminar)
+			fichas_en_mano.erase(blanca_eliminar)
+			blanca_eliminar.queue_free()
+		actualizar_posicion_mano()
+
+
+func _acumular_blancas(accum: int, ficha: Ficha) -> int:
+	if(ficha.en_blanco):
+		return accum +1
+	else:
+		return accum
+
+func _contar_blancas() -> int:
+	return fichas_en_mano.reduce(_acumular_blancas,0)

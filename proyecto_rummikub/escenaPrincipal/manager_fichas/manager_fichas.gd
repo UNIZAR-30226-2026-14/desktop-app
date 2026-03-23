@@ -66,7 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
 				else: # arrastra algo a grupo
 					print("arrastra sobre grupo")
-					if(sobre_lado_grupo == globales.IZQUIERDA):
+					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
@@ -129,6 +129,7 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
+
 	print("Se hace clic")
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
@@ -161,3 +162,7 @@ func _salio_cursor_en_grupo(_grupo_sobrepasado : Grupo_fichas, _lado) -> void:
 func conectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
+
+func desconectar_ficha(ficha: Ficha):
+	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)
+	ficha.cursor_no_sobre_ficha.disconnect(_salio_cursor_en_ficha)
