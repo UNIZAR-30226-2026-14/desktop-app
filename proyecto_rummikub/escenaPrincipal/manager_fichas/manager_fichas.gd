@@ -132,22 +132,7 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
-<<<<<<< HEAD
 
-	print("click ", ficha.name)
-	if(not ficha.en_blanco):
-		if(ficha.estado == globales.ESTADO_FICHA.MANO):
-			mano.quitar_ficha(sobre_ficha)
-			grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
-			globales.apropiar_hijo(self, grupo_arrastrado)
-		else:
-			var grupo_original = ficha.miGrupo
-			grupo_arrastrado = grupo_original.partir(ficha)
-			grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
-			grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
-			sobre_grupo = null
-			globales.apropiar_hijo(self, grupo_arrastrado)
-=======
 	print("Se hace clic")
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
@@ -162,7 +147,6 @@ func click_izquierdo(ficha: Ficha) -> void:
 
 		globales.apropiar_hijo(self, grupo_arrastrado)
 
->>>>>>> fbf1cd293cddaf0f20492cc3ea15f67727d2695d
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo

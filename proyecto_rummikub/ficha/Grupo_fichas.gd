@@ -127,7 +127,6 @@ func partir(ficha: Ficha) -> Grupo_fichas:
 	#crea grupo resultado
 	var res = Grupo_fichas(lista_ficha_hasta_derecha)
 	
-	#lista_ficha_hasta_derecha.map(fichas.erase)
 	_recalcula_anchura()
 	_calcula_posicion_grupo(globales.LADOS.IZQUIERDA)
 	_posicionar_fichas()
