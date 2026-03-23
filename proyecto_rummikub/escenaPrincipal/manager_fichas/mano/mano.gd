@@ -10,12 +10,14 @@ var tamano_pantalla_y: float
 var distancia_entre_fichas_horizontal: float = 10.0
 var distancia_entre_fichas_vertical: float = 5.0
 
+var num_maximo_fichas: int = 10
+
 var tamano_ficha: Vector2
 var altura_mano: float
 var fichas_por_fila: int = 5
 var fichas_en_mano: Array[Node]
 
-var ficha_en_blanco: Node2D = Ficha.ficha("blanco")
+var ficha_en_blanco: Node2D = Ficha.ficha("blanco", 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -25,7 +27,9 @@ func _ready() -> void:
 	ordenarColor.pressed.connect(ordenar_por_color)
 	$AreaMano.mouse_entered.connect(actualizar_estado_cursor_mano)
 	$AreaMano.mouse_exited.connect(actualizar_estado_cursor_limbo)
-
+	for i in num_maximo_fichas:
+		print(i)
+		anadir_ficha(Ficha.ficha("blanco", 0))
 
 func anadir_ficha(ficha:Node) -> void:
 	globales.apropiar_hijo(self, ficha)
@@ -42,13 +46,13 @@ func quitar_ficha(ficha:Node) -> void:
 func devolver_ficha(ficha:Node) -> void:
 	globales.apropiar_hijo(self, ficha)
 	var estaba_en: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
-	print(estaba_en)
-	print()
 	fichas_en_mano.set(estaba_en,ficha)
 	ficha.estado = globales.ESTADO_FICHA.MANO
 	actualizar_posicion_mano()
 
 func intercambiar(ficha:Node) -> void:
+	if(ficha.en_blanco):
+		return
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
 	if(indice_donde_estaba < indice_ficha_intercambiar):
@@ -76,18 +80,17 @@ func actualizar_posicion_mano() -> void:
 		for ficha in fichas_en_mano:
 			ficha.position.x = anchura_ficha/2 + centro_pantalla_x + (distancia_entre_fichas_horizontal + anchura_ficha) * indice - tamano_mano/2
 			ficha.position.y = altura_inicial + (distancia_entre_fichas_vertical + altura_ficha)*fila
-			print("se pone en:" + str(ficha.position.x) + " "+ str(ficha.position.y))
 			indice += 1
 			if(indice == fichas_por_fila):
 				indice = 0
 				fila += 1
 
 func ordenar_por_color() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return a.mi_indice > b.mi_indice)
+	fichas_en_mano.sort_custom(func(a, b): return (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) ))
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return a.mi_indice <= b.mi_indice)
+	fichas_en_mano.sort_custom(func(a, b): return (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:
