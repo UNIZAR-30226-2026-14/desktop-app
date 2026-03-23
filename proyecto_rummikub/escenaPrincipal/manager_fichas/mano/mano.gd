@@ -91,7 +91,8 @@ func ordenar_por_numero() -> void:
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:
-	globales.estado_cursor = globales.ESTADO_CURSOR.LIMBO
+	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 
 func actualizar_estado_cursor_mano() -> void:
+	print("entra en mano")
 	globales.estado_cursor = globales.ESTADO_CURSOR.MANO
