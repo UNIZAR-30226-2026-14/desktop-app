@@ -67,7 +67,6 @@ func anadir_grupo_fin(grupo_o_ficha : Node2D) -> void:
 	# comportamiento
 	for ficha in lista:
 		globales.apropiar_hijo(self, ficha)
-		print("erroooor", self.name, ficha.name)
 		ficha.set_grupo(self)
 		ficha.position = Vector2(0.0,0.0)
 		anchura_hitbox += ficha.tamano_ficha().x

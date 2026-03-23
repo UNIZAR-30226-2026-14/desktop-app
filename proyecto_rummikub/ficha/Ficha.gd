@@ -17,15 +17,19 @@ var miGrupo : Grupo_fichas
 ## jugada o en la mano
 var jugada: bool
 var en_blanco : bool
+var color: String
+var numero: int
 
-static func ficha(color: String) -> Node2D:
+static func ficha(color: String, numero: int) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
 	ficha_creada.z_index = 0
 	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.name = str((indice +1 ))
-	ficha_creada.cambiar_sprite(color)
+	ficha_creada.cambiar_sprite(color, numero)
 	ficha_creada.get_child(1).get_child(0).shape.size = tamano_fichas
 	ficha_creada.jugada = false;
+	ficha_creada.color = color
+	ficha_creada.numero = numero
 	return ficha_creada
 
 func set_grupo(grupo: Grupo_fichas):
@@ -43,19 +47,26 @@ static func tamano_ficha_static() -> Vector2:
 func tamano_ficha() -> Vector2:
 	return Vector2($Area2D/CollisionShape2D.shape.get_size())
 
-func cambiar_sprite(color: String):
+func cambiar_sprite(_color: String, _numero: int):
 	en_blanco = false
-	match color:
-		"corazones":
-			$assDePicas.texture = load("res://imagenes/asscorazones.jpg")
-		"picas": 
-			$assDePicas.texture = load("res://imagenes/asspicas.jpg")
-		"treboles":
-			$assDePicas.texture = load("res://imagenes/asstreboles.jpg")
-		"diamantes":
-			$assDePicas.texture = load("res://imagenes/assdiamantes.jpg")
+	$Numero.text = str(_numero)
+	match _color:
+		"rojo":
+			$Numero.modulate = "b92300"
+			$assDePicas.texture = load("res://imagenes/carta.jpg")
+		"negro": 
+			$Numero.modulate = "000000"
+			$assDePicas.texture = load("res://imagenes/carta.jpg")
+		"azul":
+			$Numero.modulate = "00aeaf"
+			$assDePicas.texture = load("res://imagenes/carta.jpg")
+		"amarillo":
+			$Numero.modulate = "cfce00"
+			$assDePicas.texture = load("res://imagenes/carta.jpg")
 		"blanco":
 			en_blanco = true
+			$Numero.text = ""
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

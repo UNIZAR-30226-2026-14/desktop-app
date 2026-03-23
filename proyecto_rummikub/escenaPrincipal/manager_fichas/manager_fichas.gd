@@ -24,16 +24,21 @@ var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsad
 
 var lista_fichas: Array[Ficha] # lista de objetos carta
 var indice_lista_fichas: int = 0 # numero de cartas en pantalla
-var fichaVacia: Node2D = Ficha.ficha("blanco")
+var fichaVacia: Node2D = Ficha.ficha("blanco", 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	robarCarta.pressed.connect(robar_carta)
+	for ficha in mano.fichas_en_mano:
+		print("me conecto")
+		ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
+		ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
-		if (sobre_ficha != null) and event.is_pressed(): 
+		if (sobre_ficha != null && not sobre_ficha.en_blanco) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			posicion_clic = get_global_mouse_position()
 			clicando = true 
@@ -75,13 +80,13 @@ func _process(_delta: float) -> void:
 		posicion_clic = posicion_raton
 
 func _crear_ficha() -> Ficha:
-	var posibles_fichas = ["corazones", "picas", "treboles", "diamantes"]
-	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4])
+	var posibles_fichas = ["rojo", "amarillo", "negro", "azul"]
+	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4],randi()%13 )
 	self.add_child(ficha)
 	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
-	lista_fichas.insert(indice_lista_fichas, ficha)
-	indice_lista_fichas += 1
+	#lista_fichas.insert(indice_lista_fichas, ficha)
+	#indice_lista_fichas += 1
 
 	return ficha
 
@@ -100,8 +105,6 @@ func _salio_cursor_en_ficha(ficha: Ficha):
 		if sobre_ficha == ficha:
 			print("salio de " + str(ficha.name))
 			sobre_ficha = null
-		#elif ficha != null:
-			#resaltar(sobre_ficha)
 
 func resaltar(ficha: Ficha):
 	ficha.z_index += 1
@@ -113,13 +116,14 @@ func desresaltar(ficha: Ficha):
 
 func robar_carta() -> void:
 	var fich = _crear_ficha()
-	mano.anadir_ficha(fich)
+	mano.devolver_ficha(fich)
 	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
 	fich.z_index = 0
 	#if(indice_lista_fichas >= 1):
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
+<<<<<<< HEAD
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
@@ -132,6 +136,21 @@ func click_izquierdo(ficha: Ficha) -> void:
 		sobre_grupo = null
 
 		globales.apropiar_hijo(self, grupo_arrastrado)
+=======
+	print("click ", ficha.name)
+	if(not ficha.en_blanco):
+		if(ficha.estado == globales.ESTADO_FICHA.MANO):
+			mano.quitar_ficha(sobre_ficha)
+			grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
+			globales.apropiar_hijo(self, grupo_arrastrado)
+		else:
+			var grupo_ficha = ficha.miGrupo
+			grupo_arrastrado = grupo_ficha
+			grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
+			grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
+			sobre_grupo = null
+			globales.apropiar_hijo(self, grupo_arrastrado)
+>>>>>>> 2df15dca5eb2d8336d1c9ad2ec8a9eecb022965e
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo
