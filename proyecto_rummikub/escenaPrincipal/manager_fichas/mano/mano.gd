@@ -37,15 +37,27 @@ func anadir_ficha(ficha:Node) -> void:
 	fichas_en_mano.append(ficha)
 	actualizar_posicion_mano()
 
+func insertar_ficha(ficha_origen: Ficha, ficha_destino: Ficha) -> void:
+	globales.apropiar_hijo(self, ficha_origen)
+	var insertar_en: int = fichas_en_mano.find(ficha_destino)
+	fichas_en_mano.set(insertar_en,ficha_origen)
+	ficha_origen.estado = globales.ESTADO_FICHA.MANO
+	ficha_destino.queue_free()
+	actualizar_posicion_mano()
+
 func quitar_ficha(ficha:Node) -> void:
 	#self.remove_child(ficha)
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
-	fichas_en_mano.set(ficha_sacada,ficha_en_blanco)
+	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0) 
+	globales.apropiar_hijo(self, ficha_blanca)
+	fichas_en_mano.set(ficha_sacada,ficha_blanca)
+	
 	actualizar_posicion_mano()
 
 func devolver_ficha(ficha:Node) -> void:
 	globales.apropiar_hijo(self, ficha)
 	var estaba_en: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
+	fichas_en_mano.get(estaba_en).queue_free()
 	fichas_en_mano.set(estaba_en,ficha)
 	ficha.estado = globales.ESTADO_FICHA.MANO
 	actualizar_posicion_mano()
@@ -55,18 +67,25 @@ func intercambiar(ficha:Node) -> void:
 		return
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
+	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
+	var ficha_eliminar: Ficha
+	globales.apropiar_hijo(self, ficha_blanca)
 	if(indice_donde_estaba < indice_ficha_intercambiar):
-		fichas_en_mano.insert(indice_ficha_intercambiar+1,ficha_en_blanco)
+		fichas_en_mano.insert(indice_ficha_intercambiar+1,ficha_blanca)
+		ficha_eliminar = fichas_en_mano.get(indice_donde_estaba)
 		fichas_en_mano.remove_at(indice_donde_estaba)
 
 	else:
 		if (indice_ficha_intercambiar-1) < 0:
-			fichas_en_mano.insert(0,ficha_en_blanco)
+			fichas_en_mano.insert(0,ficha_blanca)
+			ficha_eliminar = fichas_en_mano.get(indice_donde_estaba+1)
 			fichas_en_mano.remove_at(indice_donde_estaba+1)
 		else:
-			fichas_en_mano.insert(indice_ficha_intercambiar-1,ficha_en_blanco)
+			fichas_en_mano.insert(indice_ficha_intercambiar-1,ficha_blanca)
+			ficha_eliminar = fichas_en_mano.get(indice_donde_estaba+1)
 			fichas_en_mano.remove_at(indice_donde_estaba+1)
-
+			
+	ficha_eliminar.queue_free()
 	actualizar_posicion_mano()
 
 func actualizar_posicion_mano() -> void:
@@ -86,11 +105,11 @@ func actualizar_posicion_mano() -> void:
 				fila += 1
 
 func ordenar_por_color() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) ))
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:

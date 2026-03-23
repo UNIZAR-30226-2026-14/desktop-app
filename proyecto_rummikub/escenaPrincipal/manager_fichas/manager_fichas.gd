@@ -38,6 +38,8 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
+		if(sobre_ficha != null && sobre_ficha.en_blanco):
+			print("sobre blanco")
 		if (sobre_ficha != null && not sobre_ficha.en_blanco) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			posicion_clic = get_global_mouse_position()
@@ -53,7 +55,10 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO):
 					print("Intento devolver", )
 					for ficha in grupo_arrastrado.fichas :
-						mano.devolver_ficha(ficha)
+						if(sobre_ficha.en_blanco):
+							mano.insertar_ficha(ficha, sobre_ficha)
+						else:
+							mano.devolver_ficha(ficha)
 					grupo_arrastrado.queue_free()
 				elif(sobre_grupo == null):
 					print("deja grupo, pq arrastra sobre no grupo")
@@ -66,7 +71,7 @@ func _unhandled_input(event: InputEvent) -> void:
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
-				clicando = false
+			clicando = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -91,16 +96,20 @@ func _crear_ficha() -> Ficha:
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):
-	if not clicando:
+	if(ficha.en_blanco):
+		sobre_ficha = ficha
+
+	if (not clicando):
 		sobre_ficha = ficha
 		resaltar(ficha)
 		print("entraron en " + str(ficha.name))
 		print("prioridad: " + str(ficha.z_index))
 	elif sobre_ficha != null:
-		mano.intercambiar(ficha)
+		if(not sobre_ficha.en_blanco):
+			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
-	if not clicando:
+	if ((not clicando) or ficha.en_blanco):
 		desresaltar(ficha)
 		if sobre_ficha == ficha:
 			print("salio de " + str(ficha.name))
@@ -123,6 +132,7 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
+<<<<<<< HEAD
 
 	print("click ", ficha.name)
 	if(not ficha.en_blanco):
@@ -137,6 +147,22 @@ func click_izquierdo(ficha: Ficha) -> void:
 			grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
 			sobre_grupo = null
 			globales.apropiar_hijo(self, grupo_arrastrado)
+=======
+	print("Se hace clic")
+	if(ficha.estado == globales.ESTADO_FICHA.MANO):
+		mano.quitar_ficha(sobre_ficha)
+		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
+		globales.apropiar_hijo(self, grupo_arrastrado)
+	else:
+		var grupo_original = ficha.miGrupo
+		grupo_arrastrado = grupo_original.partir(ficha)
+		grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
+		grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
+		sobre_grupo = null
+
+		globales.apropiar_hijo(self, grupo_arrastrado)
+
+>>>>>>> fbf1cd293cddaf0f20492cc3ea15f67727d2695d
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo
