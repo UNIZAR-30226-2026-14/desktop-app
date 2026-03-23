@@ -31,8 +31,7 @@ func _ready() -> void:
 	robarCarta.pressed.connect(robar_carta)
 	for ficha in mano.fichas_en_mano:
 		print("me conecto")
-		ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
-		ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
+		conectar_ficha(ficha)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -88,11 +87,9 @@ func _crear_ficha() -> Ficha:
 	var posibles_fichas = ["rojo", "amarillo", "negro", "azul"]
 	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4],randi()%13 )
 	self.add_child(ficha)
-	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
-	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
+	conectar_ficha(ficha)
 	#lista_fichas.insert(indice_lista_fichas, ficha)
 	#indice_lista_fichas += 1
-
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):
@@ -160,3 +157,7 @@ func _entro_cursor_en_grupo(grupo_sobrepasado : Grupo_fichas, lado) -> void:
 
 func _salio_cursor_en_grupo(_grupo_sobrepasado : Grupo_fichas, _lado) -> void:
 	sobre_grupo = null
+
+func conectar_ficha(ficha: Ficha):
+	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
+	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)

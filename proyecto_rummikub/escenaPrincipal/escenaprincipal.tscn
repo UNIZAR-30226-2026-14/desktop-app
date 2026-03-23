@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
-size = Vector2(426, 208)
+size = Vector2(426, 213)
 
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 
@@ -20,17 +20,19 @@ mano = NodePath("mano")
 tablero = NodePath("tablero")
 robarCarta = NodePath("robarCarta")
 
-[node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227 node_paths=PackedStringArray("ordenarNumero", "ordenarColor")]
+[node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227 node_paths=PackedStringArray("ordenarNumero", "ordenarColor", "manager_fichas", "hitbox_mano")]
 script = ExtResource("2_l7e7q")
 ordenarNumero = NodePath("ordenarNumero")
 ordenarColor = NodePath("ordenarColor")
+manager_fichas = NodePath("..")
+hitbox_mano = NodePath("AreaMano/CollisionShapeMano")
 
 [node name="AreaMano" type="Area2D" parent="managerFichas/mano" unique_id=1105991474]
 position = Vector2(64, -6)
 collision_layer = 2
 
 [node name="CollisionShapeMano" type="CollisionShape2D" parent="managerFichas/mano/AreaMano" unique_id=1873937284]
-position = Vector2(-76, 211)
+position = Vector2(-68, 218.5)
 shape = SubResource("RectangleShape2D_nj8sc")
 
 [node name="ordenarColor" type="Button" parent="managerFichas/mano" unique_id=995823319]

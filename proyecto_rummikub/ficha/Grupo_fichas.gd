@@ -22,7 +22,7 @@ static func Grupo_fichas(listaFichas : Array[Ficha]) -> Grupo_fichas:
 	if(listaFichas.size()==1):
 		grupo.position = listaFichas[0].position
 	elif(listaFichas.size()%2 == 0):
-		grupo.position = listaFichas[(listaFichas.size()/2)+1].position
+		grupo.position = listaFichas[(listaFichas.size()/2)].position
 	else:
 		grupo.position = listaFichas[(listaFichas.size()/2)].position
 		#grupo.position += listaFichas[0].tamano_ficha().x / 2

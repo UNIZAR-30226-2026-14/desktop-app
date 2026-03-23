@@ -4,6 +4,8 @@ extends Node2D
 
 @export var ordenarNumero: Button
 @export var ordenarColor: Button
+@export var manager_fichas: Node2D
+@export var hitbox_mano: CollisionShape2D
 
 var centro_pantalla_x: float
 var tamano_pantalla_y: float 
@@ -11,6 +13,7 @@ var distancia_entre_fichas_horizontal: float = 10.0
 var distancia_entre_fichas_vertical: float = 5.0
 
 var num_maximo_fichas: int = 10
+var num_filas: int = 2
 
 var tamano_ficha: Vector2
 var altura_mano: float
@@ -32,6 +35,7 @@ func _ready() -> void:
 		anadir_ficha(Ficha.ficha("blanco", 0))
 
 func anadir_ficha(ficha:Node) -> void:
+	actualizar_espacio()
 	globales.apropiar_hijo(self, ficha)
 	ficha.estado = globales.ESTADO_FICHA.MANO
 	fichas_en_mano.append(ficha)
@@ -55,6 +59,7 @@ func quitar_ficha(ficha:Node) -> void:
 	actualizar_posicion_mano()
 
 func devolver_ficha(ficha:Node) -> void:
+	actualizar_espacio()
 	globales.apropiar_hijo(self, ficha)
 	var estaba_en: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	fichas_en_mano.get(estaba_en).queue_free()
@@ -65,22 +70,25 @@ func devolver_ficha(ficha:Node) -> void:
 func intercambiar(ficha:Node) -> void:
 	if(ficha.en_blanco):
 		return
+	
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
 	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
 	var ficha_eliminar: Ficha
 	globales.apropiar_hijo(self, ficha_blanca)
 	if(indice_donde_estaba < indice_ficha_intercambiar):
+		print("caso 1")
 		fichas_en_mano.insert(indice_ficha_intercambiar+1,ficha_blanca)
 		ficha_eliminar = fichas_en_mano.get(indice_donde_estaba)
 		fichas_en_mano.remove_at(indice_donde_estaba)
-
 	else:
 		if (indice_ficha_intercambiar-1) < 0:
+			print("caso 2")
 			fichas_en_mano.insert(0,ficha_blanca)
 			ficha_eliminar = fichas_en_mano.get(indice_donde_estaba+1)
 			fichas_en_mano.remove_at(indice_donde_estaba+1)
 		else:
+			print("caso 3")
 			fichas_en_mano.insert(indice_ficha_intercambiar-1,ficha_blanca)
 			ficha_eliminar = fichas_en_mano.get(indice_donde_estaba+1)
 			fichas_en_mano.remove_at(indice_donde_estaba+1)
@@ -100,7 +108,7 @@ func actualizar_posicion_mano() -> void:
 			ficha.position.x = anchura_ficha/2 + centro_pantalla_x + (distancia_entre_fichas_horizontal + anchura_ficha) * indice - tamano_mano/2
 			ficha.position.y = altura_inicial + (distancia_entre_fichas_vertical + altura_ficha)*fila
 			indice += 1
-			if(indice == fichas_por_fila):
+			if((indice == fichas_por_fila) and ((num_filas -1 ) > fila )):
 				indice = 0
 				fila += 1
 
@@ -118,3 +126,23 @@ func actualizar_estado_cursor_limbo() -> void:
 func actualizar_estado_cursor_mano() -> void:
 	print("entra en mano")
 	globales.estado_cursor = globales.ESTADO_CURSOR.MANO
+
+
+func hay_espacio() -> bool:
+	return fichas_en_mano.any(func(a): return a.en_blanco) or (fichas_en_mano.size() == 0)
+
+
+func aumentar_tamano_mano() -> void:
+	fichas_por_fila += 1
+	hitbox_mano.shape.size.x += (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
+	num_maximo_fichas += num_filas
+	for i in num_filas :
+		var nueva_ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
+		manager_fichas.conectar_ficha(nueva_ficha_blanca)
+		fichas_en_mano.push_back(nueva_ficha_blanca)
+	actualizar_posicion_mano()
+
+func actualizar_espacio() -> void:
+	if( not hay_espacio()):
+		print("aumentar")
+		aumentar_tamano_mano()
