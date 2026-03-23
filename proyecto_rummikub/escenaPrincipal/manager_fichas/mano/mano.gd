@@ -93,11 +93,11 @@ func actualizar_posicion_mano() -> void:
 				fila += 1
 
 func ordenar_por_color() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) ))
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:

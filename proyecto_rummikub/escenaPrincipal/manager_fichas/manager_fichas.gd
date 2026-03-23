@@ -106,7 +106,7 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
-	if not clicando:
+	if (not clicando or ficha.en_blanco):
 		desresaltar(ficha)
 		if sobre_ficha == ficha:
 			print("salio de " + str(ficha.name))
@@ -129,7 +129,6 @@ func robar_carta() -> void:
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
 
 func click_izquierdo(ficha: Ficha) -> void:
-<<<<<<< HEAD
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
@@ -142,21 +141,7 @@ func click_izquierdo(ficha: Ficha) -> void:
 		sobre_grupo = null
 
 		globales.apropiar_hijo(self, grupo_arrastrado)
-=======
-	print("click ", ficha.name)
-	if(not ficha.en_blanco):
-		if(ficha.estado == globales.ESTADO_FICHA.MANO):
-			mano.quitar_ficha(sobre_ficha)
-			grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
-			globales.apropiar_hijo(self, grupo_arrastrado)
-		else:
-			var grupo_ficha = ficha.miGrupo
-			grupo_arrastrado = grupo_ficha
-			grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
-			grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
-			sobre_grupo = null
-			globales.apropiar_hijo(self, grupo_arrastrado)
->>>>>>> 2df15dca5eb2d8336d1c9ad2ec8a9eecb022965e
+
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo
