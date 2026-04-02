@@ -15,6 +15,9 @@ static var estado_juego: ESTADO_JUEGO
 # viene del tablero o a la mano si venia de la mano
 static var estado_anterior_cursor: ESTADO_CURSOR
 
+# la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
+static var abierto: bool = false
+
 func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():
 		hijo.get_parent().remove_child(hijo)

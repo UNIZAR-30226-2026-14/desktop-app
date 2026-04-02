@@ -1,6 +1,7 @@
 extends Node2D
 @export var mano: Node2D
 @export var tablero: Node2D
+@export var manager_juego: Node2D
 
 # cuanto aumenta la escala del la carta al poner el cursor sobre ella
 @export var escala_aumentada: Vector2 = Vector2(1.2,  1.2) 
@@ -11,7 +12,6 @@ extends Node2D
 
 @export var pasarTurno: Button
 @export var devolverFichas: Button
-
 
 const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
@@ -33,15 +33,9 @@ var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	robarCarta.pressed.connect(robar_carta)
-	pasarTurno.pressed.connect(pasar_turno)
-	devolverFichas.pressed.connect(devolver_fichas)
-	mi_turno()
 	for ficha in mano.fichas_en_mano:
 		print("me conecto")
 		conectar_ficha(ficha)
-	
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
@@ -62,7 +56,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
 					for ficha in grupo_arrastrado.fichas :
-						if(sobre_ficha.en_blanco):
+						if(sobre_ficha != null and sobre_ficha.en_blanco):
 							mano.insertar_ficha(ficha, sobre_ficha)
 						else:
 							mano.devolver_ficha(ficha)
@@ -80,7 +74,6 @@ func _unhandled_input(event: InputEvent) -> void:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
 					poniendo_fichas()
 			clicando = false
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -132,15 +125,6 @@ func desresaltar(ficha: Ficha):
 	ficha.z_index -= 1
 	ficha.scale = escala_por_defecto
 
-func robar_carta() -> void:
-	var fich = _crear_ficha()
-	mano.devolver_ficha(fich)
-	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
-	fich.z_index = 0
-	#if(indice_lista_fichas >= 1):
-		#lista_fichas[indice_lista_fichas-1].z_index += 1
-	pasar_turno()
-
 func click_izquierdo(ficha: Ficha) -> void:
 
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
@@ -178,48 +162,12 @@ func desconectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.disconnect(_salio_cursor_en_ficha)
 
-func mi_turno():
-	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
-	
-	robarCarta.disabled = false
-	
-	devolverFichas.disabled = true
-	pasarTurno.disabled = true
-
-func pasar_turno():
-	if(tablero.tablero_correcto()):
-		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
-		tablero.fijar_tablero()
-		robarCarta.disabled = true
-		devolverFichas.disabled = true
-		pasarTurno.disabled = true
-	else:
-		pass
-
-func devolver_fichas():
-	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
-	
-	devolverFichas.disabled = true
-	pasarTurno.disabled = true
-	robarCarta.disabled = false
-
 func poniendo_fichas():
-	globales.estado_juego = globales.ESTADO_JUEGO.PONIENDO_FICHAS
-	
-	devolverFichas.disabled = false
-	pasarTurno.disabled = false
-	
-	robarCarta.disabled = true
+	manager_juego.poniendo_fichas()
 
 func quitando_fichas():
-	if(not tablero.alguna_recien_puesta() and es_mi_turno()):
-		globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
-		
-		devolverFichas.disabled = true
-		pasarTurno.disabled = true
-		robarCarta.disabled = false
-	
+	if(not tablero.alguna_recien_puesta() and _es_mi_turno()):
+		manager_juego.no_poniendo_fichas()
 
-func es_mi_turno() -> bool:
+func _es_mi_turno() -> bool:
 	return (globales.estado_juego != globales.ESTADO_JUEGO.NO_MI_TURNO)
-	

@@ -34,6 +34,12 @@ func _ready() -> void:
 	for i in num_maximo_fichas:
 		print(i)
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
+	
+	#temporal para probar cosas
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
 
 func anadir_ficha(ficha:Node) -> void:
 	actualizar_espacio()
@@ -117,7 +123,6 @@ func actualizar_posicion_mano() -> void:
 				fila += 1
 
 func ordenar_por_color() -> void:
-	manager_fichas.mi_turno()
 	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
 	actualizar_posicion_mano()
 
@@ -149,7 +154,6 @@ func aumentar_tamano_mano() -> void:
 		fichas_en_mano.push_back(nueva_ficha_blanca)
 	actualizar_posicion_mano()
 
-
 func actualizar_espacio() -> void:
 	if( not hay_espacio()):
 		print("aumentar")
@@ -177,3 +181,11 @@ func _acumular_blancas(accum: int, ficha: Ficha) -> int:
 
 func _contar_blancas() -> int:
 	return fichas_en_mano.reduce(_acumular_blancas,0)
+
+func insertar_mano(nueva_mano :Array[Node]) -> void:
+	for ficha in fichas_en_mano:
+		quitar_ficha(ficha)
+	
+	for ficha in nueva_mano:
+		devolver_ficha(ficha)
+	actualizar_posicion_mano()

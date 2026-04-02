@@ -10,7 +10,7 @@ var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 var grupos: Array[Grupo_fichas] = []
 var gruposViejos = {}
 
-func tableroValido(abierto: bool) -> bool:
+func tablero_valido(abierto: bool) -> bool:
 	for grupo in grupos:
 		if !grupo.grupo_correcto(abierto): return false
 	return true
@@ -69,6 +69,3 @@ func fijar_tablero() -> void:
 	for grupo in grupos:
 		for ficha in grupo.fichas:
 			ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
-
-func tablero_correcto() -> bool:
-	return true
