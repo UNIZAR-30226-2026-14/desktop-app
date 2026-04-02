@@ -37,6 +37,5 @@ func actualizar_circulo_carga() -> void:
 
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+func set_conexion(conexion: HTTPRequest) -> void:
+	globales.apropiar_hijo(self, conexion)

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cvw1u0y51ule6"]
+
+[ext_resource type="Script" uid="uid://dwss1hxgir1fb" path="res://globales/red/conector_red.gd" id="1_vs5kn"]
+
+[node name="ConectorRed" type="Node" unique_id=916324610]
+script = ExtResource("1_vs5kn")
+
+[node name="RobarRequest" type="HTTPRequest" parent="." unique_id=1703444548]
+
+[node name="VerificarJugadaRequest" type="HTTPRequest" parent="." unique_id=515863898]
+
+[node name="RobarRequest3" type="HTTPRequest" parent="." unique_id=1960030004]
+
+[node name="RobarRequest4" type="HTTPRequest" parent="." unique_id=429326021]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://qholkstclop0" path="res://proyecto_rummikub/menuInicio/modo_clasico.gd" id="1_5dy57"]
 [ext_resource type="Script" uid="uid://b4mfbsy3m2wvv" path="res://proyecto_rummikub/menuInicio/button.gd" id="2_l06n1"]
+[ext_resource type="Script" uid="uid://bbt313hn2cygs" path="res://proyecto_rummikub/menuInicio/gestor_pestana_amigos.gd" id="3_87g63"]
 
 [node name="Control" type="Control" unique_id=1337258946]
 layout_mode = 3
@@ -84,5 +85,9 @@ grow_horizontal = 0
 grow_vertical = 2
 color = Color(0.18431373, 0.39607844, 0.08235294, 0.8)
 
+[node name="GestorPestanaAmigos" type="HTTPRequest" parent="." unique_id=94937616]
+script = ExtResource("3_87g63")
+
 [connection signal="pressed" from="Fondo/ModoClasico" to="Fondo/ModoClasico" method="_on_pressed"]
 [connection signal="pressed" from="BarraSuperior/BotonAmigos" to="BarraSuperior/BotonAmigos" method="_on_pressed"]
+[connection signal="request_completed" from="GestorPestanaAmigos" to="GestorPestanaAmigos" method="_on_request_completed"]

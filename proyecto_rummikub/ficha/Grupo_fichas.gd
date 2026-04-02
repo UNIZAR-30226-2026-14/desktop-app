@@ -37,7 +37,7 @@ static func Grupo_fichas(listaFichas : Array[Ficha]) -> Grupo_fichas:
 	grupo.anadir_grupo_fin(listaFichas)
 	return grupo
 
-	
+
 
 func _calcula_posicion_grupo(en_base_a : globales.LADOS ) -> void:
 	var distancia_inicio_a_centro = (anchura_hitbox - tamano_extra) / 2  
