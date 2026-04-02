@@ -138,8 +138,48 @@ func _posicionar_fichas() -> void:
 		ficha.position.x = ficha.tamano_ficha().x/2 + (ficha.tamano_ficha().x) * indice - (ficha.tamano_ficha().x*fichas.size())/2
 		indice += 1
 
-func grupo_correcto() -> bool:
-	return true
+func grupo_correcto(abierto: bool) -> bool:
+	if fichas.size() < 3: return false
+	
+	var esEscalera: bool = true 
+	var colorEscalera: Ficha.COLOR
+	var esperadoEscalera: int = -1
+	
+	var esMismoNumero: bool = fichas.size() <= Ficha.COLOR.size() - 1 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
+	var setColores: Array[Ficha.COLOR] = []
+	var esperadoMismo: int = -1
+	for ficha in fichas:
+		if !abierto and ficha.estado != globales.ESTADO_FICHA.TABLERO_NO_FIJADA: return false #ha usado cartas de la mesa para abrir
+		if esperadoEscalera == -1: #no se ha encontrado nungún no comodín
+			if ficha.color != Ficha.COLOR.COMODIN: #primera carta para evaluar validez
+				esperadoEscalera = ficha.numero + 1
+				colorEscalera = ficha.color
+				esperadoMismo = ficha.numero
+				setColores.append(ficha.color)
+			continue
+		else:
+			if esEscalera:
+				esEscalera = (ficha.numero == esperadoEscalera and ficha.color == colorEscalera) or ficha.color == Ficha.COLOR.COMODIN
+				esperadoEscalera += 1
+			if esMismoNumero:
+				esMismoNumero = (ficha.numero == esperadoMismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
+				setColores.append(ficha.color)
+			if !esEscalera and !esMismoNumero: return false
+		
+	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
+	if esEscalera:
+		if ! abierto: return true
+		else:
+			var baseEscalera = esperadoEscalera - fichas.size()
+			var numTotal = range(baseEscalera, esperadoEscalera).reduce(func(accum,number): return accum + number, 0)
+			return numTotal >= 30
+	if esMismoNumero:
+		if ! abierto: return true
+		else:
+			var numTotal = esperadoMismo * fichas.size()
+			return numTotal >= 30
+		
+	return false
 
 
 func _emitir_señal_entrada_izquierda():

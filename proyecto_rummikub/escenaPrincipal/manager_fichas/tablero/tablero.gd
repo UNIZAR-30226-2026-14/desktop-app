@@ -10,13 +10,17 @@ var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 var grupos: Array[Grupo_fichas] = []
 var gruposViejos = {}
 
+func tableroValido(abierto: bool) -> bool:
+	for grupo in grupos:
+		if !grupo.grupo_correcto(abierto): return false
+	return true
+
 func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:
 	grupos.append(grupo)
 	globales.apropiar_hijo(self, grupo)
 
 func quitar_grupo_fichas(grupo: Grupo_fichas) -> void:
 	grupos.erase(grupo)
-	#self.remove_child(grupo)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

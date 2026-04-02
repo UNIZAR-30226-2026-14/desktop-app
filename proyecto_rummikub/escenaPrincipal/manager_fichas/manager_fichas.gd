@@ -24,7 +24,7 @@ var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsad
 
 var lista_fichas: Array[Ficha] # lista de objetos carta
 var indice_lista_fichas: int = 0 # numero de cartas en pantalla
-var fichaVacia: Node2D = Ficha.ficha("blanco", 0)
+var fichaVacia: Node2D = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -82,7 +82,7 @@ func _process(_delta: float) -> void:
 		posicion_clic = posicion_raton
 
 func _crear_ficha() -> Ficha:
-	var posibles_fichas = ["rojo", "amarillo", "negro", "azul"]
+	var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
 	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4],randi()%13 )
 	self.add_child(ficha)
 	conectar_ficha(ficha)
@@ -136,7 +136,7 @@ func click_izquierdo(ficha: Ficha) -> void:
 		var grupo_original = ficha.miGrupo
 		grupo_arrastrado = grupo_original.partir(ficha)
 		sobre_grupo = grupo_original
-
+		if grupo_arrastrado == grupo_original: $tablero.quitar_grupo_fichas(grupo_arrastrado)
 		globales.apropiar_hijo(self, grupo_arrastrado)
 
 		
