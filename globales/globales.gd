@@ -5,14 +5,18 @@ enum LADOS {IZQUIERDA, DERECHA}
 
 enum ESTADO_FICHA {MANO, TABLERO_FIJADA, TABLERO_NO_FIJADA}
 
-
 enum ESTADO_CURSOR {MANO, TABLERO, LIMBO}
 
-static var estado_cursor
+enum ESTADO_JUEGO {NO_MI_TURNO, PONIENDO_FICHAS, NO_PONIENDO_FICHAS}
 
+static var estado_cursor: ESTADO_CURSOR
+static var estado_juego: ESTADO_JUEGO
 # sin uso aun pero quiero usarlo para devolver la ficha al tablero si el cursor 
 # viene del tablero o a la mano si venia de la mano
-static var estado_anterior_cursor
+static var estado_anterior_cursor: ESTADO_CURSOR
+
+# la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
+static var abierto: bool = false
 
 func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():

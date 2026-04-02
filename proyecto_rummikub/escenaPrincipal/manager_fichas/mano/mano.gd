@@ -34,6 +34,12 @@ func _ready() -> void:
 	for i in num_maximo_fichas:
 		print(i)
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
+	
+	#temporal para probar cosas
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
 
 func anadir_ficha(ficha:Node) -> void:
 	actualizar_espacio()
@@ -55,6 +61,7 @@ func quitar_ficha(ficha:Node) -> void:
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
 	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0) 
 	globales.apropiar_hijo(self, ficha_blanca)
+	manager_fichas.conectar_ficha(ficha_blanca)
 	fichas_en_mano.set(ficha_sacada,ficha_blanca)
 	disminuir()
 	actualizar_posicion_mano()
@@ -74,7 +81,9 @@ func intercambiar(ficha:Node) -> void:
 	
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
+
 	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
+	manager_fichas.conectar_ficha(ficha_blanca)
 	var ficha_eliminar: Ficha
 	globales.apropiar_hijo(self, ficha_blanca)
 	if(indice_donde_estaba < indice_ficha_intercambiar):
@@ -114,11 +123,11 @@ func actualizar_posicion_mano() -> void:
 				fila += 1
 
 func ordenar_por_color() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:
@@ -144,7 +153,6 @@ func aumentar_tamano_mano() -> void:
 		manager_fichas.conectar_ficha(nueva_ficha_blanca)
 		fichas_en_mano.push_back(nueva_ficha_blanca)
 	actualizar_posicion_mano()
-
 
 func actualizar_espacio() -> void:
 	if( not hay_espacio()):
@@ -173,3 +181,11 @@ func _acumular_blancas(accum: int, ficha: Ficha) -> int:
 
 func _contar_blancas() -> int:
 	return fichas_en_mano.reduce(_acumular_blancas,0)
+
+func insertar_mano(nueva_mano :Array[Node]) -> void:
+	for ficha in fichas_en_mano:
+		quitar_ficha(ficha)
+	
+	for ficha in nueva_mano:
+		devolver_ficha(ficha)
+	actualizar_posicion_mano()

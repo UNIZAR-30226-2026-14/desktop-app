@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bu1oml7a5v2me"
-path="res://.godot/imported/asscorazones.jpg-16850c32816ba1059483d04c8305d4bd.ctex"
+uid="uid://b7dnd5f3w24h2"
+path="res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/asscorazones.jpg"
-dest_files=["res://.godot/imported/asscorazones.jpg-16850c32816ba1059483d04c8305d4bd.ctex"]
+source_file="res://imagenes/check.png"
+dest_files=["res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"]
 
 [params]
 

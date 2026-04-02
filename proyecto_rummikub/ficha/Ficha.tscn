@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d2m3pflispvhh"]
 
 [ext_resource type="Script" uid="uid://diiqjqmbuekht" path="res://proyecto_rummikub/ficha/Ficha.gd" id="1_en3ta"]
+[ext_resource type="FontFile" uid="uid://cgdt6xx8my0dt" path="res://imagenes/VCR_OSD_MONO_1.001.ttf" id="2_swb5m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0wtaq"]
 size = Vector2(70, 98)
@@ -24,15 +25,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -17.75
-offset_right = 16.0
-offset_bottom = 13.75
+offset_left = -32.0
+offset_top = -18.0
+offset_right = 33.0
+offset_bottom = 13.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 mouse_filter = 2
 mouse_behavior_recursive = 1
-theme_override_font_sizes/normal_font_size = 27
+theme_override_colors/font_shadow_color = Color(0.8646751, 0.86467516, 0.8646751, 0)
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/normal_font = ExtResource("2_swb5m")
+theme_override_font_sizes/normal_font_size = 32
+text = "1234567890"
 fit_content = true
 horizontal_alignment = 1

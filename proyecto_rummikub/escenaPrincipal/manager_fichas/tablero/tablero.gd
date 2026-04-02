@@ -10,7 +10,7 @@ var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 var grupos: Array[Grupo_fichas] = []
 var gruposViejos = {}
 
-func tableroValido(abierto: bool) -> bool:
+func tablero_valido(abierto: bool) -> bool:
 	for grupo in grupos:
 		if !grupo.grupo_correcto(abierto): return false
 	return true
@@ -56,3 +56,16 @@ func actualizar_estado_cursor_limbo() -> void:
 func actualizar_estado_cursor_tablero() -> void:
 	print("entra en tablero")
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
+
+func alguna_recien_puesta() -> bool:
+	
+	for grupo in grupos:
+		for ficha in grupo.fichas:
+			if(ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA):
+				return true
+	return false
+
+func fijar_tablero() -> void:
+	for grupo in grupos:
+		for ficha in grupo.fichas:
+			ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
