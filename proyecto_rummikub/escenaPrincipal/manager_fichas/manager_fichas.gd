@@ -9,6 +9,10 @@ extends Node2D
 
 @export var robarCarta: Button
 
+@export var pasarTurno: Button
+@export var devolverFichas: Button
+
+
 const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
 var max_fichas: int = 10 # es para debuggear
@@ -19,26 +23,29 @@ var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el
 var sobre_grupo: Grupo_fichas = null
 var sobre_lado_grupo
 
+var posicion_original_grupo: Vector2
+
 var estado_cursor # puede ser: MANO, TABLERO, LIMBO
 var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsado el clic izquierdo
 
 var lista_fichas: Array[Ficha] # lista de objetos carta
 var indice_lista_fichas: int = 0 # numero de cartas en pantalla
-var fichaVacia: Node2D = Ficha.ficha("blanco", 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	robarCarta.pressed.connect(robar_carta)
+	pasarTurno.pressed.connect(pasar_turno)
+	devolverFichas.pressed.connect(devolver_fichas)
+	mi_turno()
 	for ficha in mano.fichas_en_mano:
 		print("me conecto")
 		conectar_ficha(ficha)
+	
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
-		if(sobre_ficha != null && sobre_ficha.en_blanco):
-			print("sobre blanco")
 		if (sobre_ficha != null && not sobre_ficha.en_blanco) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			posicion_clic = get_global_mouse_position()
@@ -48,10 +55,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		elif event.is_released():
 		# si se deja de clicar
-			if(grupo_arrastrado != null && clicando):
-				grupo_arrastrado.z_index -= 1 # se le baja la prioridad a la carta
+			if(grupo_arrastrado != null && clicando): # se suelta un grupo
+				grupo_arrastrado.z_index -= 1 
 				if(globales.estado_cursor==globales.ESTADO_CURSOR.MANO 
-					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO):
+					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO
+					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
 					for ficha in grupo_arrastrado.fichas :
 						if(sobre_ficha.en_blanco):
@@ -59,17 +67,20 @@ func _unhandled_input(event: InputEvent) -> void:
 						else:
 							mano.devolver_ficha(ficha)
 					grupo_arrastrado.queue_free()
-				elif(sobre_grupo == null):
+					quitando_fichas()
+				elif(sobre_grupo == null): # se arrastra sobre lugar del tablero vacio
 					print("deja grupo, pq arrastra sobre no grupo")
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
-				else: # arrastra algo a grupo
+					poniendo_fichas()
+				else: # arrastra en el tablero sobre un grupo
 					print("arrastra sobre grupo")
 					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
+					poniendo_fichas()
 			clicando = false
 
 
@@ -94,6 +105,7 @@ func _crear_ficha() -> Ficha:
 
 func _entro_cursor_en_ficha(ficha: Ficha):
 	if(ficha.en_blanco):
+		print("entraron en ficha blanca")
 		sobre_ficha = ficha
 
 	if (not clicando):
@@ -103,6 +115,8 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 		print("prioridad: " + str(ficha.z_index))
 	elif sobre_ficha != null:
 		if(not sobre_ficha.en_blanco):
+			if(not mano.hay_espacio()):
+				mano.aumentar_tamano_mano()
 			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
@@ -127,6 +141,7 @@ func robar_carta() -> void:
 	fich.z_index = 0
 	#if(indice_lista_fichas >= 1):
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
+	pasar_turno()
 
 func click_izquierdo(ficha: Ficha) -> void:
 
@@ -166,3 +181,49 @@ func conectar_ficha(ficha: Ficha):
 func desconectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.disconnect(_salio_cursor_en_ficha)
+
+func mi_turno():
+	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
+	
+	robarCarta.disabled = false
+	
+	devolverFichas.disabled = true
+	pasarTurno.disabled = true
+
+func pasar_turno():
+	if(tablero.tablero_correcto()):
+		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
+		tablero.fijar_tablero()
+		robarCarta.disabled = true
+		devolverFichas.disabled = true
+		pasarTurno.disabled = true
+	else:
+		pass
+
+func devolver_fichas():
+	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
+	
+	devolverFichas.disabled = true
+	pasarTurno.disabled = true
+	robarCarta.disabled = false
+
+func poniendo_fichas():
+	globales.estado_juego = globales.ESTADO_JUEGO.PONIENDO_FICHAS
+	
+	devolverFichas.disabled = false
+	pasarTurno.disabled = false
+	
+	robarCarta.disabled = true
+
+func quitando_fichas():
+	if(not tablero.alguna_recien_puesta() and es_mi_turno()):
+		globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
+		
+		devolverFichas.disabled = true
+		pasarTurno.disabled = true
+		robarCarta.disabled = false
+	
+
+func es_mi_turno() -> bool:
+	return (globales.estado_juego != globales.ESTADO_JUEGO.NO_MI_TURNO)
+	

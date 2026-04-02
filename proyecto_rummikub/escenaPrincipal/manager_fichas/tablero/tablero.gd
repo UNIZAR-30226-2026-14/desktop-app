@@ -52,3 +52,19 @@ func actualizar_estado_cursor_limbo() -> void:
 func actualizar_estado_cursor_tablero() -> void:
 	print("entra en tablero")
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
+
+func alguna_recien_puesta() -> bool:
+	
+	for grupo in grupos:
+		for ficha in grupo.fichas:
+			if(ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA):
+				return true
+	return false
+
+func fijar_tablero() -> void:
+	for grupo in grupos:
+		for ficha in grupo.fichas:
+			ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
+
+func tablero_correcto() -> bool:
+	return true

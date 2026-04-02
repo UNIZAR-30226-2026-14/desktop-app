@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tkvfl75emtop"
-path="res://.godot/imported/asstreboles.jpg-9a902c4c942325ebc179358c9af56faf.ctex"
+uid="uid://b7dnd5f3w24h2"
+path="res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/asstreboles.jpg"
-dest_files=["res://.godot/imported/asstreboles.jpg-9a902c4c942325ebc179358c9af56faf.ctex"]
+source_file="res://imagenes/check.png"
+dest_files=["res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"]
 
 [params]
 

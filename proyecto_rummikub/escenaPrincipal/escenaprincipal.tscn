@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/manager_fichas.gd" id="1_fdp1d"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
 [ext_resource type="Texture2D" uid="uid://bjt762qw1b5f0" path="res://imagenes/icono_ordenar_cartas/ordenar_por_numero.png" id="4_qada0"]
+[ext_resource type="Texture2D" uid="uid://b7dnd5f3w24h2" path="res://imagenes/check.png" id="5_k1ots"]
 [ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/tablero/tablero.gd" id="5_nj8sc"]
 [ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/robar_carta.png" id="5_qada0"]
+[ext_resource type="Texture2D" uid="uid://dfg4w7nij8fws" path="res://imagenes/—Pngtree—reload vector icon_3725434.png" id="6_7fgi8"]
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
@@ -14,11 +16,13 @@ size = Vector2(426, 213)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 
-[node name="managerFichas" type="Node2D" parent="." unique_id=589849570 node_paths=PackedStringArray("mano", "tablero", "robarCarta")]
+[node name="managerFichas" type="Node2D" parent="." unique_id=589849570 node_paths=PackedStringArray("mano", "tablero", "robarCarta", "pasarTurno", "devolverFichas")]
 script = ExtResource("1_fdp1d")
 mano = NodePath("mano")
 tablero = NodePath("tablero")
 robarCarta = NodePath("robarCarta")
+pasarTurno = NodePath("mano/pasarTurno")
+devolverFichas = NodePath("mano/devolverFichas")
 
 [node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227 node_paths=PackedStringArray("ordenarNumero", "ordenarColor", "manager_fichas", "hitbox_mano")]
 script = ExtResource("2_l7e7q")
@@ -51,13 +55,29 @@ offset_bottom = 685.0
 scale = Vector2(0.1, 0.1)
 icon = ExtResource("4_qada0")
 
+[node name="pasarTurno" type="Button" parent="managerFichas/mano" unique_id=1250822187]
+offset_left = -556.0
+offset_top = 84.0
+offset_right = 1452.0
+offset_bottom = 2092.0
+scale = Vector2(0.02, 0.02)
+icon = ExtResource("5_k1ots")
+
+[node name="devolverFichas" type="Button" parent="managerFichas/mano" unique_id=947377310]
+offset_left = -555.0
+offset_top = 151.99994
+offset_right = 477.0
+offset_bottom = 1184.0
+scale = Vector2(0.038, 0.038)
+icon = ExtResource("6_7fgi8")
+
 [node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
 script = ExtResource("5_nj8sc")
 
 [node name="robarCarta" type="Button" parent="managerFichas" unique_id=532416471]
-offset_left = 498.99994
-offset_top = 240.99994
-offset_right = 1018.99994
-offset_bottom = 760.99994
+offset_left = -559.0
+offset_top = 222.0
+offset_right = -39.0
+offset_bottom = 742.0
 scale = Vector2(0.1, 0.1)
 icon = ExtResource("5_qada0")

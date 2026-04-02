@@ -55,6 +55,7 @@ func quitar_ficha(ficha:Node) -> void:
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
 	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0) 
 	globales.apropiar_hijo(self, ficha_blanca)
+	manager_fichas.conectar_ficha(ficha_blanca)
 	fichas_en_mano.set(ficha_sacada,ficha_blanca)
 	disminuir()
 	actualizar_posicion_mano()
@@ -75,6 +76,7 @@ func intercambiar(ficha:Node) -> void:
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
 	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
+	manager_fichas.conectar_ficha(ficha_blanca)
 	var ficha_eliminar: Ficha
 	globales.apropiar_hijo(self, ficha_blanca)
 	if(indice_donde_estaba < indice_ficha_intercambiar):
@@ -114,11 +116,12 @@ func actualizar_posicion_mano() -> void:
 				fila += 1
 
 func ordenar_por_color() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
+	manager_fichas.mi_turno()
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.color < b.color) || ( (a.color == b.color) && (a.numero < b.numero) ))&& (not a.en_blanco) )
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:
