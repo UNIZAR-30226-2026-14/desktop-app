@@ -68,14 +68,12 @@ func _unhandled_input(event: InputEvent) -> void:
 							mano.devolver_ficha(ficha)
 					grupo_arrastrado.queue_free()
 					quitando_fichas()
-				elif(sobre_grupo == null): # se arrastra sobre lugar del tablero vacio
-					print("deja grupo, pq arrastra sobre no grupo")
+				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
 					poniendo_fichas()
 				else: # arrastra en el tablero sobre un grupo
-					print("arrastra sobre grupo")
 					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
@@ -95,7 +93,7 @@ func _process(_delta: float) -> void:
 		posicion_clic = posicion_raton
 
 func _crear_ficha() -> Ficha:
-	var posibles_fichas = ["rojo", "amarillo", "negro", "azul"]
+	var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
 	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4],randi()%13 )
 	self.add_child(ficha)
 	conectar_ficha(ficha)
@@ -145,7 +143,6 @@ func robar_carta() -> void:
 
 func click_izquierdo(ficha: Ficha) -> void:
 
-	print("Se hace clic")
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
@@ -153,10 +150,8 @@ func click_izquierdo(ficha: Ficha) -> void:
 	else:
 		var grupo_original = ficha.miGrupo
 		grupo_arrastrado = grupo_original.partir(ficha)
-		grupo_arrastrado.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
-		grupo_arrastrado.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
-		sobre_grupo = null
-
+		sobre_grupo = grupo_original
+		if grupo_arrastrado == grupo_original: $tablero.quitar_grupo_fichas(grupo_arrastrado)
 		globales.apropiar_hijo(self, grupo_arrastrado)
 
 		
@@ -172,7 +167,8 @@ func _entro_cursor_en_grupo(grupo_sobrepasado : Grupo_fichas, lado) -> void:
 	sobre_grupo = grupo_sobrepasado
 
 func _salio_cursor_en_grupo(_grupo_sobrepasado : Grupo_fichas, _lado) -> void:
-	sobre_grupo = null
+	if sobre_grupo==_grupo_sobrepasado && sobre_lado_grupo==_lado:
+		sobre_grupo = null
 
 func conectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)

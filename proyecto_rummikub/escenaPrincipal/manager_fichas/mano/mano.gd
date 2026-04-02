@@ -21,7 +21,7 @@ var altura_mano: float
 var fichas_por_fila: int = 5
 var fichas_en_mano: Array[Node]
 
-var ficha_en_blanco: Node2D = Ficha.ficha("blanco", 0)
+var ficha_en_blanco: Node2D = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -33,7 +33,7 @@ func _ready() -> void:
 	$AreaMano.mouse_exited.connect(actualizar_estado_cursor_limbo)
 	for i in num_maximo_fichas:
 		print(i)
-		anadir_ficha(Ficha.ficha("blanco", 0))
+		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 
 func anadir_ficha(ficha:Node) -> void:
 	actualizar_espacio()
@@ -53,7 +53,7 @@ func insertar_ficha(ficha_origen: Ficha, ficha_destino: Ficha) -> void:
 func quitar_ficha(ficha:Node) -> void:
 	#self.remove_child(ficha)
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
-	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0) 
+	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0) 
 	globales.apropiar_hijo(self, ficha_blanca)
 	manager_fichas.conectar_ficha(ficha_blanca)
 	fichas_en_mano.set(ficha_sacada,ficha_blanca)
@@ -75,7 +75,8 @@ func intercambiar(ficha:Node) -> void:
 	
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
-	var ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
+
+	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 	manager_fichas.conectar_ficha(ficha_blanca)
 	var ficha_eliminar: Ficha
 	globales.apropiar_hijo(self, ficha_blanca)
@@ -142,7 +143,7 @@ func aumentar_tamano_mano() -> void:
 	num_maximo_fichas += num_filas
 	for i in num_filas :
 		print("poner blanca")
-		var nueva_ficha_blanca: Ficha = Ficha.ficha("blanco", 0)
+		var nueva_ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 		globales.apropiar_hijo(self, nueva_ficha_blanca)
 		manager_fichas.conectar_ficha(nueva_ficha_blanca)
 		fichas_en_mano.push_back(nueva_ficha_blanca)
