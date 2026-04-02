@@ -8,7 +8,6 @@ extends Node2D
 var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
 var grupos: Array[Grupo_fichas] = []
-var gruposViejos = {}
 
 func tablero_valido(abierto: bool) -> bool:
 	for grupo in grupos:
@@ -58,7 +57,6 @@ func actualizar_estado_cursor_tablero() -> void:
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 
 func alguna_recien_puesta() -> bool:
-	
 	for grupo in grupos:
 		for ficha in grupo.fichas:
 			if(ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA):
@@ -69,3 +67,14 @@ func fijar_tablero() -> void:
 	for grupo in grupos:
 		for ficha in grupo.fichas:
 			ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
+
+func insertar_tablero(misGrupos: Array[Grupo_fichas]):
+	for grupo in grupos:
+		grupo.queue_free()
+	grupos = []
+	for grupo in misGrupos:
+		anadir_grupo_fichas(grupo)
+		
+	
+	
+	

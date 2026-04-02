@@ -1,4 +1,4 @@
-class_name conector_red extends HTTPRequest
+class_name conector_red extends Node
 
 signal siguiente_turno(gruposNuevos: Array[Grupo_fichas], gruposEliminados: Array[Grupo_fichas])
 signal jugada_verificada(correcto: bool)

@@ -10,8 +10,22 @@ extends Node2D
 @export var mano: Node2D
 @export var manager_fichas: Node2D
 
-var fichas_en_mano_antes: Array[Node]
-var grupos_en_tablero_antes: Array[Grupo_fichas]
+class GrupoGuardado:
+	var grupo: Array[Ficha]
+	var posicion: Vector2
+	
+	func _init(mgrupo: Array[Ficha], mposicion: Vector2) -> void:
+		grupo = mgrupo
+		posicion = mposicion
+	
+	func creaGrupo()-> Grupo_fichas:
+		var res = Grupo_fichas.Grupo_fichas(grupo)
+		res.position = posicion
+		return res
+
+var fichas_en_mano_antes: Array[Ficha]
+var grupos_en_tablero_antes: Array[GrupoGuardado]
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -45,8 +59,11 @@ func iniciar_turno() -> void:
 
 func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
-	fichas_en_mano_antes = mano.fichas_en_mano.duplicate()
-	grupos_en_tablero_antes = tablero.grupos.duplicate()
+	fichas_en_mano_antes = mano.fichas_en_mano.duplicate(true)
+	grupos_en_tablero_antes = []
+	for grupo in tablero.grupos:
+		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas,grupo.position))
+
 
 func no_poniendo_fichas() -> void:
 
@@ -75,8 +92,12 @@ func devolver_fichas() -> void:
 	pasarTurno.disabled = true
 	robarCarta.disabled = false
 	
-	mano.insertar_mano(fichas_en_mano_antes)
+	var arrayGrupos: Array[Grupo_fichas] = []
+	for grupo: GrupoGuardado in grupos_en_tablero_antes:
+		arrayGrupos.append(grupo.creaGrupo())
+	tablero.insertar_tablero(arrayGrupos)
 	
+	mano.insertar_mano(fichas_en_mano_antes)
 
 func robar_carta() -> void:
 	var fich = manager_fichas._crear_ficha()

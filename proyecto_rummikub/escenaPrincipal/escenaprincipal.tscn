@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bxlkgyvjo1kko"]
 
 [ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/manager_fichas.gd" id="1_fdp1d"]
-[ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/escenaprincipal.gd" id="1_k1ots"]
+[ext_resource type="Script" uid="uid://caxyet7tuyrfj" path="res://proyecto_rummikub/escenaPrincipal/escenaprincipal.gd" id="1_k1ots"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
 [ext_resource type="Script" uid="uid://3olcnx0nwrf0" path="res://proyecto_rummikub/escenaPrincipal/manager_juego/manager_juego.gd" id="2_pp26n"]
 [ext_resource type="Texture2D" uid="uid://dfg4w7nij8fws" path="res://imagenes/devolver_fichas.png" id="3_pp26n"]
@@ -10,7 +10,7 @@
 [ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/tablero/tablero.gd" id="5_nj8sc"]
 [ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/robar_carta.png" id="5_qada0"]
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
-[ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/http_request.gd" id="8_7fgi8"]
+[ext_resource type="Script" uid="uid://01rkl37dyspm" path="res://proyecto_rummikub/escenaPrincipal/http_request.gd" id="8_7fgi8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
 size = Vector2(426, 213)

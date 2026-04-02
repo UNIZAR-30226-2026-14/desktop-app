@@ -19,7 +19,7 @@ var num_filas: int = 2
 var tamano_ficha: Vector2
 var altura_mano: float
 var fichas_por_fila: int = 5
-var fichas_en_mano: Array[Node]
+var fichas_en_mano: Array[Ficha]
 
 var ficha_en_blanco: Node2D = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 
@@ -182,10 +182,11 @@ func _acumular_blancas(accum: int, ficha: Ficha) -> int:
 func _contar_blancas() -> int:
 	return fichas_en_mano.reduce(_acumular_blancas,0)
 
-func insertar_mano(nueva_mano :Array[Node]) -> void:
+func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 	for ficha in fichas_en_mano:
 		quitar_ficha(ficha)
-	
+
 	for ficha in nueva_mano:
+		ficha.estado = globales.ESTADO_FICHA.MANO
 		devolver_ficha(ficha)
 	actualizar_posicion_mano()
