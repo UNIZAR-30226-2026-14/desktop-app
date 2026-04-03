@@ -184,9 +184,14 @@ func _contar_blancas() -> int:
 
 func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 	for ficha in fichas_en_mano:
-		quitar_ficha(ficha)
+		if(not ficha.en_blanco):
+			print("Quitando ficha: " + str(ficha.mi_indice))
+			quitar_ficha(ficha)
+			self.remove_child(ficha)
 
 	for ficha in nueva_mano:
-		ficha.estado = globales.ESTADO_FICHA.MANO
-		devolver_ficha(ficha)
+		if(not ficha.en_blanco):
+			print("Metiendo ficha: " + str(ficha.mi_indice))
+			devolver_ficha(ficha)
+			manager_fichas.conectar_ficha(ficha)
 	actualizar_posicion_mano()

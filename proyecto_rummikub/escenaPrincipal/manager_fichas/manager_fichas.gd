@@ -56,7 +56,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
 					for ficha in grupo_arrastrado.fichas :
-						if(sobre_ficha != null and sobre_ficha.en_blanco):
+						if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
 							mano.insertar_ficha(ficha, sobre_ficha)
 						else:
 							mano.devolver_ficha(ficha)

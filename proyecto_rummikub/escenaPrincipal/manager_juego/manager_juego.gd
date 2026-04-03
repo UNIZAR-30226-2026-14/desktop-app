@@ -59,7 +59,14 @@ func iniciar_turno() -> void:
 
 func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
-	fichas_en_mano_antes = mano.fichas_en_mano.duplicate(true)
+	fichas_en_mano_antes = []
+	var ficha_nueva: Ficha
+	for ficha in mano.fichas_en_mano:
+		#ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
+		#globales.apropiar_hijo(self, ficha_nueva)
+		fichas_en_mano_antes.append(ficha.duplicate())
+		
+	
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
 		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas,grupo.position))
