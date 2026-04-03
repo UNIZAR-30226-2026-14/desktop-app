@@ -69,7 +69,7 @@ func guardar_estado() -> void:
 	
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
-		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas,grupo.position))
+		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
 
 
 func no_poniendo_fichas() -> void:
