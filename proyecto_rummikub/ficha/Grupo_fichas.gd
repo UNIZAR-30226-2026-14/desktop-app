@@ -181,6 +181,11 @@ func grupo_correcto(abierto: bool) -> bool:
 		
 	return false
 
+func contengo_ficha_fijada() -> bool:
+	for ficha in fichas:
+		if ficha.estado == globales.ESTADO_FICHA.TABLERO_FIJADA:
+			return true
+	return false
 
 func _emitir_señal_entrada_izquierda():
 	cursor_sobre_grupo.emit(self, globales.LADOS.IZQUIERDA)

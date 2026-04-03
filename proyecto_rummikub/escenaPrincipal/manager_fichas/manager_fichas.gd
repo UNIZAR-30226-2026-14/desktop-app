@@ -23,7 +23,7 @@ var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el
 var sobre_grupo: Grupo_fichas = null
 var sobre_lado_grupo
 
-var posicion_original_grupo: Vector2
+var posicion_original_grupo: Transform2D
 
 var estado_cursor # puede ser: MANO, TABLERO, LIMBO
 var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsado el clic izquierdo
@@ -55,13 +55,21 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO
 					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
-					for ficha in grupo_arrastrado.fichas :
-						if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
-							mano.insertar_ficha(ficha, sobre_ficha)
-						else:
-							mano.devolver_ficha(ficha)
-					grupo_arrastrado.queue_free()
-					quitando_fichas()
+					if not grupo_arrastrado.contengo_ficha_fijada():
+						for ficha in grupo_arrastrado.fichas :
+							if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
+								mano.insertar_ficha(ficha, sobre_ficha)
+							else:
+								mano.devolver_ficha(ficha)
+						grupo_arrastrado.queue_free()
+						quitando_fichas()
+					else:
+						grupo_arrastrado.transform = posicion_original_grupo
+						grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
+						grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
+						$tablero.anadir_grupo_fichas(grupo_arrastrado)
+						poniendo_fichas()
+						
 				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
@@ -103,12 +111,11 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 		sobre_ficha = ficha
 		resaltar(ficha)
 		print("entraron en " + str(ficha.name))
-		print("prioridad: " + str(ficha.z_index))
-	elif sobre_ficha != null:
-		if(not sobre_ficha.en_blanco):
-			if(not mano.hay_espacio()):
-				mano.aumentar_tamano_mano()
-			mano.intercambiar(ficha)
+		#print("prioridad: " + str(ficha.z_index))
+	else:
+		if(not mano.hay_espacio()):
+			mano.aumentar_tamano_mano()
+		mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
 	if ((not clicando) or ficha.en_blanco):
@@ -133,11 +140,12 @@ func click_izquierdo(ficha: Ficha) -> void:
 		globales.apropiar_hijo(self, grupo_arrastrado)
 	else:
 		var grupo_original = ficha.miGrupo
+		posicion_original_grupo = grupo_original.transform
 		grupo_arrastrado = grupo_original.partir(ficha)
 		sobre_grupo = grupo_original
 		if grupo_arrastrado == grupo_original: $tablero.quitar_grupo_fichas(grupo_arrastrado)
 		globales.apropiar_hijo(self, grupo_arrastrado)
-
+		
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo

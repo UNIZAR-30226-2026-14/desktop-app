@@ -76,6 +76,7 @@ func devolver_ficha(ficha:Node) -> void:
 	actualizar_posicion_mano()
 
 func intercambiar(ficha:Node) -> void:
+	print("INTERCAMBIAR")
 	if(ficha.en_blanco):
 		return
 	
