@@ -6,6 +6,9 @@ extends Node2D
 @export var ordenarColor: Button
 @export var manager_fichas: Node2D
 @export var hitbox_mano: CollisionShape2D
+@export var color_mano: Node
+
+#var stylebox:StyleBoxFlat = $AreaMano/CollisionShapeMano/Panel.get_theme_stylebox("panel")
 
 var centro_pantalla_x: float
 var tamano_pantalla_y: float 
@@ -45,6 +48,7 @@ func anadir_ficha(ficha:Node) -> void:
 	actualizar_espacio()
 	globales.apropiar_hijo(self, ficha)
 	ficha.estado = globales.ESTADO_FICHA.MANO
+	ficha.desresaltar_aura()
 	fichas_en_mano.append(ficha)
 	actualizar_posicion_mano()
 
@@ -53,8 +57,10 @@ func insertar_ficha(ficha_origen: Ficha, ficha_destino: Ficha) -> void:
 	var insertar_en: int = fichas_en_mano.find(ficha_destino)
 	fichas_en_mano.set(insertar_en,ficha_origen)
 	ficha_origen.estado = globales.ESTADO_FICHA.MANO
+	ficha_origen.desresaltar_aura()
 	ficha_destino.queue_free()
 	actualizar_posicion_mano()
+	
 
 func quitar_ficha(ficha:Node) -> void:
 	#self.remove_child(ficha)
@@ -73,6 +79,7 @@ func devolver_ficha(ficha:Node) -> void:
 	fichas_en_mano.get(estaba_en).queue_free()
 	fichas_en_mano.set(estaba_en,ficha)
 	ficha.estado = globales.ESTADO_FICHA.MANO
+	ficha.desresaltar_aura()
 	actualizar_posicion_mano()
 
 func intercambiar(ficha:Node) -> void:
@@ -145,7 +152,12 @@ func hay_espacio() -> bool:
 
 func aumentar_tamano_mano() -> void:
 	fichas_por_fila += 1
-	hitbox_mano.shape.size.x += (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
+	var aumento: float = (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
+	hitbox_mano.shape.size.x += aumento
+	$AreaMano/CollisionShapeMano/Panel.size = hitbox_mano.shape.size
+	$AreaMano/CollisionShapeMano/Panel.position.x -= aumento / 2
+	
+	#$AreaMano/CollisionShapeMano/Panel.position = Vector2
 	num_maximo_fichas += num_filas
 	for i in num_filas :
 		print("poner blanca")

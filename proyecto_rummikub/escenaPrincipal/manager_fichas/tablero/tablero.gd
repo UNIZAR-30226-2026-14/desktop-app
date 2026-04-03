@@ -67,6 +67,7 @@ func fijar_tablero() -> void:
 	for grupo in grupos:
 		for ficha in grupo.fichas:
 			ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
+			ficha.desresaltar_aura()
 
 func insertar_tablero(misGrupos: Array[Grupo_fichas]):
 	for grupo in grupos:

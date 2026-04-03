@@ -23,6 +23,7 @@ var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el
 var sobre_grupo: Grupo_fichas = null
 var sobre_lado_grupo
 
+var grupo_de_origen: Grupo_fichas
 var posicion_original_grupo: Transform2D
 
 var estado_cursor # puede ser: MANO, TABLERO, LIMBO
@@ -64,17 +65,21 @@ func _unhandled_input(event: InputEvent) -> void:
 						grupo_arrastrado.queue_free()
 						quitando_fichas()
 					else:
-						grupo_arrastrado.transform = posicion_original_grupo
-						grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
-						grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
-						$tablero.anadir_grupo_fichas(grupo_arrastrado)
-						poniendo_fichas()
+						if(grupo_de_origen == null):
+							grupo_arrastrado.transform = posicion_original_grupo
+							grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
+							grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
+							$tablero.anadir_grupo_fichas(grupo_arrastrado)
+							poniendo_fichas()
+						else:
+							grupo_de_origen.anadir_grupo_fin(grupo_arrastrado)
 						
 				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
 					poniendo_fichas()
+
 				else: # arrastra en el tablero sobre un grupo
 					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
@@ -136,14 +141,21 @@ func click_izquierdo(ficha: Ficha) -> void:
 
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
+		ficha.estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
+		ficha.resaltar_aura()
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
 		globales.apropiar_hijo(self, grupo_arrastrado)
 	else:
 		var grupo_original = ficha.miGrupo
-		posicion_original_grupo = grupo_original.transform
 		grupo_arrastrado = grupo_original.partir(ficha)
 		sobre_grupo = grupo_original
-		if grupo_arrastrado == grupo_original: $tablero.quitar_grupo_fichas(grupo_arrastrado)
+		if grupo_arrastrado == grupo_original: # nos llevamos todo el grupo
+			posicion_original_grupo = grupo_original.transform
+			grupo_de_origen = null
+			$tablero.quitar_grupo_fichas(grupo_arrastrado)
+		else: # nos llevamos solo parte
+			grupo_de_origen = grupo_original
+		
 		globales.apropiar_hijo(self, grupo_arrastrado)
 		
 		

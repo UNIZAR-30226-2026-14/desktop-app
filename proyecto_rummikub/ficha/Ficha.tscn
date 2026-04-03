@@ -10,6 +10,11 @@ size = Vector2(70, 98)
 script = ExtResource("1_en3ta")
 area2d = NodePath("Area2D")
 
+[node name="auraFicha" type="Sprite2D" parent="." unique_id=1118459229]
+modulate = Color(1, 1, 0.70980394, 0.2)
+position = Vector2(1.5, 10)
+scale = Vector2(0.11, 0.14)
+
 [node name="assDePicas" type="Sprite2D" parent="." unique_id=579691819]
 scale = Vector2(0.1, 0.1)
 
