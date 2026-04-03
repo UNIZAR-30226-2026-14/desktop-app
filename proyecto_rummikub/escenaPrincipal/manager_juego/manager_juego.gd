@@ -25,12 +25,13 @@ class GrupoGuardado:
 
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
-
+var abierto: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
+	globales.abierto = false
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(pasar_turno)
 	devolverFichas.pressed.connect(devolver_fichas)
@@ -38,7 +39,7 @@ func _ready() -> void:
 
 func pasar_turno():
 	if(tablero.tablero_valido(globales.abierto)):
-		globales.abierto = true
+		abierto = true
 		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 		tablero.fijar_tablero()
 		robarCarta.disabled = true
