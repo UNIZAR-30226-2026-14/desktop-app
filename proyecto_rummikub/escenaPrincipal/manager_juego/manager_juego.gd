@@ -25,20 +25,22 @@ class GrupoGuardado:
 
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
+
+# la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
 var abierto: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
-	globales.abierto = false
+	abierto = false
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(pasar_turno)
 	devolverFichas.pressed.connect(devolver_fichas)
 	miTurno.pressed.connect(iniciar_turno)
 
 func pasar_turno():
-	if(tablero.tablero_valido(globales.abierto)):
+	if(tablero.tablero_valido(abierto)):
 		abierto = true
 		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 		tablero.fijar_tablero()
