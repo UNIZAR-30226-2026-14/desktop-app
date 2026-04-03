@@ -3,9 +3,12 @@ class_name conector_red extends Node
 signal siguiente_turno(gruposNuevos: Array[Grupo_fichas], gruposEliminados: Array[Grupo_fichas])
 signal jugada_verificada(correcto: bool)
 signal robado(num: int, color: Ficha.COLOR)
-signal partida_encontrada(manoInicial: Array[Ficha], numJugadores: int)
+
+const siguiente_turno_manual: bool = false
 
 static var singleton_instance: conector_red = null
+
+var miTurno: bool
 
 func _init() -> void:
 	if singleton_instance == null:
@@ -16,23 +19,27 @@ func _init() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	miTurno = false
 
-func completar_jugada(conectar: Callable):
-	pass
+func espera_a_turno(receptor: Callable) -> void:
+	siguiente_turno.connect(receptor)
+	siguiente_turno.emit([],[])
 
-func robar(conectar: Callable):
-	robado.connect(conectar)
+func acabo_turno(receptor: Callable):
+	return receptor.call(true)
+
+func robar(receptor: Callable):
 	var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
-	robado.emit(posibles_fichas[randi()%4],randi()%13 )
-	robado.disconnect(conectar)
+	return receptor.call(posibles_fichas[randi()%4],randi()%13 )
 
-func buscar_partida(conectar: Callable):
-	partida_encontrada.connect(conectar)
+func buscar_partida():
+	await get_tree().create_timer(5.0).timeout
+	get_tree().change_scene_to_file("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn")
+	#pasar info a manager_juego
 	pass
 
-func get_info_jugadores_en_partida(conectar: Callable):
-	pass
+#func get_info_inicio_partida():
+	#pass
 
 func fin_partida():
 	pass

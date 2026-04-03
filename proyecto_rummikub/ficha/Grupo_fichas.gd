@@ -48,7 +48,7 @@ func _calcula_posicion_grupo(en_base_a : globales.LADOS ) -> void:
 
 func _recalcula_anchura() -> void:
 	anchura_hitbox = tamano_extra
-	fichas.map(func(f:Ficha): anchura_hitbox += f.tamano_ficha_static().x)
+	fichas.map(func(f:Ficha): anchura_hitbox += f.tamano_ficha().x)
 	$izquierda/CollisionShape2D.shape.size.x = anchura_hitbox / 2
 	$derecha/CollisionShape2D.shape.size.x = anchura_hitbox / 2
 	$izquierda/CollisionShape2D.position.x = -anchura_hitbox / 4

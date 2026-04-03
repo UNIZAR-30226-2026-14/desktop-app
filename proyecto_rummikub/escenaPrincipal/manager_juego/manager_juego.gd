@@ -34,19 +34,24 @@ func _ready() -> void:
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
 	abierto = false
+
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(pasar_turno)
 	devolverFichas.pressed.connect(devolver_fichas)
-	miTurno.pressed.connect(iniciar_turno)
+	await ConectorRed.espera_a_turno(func(_primer,_segun): iniciar_turno())
+	#miTurno.pressed.connect(iniciar_turno)
 
 func pasar_turno():
-	if(tablero.tablero_valido(abierto)):
+	var valido = tablero.tablero_valido(abierto)
+	if valido: valido = await ConectorRed.acabo_turno(func(res:bool): return res)
+	if(valido):
 		abierto = true
 		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 		tablero.fijar_tablero()
 		robarCarta.disabled = true
 		devolverFichas.disabled = true
 		pasarTurno.disabled = true
+		await ConectorRed.espera_a_turno(func(_primer,_segun): iniciar_turno())
 	else:
 		print("TABLERO NO VALIDO")
 
@@ -104,13 +109,17 @@ func devolver_fichas() -> void:
 	
 	var arrayGrupos: Array[Grupo_fichas] = []
 	for grupo: GrupoGuardado in grupos_en_tablero_antes:
-		arrayGrupos.append(grupo.creaGrupo())
+		var ungrupo: Grupo_fichas = grupo.creaGrupo()
+		ungrupo.cursor_sobre_grupo.connect(manager_fichas._entro_cursor_en_grupo) 
+		ungrupo.cursor_no_sobre_grupo.connect(manager_fichas._salio_cursor_en_grupo)
+		arrayGrupos.append(ungrupo)
 	tablero.insertar_tablero(arrayGrupos)
 	
 	mano.insertar_mano(fichas_en_mano_antes)
 
 func robar_carta() -> void:
-	var fich = manager_fichas._crear_ficha()
+	var fich: Ficha
+	fich = await ConectorRed.robar(func(num, color)->Ficha: return manager_fichas._crear_ficha(color,num))
 	mano.devolver_ficha(fich)
 	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
 	fich.z_index = 0
