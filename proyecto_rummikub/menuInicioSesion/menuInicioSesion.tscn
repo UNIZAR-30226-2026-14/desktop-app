@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://ty280l2fpl1h"]
+
+[ext_resource type="Script" uid="uid://banytjtu4c0cc" path="res://proyecto_rummikub/menuInicioSesion/menu_inicio_sesion.gd" id="1_vqqxq"]
+[ext_resource type="Texture2D" uid="uid://5cum5gsue3dt" path="res://imagenes/imagenes_iniciar_sesion/inicioInsertarNombreUsuario.png" id="1_x8j27"]
+[ext_resource type="Texture2D" uid="uid://dlmnc4p2byb3m" path="res://imagenes/imagenes_iniciar_sesion/insertarContraseñaIcono.png" id="2_2ymbn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ymbn"]
+bg_color = Color(0.09803922, 0.20392157, 0.10980392, 1)
+shadow_color = Color(0.09019608, 0.13333334, 0.09411765, 1)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+
+[node name="MenuInicioSesion" type="Control" unique_id=1120480190 node_paths=PackedStringArray("confirmar", "textoNombreUsuario", "textoContrasena")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vqqxq")
+confirmar = NodePath("ColorRect/botonConfirmar")
+textoNombreUsuario = NodePath("ColorRect/textoNombreUsuario")
+textoContrasena = NodePath("ColorRect/textoContrasena")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2084089797]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.3647059, 0.1254902, 1)
+
+[node name="textoNombreUsuario" type="LineEdit" parent="ColorRect" unique_id=1842297931]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.5
+offset_top = -109.5
+offset_right = 170.5
+offset_bottom = -66.5
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Nombre de usuario"
+max_length = 30
+
+[node name="iconoInsertarNombreUsuario" type="Sprite2D" parent="ColorRect/textoNombreUsuario" unique_id=1964317944]
+position = Vector2(320, 20)
+scale = Vector2(0.04833977, 0.046875067)
+texture = ExtResource("1_x8j27")
+
+[node name="textoContrasena" type="LineEdit" parent="ColorRect" unique_id=952504494]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.5
+offset_top = -54.5
+offset_right = 170.5
+offset_bottom = -11.5
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Contraseña"
+max_length = 45
+secret = true
+
+[node name="InsertarContrasenaIcono" type="Sprite2D" parent="ColorRect/textoContrasena" unique_id=2104159535]
+position = Vector2(315, 20)
+scale = Vector2(0.025312481, 0.022499964)
+texture = ExtResource("2_2ymbn")
+
+[node name="botonConfirmar" type="Button" parent="ColorRect" unique_id=907772727]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -151.5
+offset_top = 23.0
+offset_right = 150.5
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_2ymbn")
+text = "CONFIRMAR"

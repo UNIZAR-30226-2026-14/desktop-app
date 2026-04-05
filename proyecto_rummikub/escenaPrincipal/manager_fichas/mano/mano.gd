@@ -15,20 +15,20 @@ var tamano_pantalla_y: float
 var distancia_entre_fichas_horizontal: float = 10.0
 var distancia_entre_fichas_vertical: float = 5.0
 
-var num_maximo_fichas: int = 10
+var num_maximo_fichas: int = 18
 var num_minimo_fichas: int = num_maximo_fichas
 var num_filas: int = 2
 
 var tamano_ficha: Vector2
 var altura_mano: float
-var fichas_por_fila: int = 5
+var fichas_por_fila: int = 9
 var fichas_en_mano: Array[Ficha]
 
 var ficha_en_blanco: Node2D = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	altura_mano = get_viewport().size.y / 4
+	#altura_mano = $AreaMano/CollisionShapeMano.position.y + altura_ficha  #get_viewport().size.y / 3
 	centro_pantalla_x =  0.0
 	ordenarNumero.pressed.connect(ordenar_por_numero)
 	ordenarColor.pressed.connect(ordenar_por_color)
@@ -43,6 +43,8 @@ func _ready() -> void:
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
+	actualizar_posicion_mano()
+
 
 func anadir_ficha(ficha:Node) -> void:
 	actualizar_espacio()
@@ -119,9 +121,9 @@ func actualizar_posicion_mano() -> void:
 		var anchura_ficha = fichas_en_mano[0].tamano_ficha().x
 		var altura_ficha  = fichas_en_mano[0].tamano_ficha().y
 		var tamano_mano  = (distancia_entre_fichas_horizontal + anchura_ficha) * min(fichas_en_mano.size(), fichas_por_fila)
-		var indice:float = 0
-		var fila:float = 0
-		var altura_inicial: float = altura_mano
+		var indice: float = 0
+		var fila: float = 0
+		var altura_inicial: float = $AreaMano/CollisionShapeMano.position.y - altura_ficha + 2*distancia_entre_fichas_vertical
 		for ficha in fichas_en_mano:
 			ficha.position.x = anchura_ficha/2 + centro_pantalla_x + (distancia_entre_fichas_horizontal + anchura_ficha) * indice - tamano_mano/2
 			ficha.position.y = altura_inicial + (distancia_entre_fichas_vertical + altura_ficha)*fila
@@ -175,7 +177,11 @@ func actualizar_espacio() -> void:
 func disminuir()->void:
 	if((_contar_blancas()>=2) and (num_maximo_fichas > num_minimo_fichas)):
 		num_maximo_fichas -=2
-		hitbox_mano.shape.size.x -= (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
+		var disminucion: float = (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
+		hitbox_mano.shape.size.x -= disminucion
+		$AreaMano/CollisionShapeMano/Panel.size = hitbox_mano.shape.size
+		$AreaMano/CollisionShapeMano/Panel.position.x += disminucion / 2
+		
 		fichas_por_fila -= 1
 		for i in num_filas :
 			var posicion_blanca_eliminar: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)

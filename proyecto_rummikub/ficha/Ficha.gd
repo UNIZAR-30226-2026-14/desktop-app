@@ -10,7 +10,7 @@ enum COLOR{ROJO, NEGRO, AZUL, AMARILLO, BLANCO, COMODIN}
 
 static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
 static var indice: int = -1
-const tamano_fichas : Vector2 = Vector2(70.0, 98.0)
+const tamano_fichas : Vector2 = Vector2(35.0, 49.0)
 
 var mi_indice : int
 # estado puede ser: MANO, TABLERO_FIJADA, TABLERO_NO_FIJADA

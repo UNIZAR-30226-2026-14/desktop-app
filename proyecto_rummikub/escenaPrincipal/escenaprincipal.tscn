@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/http_request.gd" id="8_7fgi8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
-size = Vector2(447, 225)
+size = Vector2(447, 157.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g1hmo"]
 resource_name = "panel"
@@ -26,29 +26,8 @@ corner_radius_bottom_left = 50
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 script = ExtResource("1_k1ots")
 
-[node name="ColorRect2" type="ColorRect" parent="." unique_id=1522473387]
-z_index = -999
-z_as_relative = false
-offset_left = -579.0
-offset_top = -330.0
-offset_right = 579.0
-offset_bottom = 328.0
-size_flags_vertical = 4
-mouse_filter = 2
-mouse_force_pass_scroll_events = false
-color = Color(0.059360206, 0.1829626, 0.12114481, 1)
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=969498385]
-z_index = -998
-offset_left = -538.0
-offset_top = -288.0
-offset_right = 533.0
-offset_bottom = 75.0
-size_flags_vertical = 4
-mouse_filter = 2
-color = Color(0.044573896, 0.15443364, 0.09951004, 1)
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
+editor_draw_limits = true
 
 [node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "tablero", "mano", "manager_fichas")]
 position = Vector2(-555, 151.99994)
@@ -67,11 +46,13 @@ offset_top = -3394.7354
 offset_right = 8.0
 offset_bottom = -3386.7354
 scale = Vector2(100, 100)
+metadata/_edit_use_anchors_ = true
 
 [node name="devolverFichas" type="Button" parent="managerJuego" unique_id=947377310]
 offset_right = 1032.0
 offset_bottom = 1032.0
 icon = ExtResource("3_pp26n")
+metadata/_edit_use_anchors_ = true
 
 [node name="pasarTurno" type="Button" parent="managerJuego" unique_id=1250822187]
 offset_left = -26.31543
@@ -80,6 +61,7 @@ offset_right = 1981.6846
 offset_bottom = 218.52783
 scale = Vector2(0.5, 0.5)
 icon = ExtResource("5_k1ots")
+metadata/_edit_use_anchors_ = true
 
 [node name="robarCarta" type="Button" parent="managerJuego" unique_id=532416471]
 offset_left = 26.316254
@@ -88,6 +70,7 @@ offset_right = 546.3163
 offset_bottom = 2414.7385
 scale = Vector2(2, 2)
 icon = ExtResource("5_qada0")
+metadata/_edit_use_anchors_ = true
 
 [node name="managerFichas" type="Node2D" parent="." unique_id=589849570 node_paths=PackedStringArray("mano", "tablero", "manager_juego", "robarCarta", "pasarTurno", "devolverFichas")]
 script = ExtResource("1_fdp1d")
@@ -111,7 +94,7 @@ position = Vector2(64, -6)
 collision_layer = 2
 
 [node name="CollisionShapeMano" type="CollisionShape2D" parent="managerFichas/mano/AreaMano" unique_id=1873937284]
-position = Vector2(-67, 214)
+position = Vector2(-67, 247.75)
 shape = SubResource("RectangleShape2D_nj8sc")
 
 [node name="Panel" type="Panel" parent="managerFichas/mano/AreaMano/CollisionShapeMano" unique_id=1473587882]
@@ -122,13 +105,11 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -223.5
-offset_top = -110.5
+offset_top = -74.375
 offset_right = 223.5
-offset_bottom = 114.5
+offset_bottom = 74.375
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_g1hmo")
 
@@ -139,6 +120,7 @@ offset_right = 1019.0
 offset_bottom = 604.0
 scale = Vector2(0.1, 0.1)
 icon = ExtResource("6_nj8sc")
+metadata/_edit_use_anchors_ = true
 
 [node name="ordenarNumero" type="Button" parent="managerFichas/mano" unique_id=1435978425]
 offset_left = 497.99988
@@ -147,6 +129,7 @@ offset_right = 1017.9999
 offset_bottom = 685.0
 scale = Vector2(0.1, 0.1)
 icon = ExtResource("4_qada0")
+metadata/_edit_use_anchors_ = true
 
 [node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
 z_index = -5
@@ -154,3 +137,36 @@ script = ExtResource("5_nj8sc")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=143859430]
 script = ExtResource("8_7fgi8")
+
+[node name="ColorRect3" type="ColorRect" parent="." unique_id=1187303382]
+z_index = 5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=1522473387]
+z_index = -999
+z_as_relative = false
+offset_left = -6964.0
+offset_top = -2567.0
+offset_right = 6154.0
+offset_bottom = 3021.0
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+mouse_force_pass_scroll_events = false
+color = Color(0.059360206, 0.1829626, 0.12114481, 1)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=969498385]
+visible = false
+z_index = -998
+offset_left = -538.0
+offset_top = -288.0
+offset_right = 533.0
+offset_bottom = 75.0
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.044573896, 0.15443364, 0.09951004, 1)
+metadata/_edit_use_anchors_ = true

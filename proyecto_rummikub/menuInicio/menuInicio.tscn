@@ -1,8 +1,41 @@
 [gd_scene format=3 uid="uid://dmruc2iiqflai"]
 
 [ext_resource type="Script" uid="uid://qholkstclop0" path="res://proyecto_rummikub/menuInicio/modo_clasico.gd" id="1_5dy57"]
-[ext_resource type="Script" uid="uid://b4mfbsy3m2wvv" path="res://proyecto_rummikub/menuInicio/button.gd" id="2_l06n1"]
+[ext_resource type="Script" uid="uid://db0nhy3a6a6xd" path="res://proyecto_rummikub/menuInicio/menu_inicio.gd" id="1_87g63"]
+[ext_resource type="StyleBox" uid="uid://cl44pv36u0v2l" path="res://proyecto_rummikub/menuInicio/style_box_boton_iniciar_partida.tres" id="2_ct2gx"]
 [ext_resource type="Script" uid="uid://bbt313hn2cygs" path="res://proyecto_rummikub/menuInicio/gestor_pestana_amigos.gd" id="3_87g63"]
+[ext_resource type="Texture2D" uid="uid://dmttrrp3j7sje" path="res://imagenes/joker_negro.png" id="4_u5hb0"]
+[ext_resource type="Texture2D" uid="uid://dxut78q7xni1p" path="res://imagenes/Fernando.png" id="6_182vh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5hb0"]
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+shadow_color = Color(0.09803922, 0.09803922, 0.09803922, 0.8039216)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ct2gx"]
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+expand_margin_left = 10.0
+expand_margin_top = 10.0
+expand_margin_right = 10.0
+expand_margin_bottom = 10.0
+shadow_color = Color(0.09803922, 0.09803922, 0.09803922, 0.8039216)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2yd1p"]
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(0.07058824, 0.25882354, 0.09019608, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
 
 [node name="Control" type="Control" unique_id=1337258946]
 layout_mode = 3
@@ -11,6 +44,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_87g63")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1176407704]
 layout_mode = 1
@@ -19,35 +53,58 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.27450982, 0.5686275, 0.12941177, 1)
+color = Color(0.101960786, 0.3647059, 0.1254902, 1)
 
 [node name="ModoClasico" type="Button" parent="Fondo" unique_id=520308855]
 layout_mode = 1
-anchors_preset = 4
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 121.0
-offset_top = -163.5
-offset_right = 396.0
-offset_bottom = 163.5
+offset_left = -137.0
+offset_top = -146.0
+offset_right = 138.0
+offset_bottom = 181.0
+grow_horizontal = 2
 grow_vertical = 2
-text = "Modo Clasico"
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_u5hb0")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ct2gx")
+theme_override_styles/hover = ExtResource("2_ct2gx")
+text = "          
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+"
+alignment = 0
 script = ExtResource("1_5dy57")
 
-[node name="ModoArcade" type="Button" parent="Fondo" unique_id=1060198226]
+[node name="RichTextLabel" type="RichTextLabel" parent="Fondo/ModoClasico" unique_id=1444729863]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -416.0
-offset_top = -162.0
-offset_right = -127.0
-offset_bottom = 159.0
-grow_horizontal = 0
-grow_vertical = 2
-text = "Modo Arcade"
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -74.875
+offset_top = 15.0
+offset_right = 74.875
+offset_bottom = 55.0
+grow_horizontal = 2
+mouse_behavior_recursive = 1
+theme_override_colors/default_color = Color(0.0253638, 0.0253638, 0.025363795, 1)
+theme_override_font_sizes/normal_font_size = 23
+text = "Modo Clasico
+"
+
+[node name="JokerNegro" type="Sprite2D" parent="Fondo/ModoClasico" unique_id=1559934634]
+position = Vector2(138.625, 190.68752)
+scale = Vector2(0.312, 0.31)
+texture = ExtResource("4_u5hb0")
 
 [node name="BarraSuperior" type="ColorRect" parent="." unique_id=111327994]
 layout_mode = 1
@@ -57,37 +114,59 @@ anchor_bottom = 1.0
 offset_bottom = -543.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.18532407, 0.39584213, 0.083012976, 1)
+color = Color(0.07058824, 0.25882354, 0.09019608, 1)
 
-[node name="BotonAmigos" type="Button" parent="BarraSuperior" unique_id=966119220 node_paths=PackedStringArray("pestanaAmigos")]
+[node name="RUMMIPLUS" type="RichTextLabel" parent="BarraSuperior" unique_id=1721607257]
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -42.5
-offset_right = 42.5
-offset_bottom = 82.0
-grow_horizontal = 2
-script = ExtResource("2_l06n1")
-pestanaAmigos = NodePath("../PestanaAmigos")
-
-[node name="PestanaAmigos" type="ColorRect" parent="BarraSuperior" unique_id=636002911]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -247.0
-offset_top = -52.5
-offset_bottom = 593.5
-grow_horizontal = 0
+offset_left = -99.1875
+offset_top = -20.0
+offset_right = 99.1875
+offset_bottom = 29.5
+grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.18431373, 0.39607844, 0.08235294, 0.8)
+mouse_behavior_recursive = 1
+theme_override_font_sizes/normal_font_size = 31
+text = "RUMMIPLUS"
+
+[node name="NombreUsuario" type="RichTextLabel" parent="BarraSuperior" unique_id=1053121180]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 97.0
+offset_top = -15.0
+offset_right = 415.0
+offset_bottom = 25.0
+grow_vertical = 2
+mouse_behavior_recursive = 1
+theme_override_colors/default_color = Color(1, 1, 1, 0.84705883)
+theme_override_font_sizes/normal_font_size = 23
+text = "NombreUsuario"
+
+[node name="Sprite2D" type="Sprite2D" parent="BarraSuperior" unique_id=701225809]
+
+[node name="Panel" type="Panel" parent="BarraSuperior" unique_id=1562354141]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 17.0
+offset_right = 84.0
+offset_bottom = 90.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_2yd1p")
+
+[node name="Fernando" type="Sprite2D" parent="BarraSuperior/Panel" unique_id=826042746]
+position = Vector2(34, 37.000004)
+scale = Vector2(0.057593845, 0.05706519)
+texture = ExtResource("6_182vh")
 
 [node name="GestorPestanaAmigos" type="HTTPRequest" parent="." unique_id=94937616]
 script = ExtResource("3_87g63")
 
+[connection signal="mouse_entered" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_entered"]
+[connection signal="mouse_exited" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_exited"]
 [connection signal="pressed" from="Fondo/ModoClasico" to="Fondo/ModoClasico" method="_on_pressed"]
-[connection signal="pressed" from="BarraSuperior/BotonAmigos" to="BarraSuperior/BotonAmigos" method="_on_pressed"]
 [connection signal="request_completed" from="GestorPestanaAmigos" to="GestorPestanaAmigos" method="_on_request_completed"]

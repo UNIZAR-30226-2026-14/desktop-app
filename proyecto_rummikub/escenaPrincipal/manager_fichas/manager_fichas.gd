@@ -4,9 +4,9 @@ extends Node2D
 @export var manager_juego: Node2D
 
 # cuanto aumenta la escala del la carta al poner el cursor sobre ella
-@export var escala_aumentada: Vector2 = Vector2(1.2,  1.2) 
+@export var escala_aumentada: Vector2 = Vector2(0.7,  0.7) 
 # escalado por defecto de las cartas
-@export var escala_por_defecto: Vector2 = Vector2(1.0,  1.0) 
+@export var escala_por_defecto: Vector2 = Vector2(0.5,  0.5) 
 
 @export var robarCarta: Button
 
@@ -120,7 +120,8 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 	else:
 		if(not mano.hay_espacio()):
 			mano.aumentar_tamano_mano()
-		mano.intercambiar(ficha)
+		if(globales.estado_cursor == globales.ESTADO_CURSOR.MANO):
+			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
 	if ((not clicando) or ficha.en_blanco):
