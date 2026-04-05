@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://8qj5wf76ompn"]
+
+[ext_resource type="Script" uid="uid://b5o0eqtxnqvb" path="res://proyecto_rummikub/menu_registrarse/menu_registrarse.gd" id="1_vvo3e"]
+[ext_resource type="Texture2D" uid="uid://5cum5gsue3dt" path="res://imagenes/imagenes_iniciar_sesion/inicioInsertarNombreUsuario.png" id="2_sucvi"]
+[ext_resource type="Texture2D" uid="uid://dlmnc4p2byb3m" path="res://imagenes/imagenes_iniciar_sesion/insertarContraseñaIcono.png" id="3_hep8n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ymbn"]
+bg_color = Color(0.09803922, 0.20392157, 0.10980392, 1)
+shadow_color = Color(0.09019608, 0.13333334, 0.09411765, 1)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+
+[node name="MenuRegistrarse" type="Control" unique_id=1120480190 node_paths=PackedStringArray("confirmar", "iniciarSesion", "textoNombreUsuario", "textoContrasena", "textoConfirmarContrasena")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vvo3e")
+confirmar = NodePath("ColorRect/botonConfirmar")
+iniciarSesion = NodePath("ColorRect/botonIniciarSesion")
+textoNombreUsuario = NodePath("ColorRect/textoNombreUsuario")
+textoContrasena = NodePath("ColorRect/textoContrasena")
+textoConfirmarContrasena = NodePath("ColorRect/textoConfirmarContrasena")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2084089797]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.3647059, 0.1254902, 1)
+
+[node name="textoNombreUsuario" type="LineEdit" parent="ColorRect" unique_id=1842297931]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.5
+offset_top = -136.5
+offset_right = 170.5
+offset_bottom = -93.5
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Nombre de usuario"
+max_length = 30
+
+[node name="iconoInsertarNombreUsuario" type="Sprite2D" parent="ColorRect/textoNombreUsuario" unique_id=1964317944]
+position = Vector2(320, 20)
+scale = Vector2(0.04833977, 0.046875067)
+texture = ExtResource("2_sucvi")
+
+[node name="textoContrasena" type="LineEdit" parent="ColorRect" unique_id=952504494]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.5
+offset_top = -81.5
+offset_right = 170.5
+offset_bottom = -38.5
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Contraseña"
+max_length = 45
+secret = true
+
+[node name="InsertarContrasenaIcono" type="Sprite2D" parent="ColorRect/textoContrasena" unique_id=2104159535]
+position = Vector2(315, 20)
+scale = Vector2(0.025312481, 0.022499964)
+texture = ExtResource("3_hep8n")
+
+[node name="textoConfirmarContrasena" type="LineEdit" parent="ColorRect" unique_id=1426511188]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -169.0
+offset_top = -27.0
+offset_right = 172.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Confirmar contraseña"
+max_length = 45
+secret = true
+
+[node name="ConfirmarContrasenaIcono" type="Sprite2D" parent="ColorRect/textoConfirmarContrasena" unique_id=1191379591]
+position = Vector2(315, 20)
+scale = Vector2(0.025312481, 0.022499964)
+texture = ExtResource("3_hep8n")
+
+[node name="botonConfirmar" type="Button" parent="ColorRect" unique_id=907772727]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -151.0
+offset_top = 28.5
+offset_right = 151.0
+offset_bottom = 91.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_2ymbn")
+text = "CONFIRMAR"
+
+[node name="botonIniciarSesion" type="Button" parent="ColorRect" unique_id=1312201539]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = 105.0
+offset_right = 147.5
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_2ymbn")
+text = "Iniciar Sesion"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1780075109]
+layout_mode = 0
+offset_left = 438.0
+offset_top = 431.0
+offset_right = 592.0
+offset_bottom = 459.0
+text = "¿Ya tienes cuenta?"

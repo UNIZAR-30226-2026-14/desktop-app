@@ -31,6 +31,7 @@ var abierto: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
 	abierto = false

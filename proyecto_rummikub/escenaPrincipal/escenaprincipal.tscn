@@ -81,13 +81,14 @@ robarCarta = NodePath("../managerJuego/robarCarta")
 pasarTurno = NodePath("../managerJuego/pasarTurno")
 devolverFichas = NodePath("../managerJuego/devolverFichas")
 
-[node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227 node_paths=PackedStringArray("ordenarNumero", "ordenarColor", "manager_fichas", "hitbox_mano", "color_mano")]
+[node name="mano" type="Node2D" parent="managerFichas" unique_id=1443726227 node_paths=PackedStringArray("ordenarNumero", "ordenarColor", "manager_fichas", "hitbox_mano", "color_mano", "tablero")]
 script = ExtResource("2_l7e7q")
 ordenarNumero = NodePath("ordenarNumero")
 ordenarColor = NodePath("ordenarColor")
 manager_fichas = NodePath("..")
 hitbox_mano = NodePath("AreaMano/CollisionShapeMano")
 color_mano = NodePath("AreaMano/CollisionShapeMano/Panel")
+tablero = NodePath("../tablero")
 
 [node name="AreaMano" type="Area2D" parent="managerFichas/mano" unique_id=1105991474]
 position = Vector2(64, -6)
@@ -131,9 +132,11 @@ scale = Vector2(0.1, 0.1)
 icon = ExtResource("4_qada0")
 metadata/_edit_use_anchors_ = true
 
-[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479]
+[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano")]
 z_index = -5
 script = ExtResource("5_nj8sc")
+manager_fichas = NodePath("..")
+colision_mano = NodePath("../mano/AreaMano/CollisionShapeMano")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=143859430]
 script = ExtResource("8_7fgi8")

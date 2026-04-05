@@ -7,8 +7,7 @@ extends Node2D
 @export var manager_fichas: Node2D
 @export var hitbox_mano: CollisionShape2D
 @export var color_mano: Node
-
-#var stylebox:StyleBoxFlat = $AreaMano/CollisionShapeMano/Panel.get_theme_stylebox("panel")
+@export var tablero :Node2D
 
 var centro_pantalla_x: float
 var tamano_pantalla_y: float 
@@ -35,7 +34,6 @@ func _ready() -> void:
 	$AreaMano.mouse_entered.connect(actualizar_estado_cursor_mano)
 	$AreaMano.mouse_exited.connect(actualizar_estado_cursor_limbo)
 	for i in num_maximo_fichas:
-		print(i)
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
 	#temporal para probar cosas
@@ -84,14 +82,14 @@ func devolver_ficha(ficha:Node) -> void:
 	ficha.desresaltar_aura()
 	actualizar_posicion_mano()
 
-func intercambiar(ficha:Node) -> void:
-	print("INTERCAMBIAR")
+func intercambiar_desusado(ficha:Node) -> void:
 	if(ficha.en_blanco):
 		return
+	print("INTERCAMBIAR")
 	
 	var indice_donde_estaba: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
 	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
-
+	
 	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
 	manager_fichas.conectar_ficha(ficha_blanca)
 	var ficha_eliminar: Ficha
@@ -116,6 +114,41 @@ func intercambiar(ficha:Node) -> void:
 	ficha_eliminar.queue_free()
 	actualizar_posicion_mano()
 
+func intercambiar(ficha:Ficha) -> void:
+	if(ficha.en_blanco):
+		return
+	print("INTERCAMBIAR")
+	
+	var indice_nuevo_sitio: int = fichas_en_mano.find_custom(func(a): return a.en_blanco)
+	var indice_ficha_intercambiar: int = fichas_en_mano.find(ficha)
+	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
+	manager_fichas.conectar_ficha(ficha_blanca)
+	globales.apropiar_hijo(self, ficha_blanca)
+	var ficha_moviendo: Ficha = ficha_blanca
+	var ficha_aux: Ficha
+	if indice_nuevo_sitio < indice_ficha_intercambiar:
+		for i in range(indice_ficha_intercambiar,-1,-1):
+			print(i)
+			if fichas_en_mano[i].en_blanco:
+				fichas_en_mano[i].queue_free()
+				fichas_en_mano[i] = ficha_moviendo
+				actualizar_posicion_mano()
+				break
+			ficha_aux = fichas_en_mano[i]
+			fichas_en_mano[i] = ficha_moviendo
+			ficha_moviendo = ficha_aux
+	else:
+		for i in range(indice_ficha_intercambiar,fichas_en_mano.size(),+1):
+			if fichas_en_mano[i].en_blanco:
+				fichas_en_mano[i].queue_free()
+				fichas_en_mano[i] = ficha_moviendo
+				actualizar_posicion_mano()
+				break
+			ficha_aux = fichas_en_mano[i]
+			fichas_en_mano[i] = ficha_moviendo
+			ficha_moviendo = ficha_aux
+	actualizar_posicion_mano()
+
 func actualizar_posicion_mano() -> void:
 	if fichas_en_mano.size() != 0:
 		var anchura_ficha = fichas_en_mano[0].tamano_ficha().x
@@ -137,10 +170,24 @@ func ordenar_por_color() -> void:
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
+	var grupos_fichas: Array[Grupo_fichas] = [Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7)])]
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7),Ficha.ficha(Ficha.COLOR.ROJO,5)]))
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7),Ficha.ficha(Ficha.COLOR.ROJO,5),]))
+	grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
+	
+	tablero.insertar_grupos_fichas(grupos_fichas)
+
 	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:
+	print("entra en tablero")
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 
 func actualizar_estado_cursor_mano() -> void:
@@ -150,7 +197,6 @@ func actualizar_estado_cursor_mano() -> void:
 
 func hay_espacio() -> bool:
 	return fichas_en_mano.any(func(a): return a.en_blanco) or (fichas_en_mano.size() == 0)
-
 
 func aumentar_tamano_mano() -> void:
 	fichas_por_fila += 1
@@ -190,7 +236,6 @@ func disminuir()->void:
 			fichas_en_mano.erase(blanca_eliminar)
 			blanca_eliminar.queue_free()
 		actualizar_posicion_mano()
-
 
 func _acumular_blancas(accum: int, ficha: Ficha) -> int:
 	if(ficha.en_blanco):

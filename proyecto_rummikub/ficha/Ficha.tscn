@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://cgdt6xx8my0dt" path="res://imagenes/VCR_OSD_MONO_1.001.ttf" id="2_swb5m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0wtaq"]
-size = Vector2(70, 98)
+size = Vector2(35, 49)
 
 [node name="Ficha" type="Node2D" unique_id=1732648488 node_paths=PackedStringArray("area2d")]
 scale = Vector2(0.5, 0.5)

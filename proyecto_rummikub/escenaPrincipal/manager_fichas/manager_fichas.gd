@@ -35,7 +35,6 @@ var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for ficha in mano.fichas_en_mano:
-		print("me conecto")
 		conectar_ficha(ficha)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -182,6 +181,15 @@ func conectar_ficha(ficha: Ficha):
 func desconectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.disconnect(_salio_cursor_en_ficha)
+
+
+func conectar_grupo(grupo_fichas: Grupo_fichas) -> void:
+	grupo_fichas.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
+	grupo_fichas.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
+
+func desconectar_grupo(grupo_fichas: Grupo_fichas) -> void:
+	grupo_fichas.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
+	grupo_fichas.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
 
 func poniendo_fichas():
 	manager_juego.poniendo_fichas()
