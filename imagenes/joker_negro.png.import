@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgwypakh523e0"
-path="res://.godot/imported/sprite_sheet_fichas.png-2aa5ce6a15bc24cef2eb8be1ceb71632.ctex"
+uid="uid://dmttrrp3j7sje"
+path="res://.godot/imported/joker_negro.png-aa8f9e42856b9d10e7f40bce63a35d19.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/icono_ordenar_cartas/sprite_sheet_fichas.png"
-dest_files=["res://.godot/imported/sprite_sheet_fichas.png-2aa5ce6a15bc24cef2eb8be1ceb71632.ctex"]
+source_file="res://imagenes/joker_negro.png"
+dest_files=["res://.godot/imported/joker_negro.png-aa8f9e42856b9d10e7f40bce63a35d19.ctex"]
 
 [params]
 

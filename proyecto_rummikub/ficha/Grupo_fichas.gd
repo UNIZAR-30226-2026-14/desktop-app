@@ -48,10 +48,10 @@ func _calcula_posicion_grupo(en_base_a : globales.LADOS ) -> void:
 
 func _recalcula_anchura() -> void:
 	anchura_hitbox = tamano_extra
-	fichas.map(func(f:Ficha): anchura_hitbox += f.tamano_ficha().x)
-	$izquierda/CollisionShape2D.shape.size.x = anchura_hitbox / 2
-	$derecha/CollisionShape2D.shape.size.x = anchura_hitbox / 2
-	$izquierda/CollisionShape2D.position.x = -anchura_hitbox / 4
+	fichas.map(func(f:Ficha): anchura_hitbox += f.tamano_ficha_static().x)
+	$izquierda/CollisionShape2D.shape.size.x = (anchura_hitbox / 2)
+	$derecha/CollisionShape2D.shape.size.x = (anchura_hitbox / 2)
+	$izquierda/CollisionShape2D.position.x = (-anchura_hitbox / 4)
 	$derecha/CollisionShape2D.position.x = anchura_hitbox / 4
 
 
@@ -181,6 +181,11 @@ func grupo_correcto(abierto: bool) -> bool:
 		
 	return false
 
+func contengo_ficha_fijada() -> bool:
+	for ficha in fichas:
+		if ficha.estado == globales.ESTADO_FICHA.TABLERO_FIJADA:
+			return true
+	return false
 
 func _emitir_señal_entrada_izquierda():
 	cursor_sobre_grupo.emit(self, globales.LADOS.IZQUIERDA)
@@ -193,3 +198,13 @@ func _emitir_señal_entrada_derecha():
 
 func _emitir_señal_salida_derecha():
 	cursor_no_sobre_grupo.emit(self, globales.LADOS.DERECHA)
+
+func chocando_con_grupo() -> bool:
+	for area: Node2D in $izquierda.get_overlapping_areas():
+		if area != $derecha:
+			return true
+	
+	for area: Node2D in $derecha.get_overlapping_areas():
+		if area != $izquierda:
+			return true
+	return false

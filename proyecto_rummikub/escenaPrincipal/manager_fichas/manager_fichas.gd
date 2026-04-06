@@ -4,9 +4,9 @@ extends Node2D
 @export var manager_juego: Node2D
 
 # cuanto aumenta la escala del la carta al poner el cursor sobre ella
-@export var escala_aumentada: Vector2 = Vector2(1.2,  1.2) 
+@export var escala_aumentada: Vector2 = Vector2(0.7,  0.7) 
 # escalado por defecto de las cartas
-@export var escala_por_defecto: Vector2 = Vector2(1.0,  1.0) 
+@export var escala_por_defecto: Vector2 = Vector2(0.5,  0.5) 
 
 @export var robarCarta: Button
 
@@ -23,7 +23,8 @@ var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el
 var sobre_grupo: Grupo_fichas = null
 var sobre_lado_grupo
 
-var posicion_original_grupo: Vector2
+var grupo_de_origen: Grupo_fichas
+var posicion_original_grupo: Transform2D
 
 var estado_cursor # puede ser: MANO, TABLERO, LIMBO
 var posicion_clic: Vector2 # guarda la posiocion del cursor mientras esta pulsado el clic izquierdo
@@ -34,7 +35,6 @@ var indice_lista_fichas: int = 0 # numero de cartas en pantalla
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	for ficha in mano.fichas_en_mano:
-		print("me conecto")
 		conectar_ficha(ficha)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -55,18 +55,30 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO
 					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
-					for ficha in grupo_arrastrado.fichas :
-						if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
-							mano.insertar_ficha(ficha, sobre_ficha)
+					if not grupo_arrastrado.contengo_ficha_fijada():
+						for ficha in grupo_arrastrado.fichas :
+							if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
+								mano.insertar_ficha(ficha, sobre_ficha)
+							else:
+								mano.devolver_ficha(ficha)
+						grupo_arrastrado.queue_free()
+						quitando_fichas()
+					else:
+						if(grupo_de_origen == null):
+							grupo_arrastrado.transform = posicion_original_grupo
+							grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
+							grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
+							$tablero.anadir_grupo_fichas(grupo_arrastrado)
+							poniendo_fichas()
 						else:
-							mano.devolver_ficha(ficha)
-					grupo_arrastrado.queue_free()
-					quitando_fichas()
+							grupo_de_origen.anadir_grupo_fin(grupo_arrastrado)
+						
 				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
 					poniendo_fichas()
+
 				else: # arrastra en el tablero sobre un grupo
 					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
@@ -106,11 +118,11 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 		sobre_ficha = ficha
 		resaltar(ficha)
 		print("entraron en " + str(ficha.name))
-		print("prioridad: " + str(ficha.z_index))
-	elif sobre_ficha != null:
-		if(not sobre_ficha.en_blanco):
-			if(not mano.hay_espacio()):
-				mano.aumentar_tamano_mano()
+		#print("prioridad: " + str(ficha.z_index))
+	else:
+		if(not mano.hay_espacio()):
+			mano.aumentar_tamano_mano()
+		if(globales.estado_cursor == globales.ESTADO_CURSOR.MANO):
 			mano.intercambiar(ficha)
 
 func _salio_cursor_en_ficha(ficha: Ficha):
@@ -132,15 +144,23 @@ func click_izquierdo(ficha: Ficha) -> void:
 
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
+		ficha.estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
+		ficha.resaltar_aura()
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
 		globales.apropiar_hijo(self, grupo_arrastrado)
 	else:
 		var grupo_original = ficha.miGrupo
 		grupo_arrastrado = grupo_original.partir(ficha)
 		sobre_grupo = grupo_original
-		if grupo_arrastrado == grupo_original: $tablero.quitar_grupo_fichas(grupo_arrastrado)
+		if grupo_arrastrado == grupo_original: # nos llevamos todo el grupo
+			posicion_original_grupo = grupo_original.transform
+			grupo_de_origen = null
+			$tablero.quitar_grupo_fichas(grupo_arrastrado)
+		else: # nos llevamos solo parte
+			grupo_de_origen = grupo_original
+		
 		globales.apropiar_hijo(self, grupo_arrastrado)
-
+		
 		
 		#sobre_quien = grupo_ficha.partir(sobre_quien)
 		#var grupo_ficha = ficha.miGrupo
@@ -164,6 +184,15 @@ func conectar_ficha(ficha: Ficha):
 func desconectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.disconnect(_salio_cursor_en_ficha)
+
+
+func conectar_grupo(grupo_fichas: Grupo_fichas) -> void:
+	grupo_fichas.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
+	grupo_fichas.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
+
+func desconectar_grupo(grupo_fichas: Grupo_fichas) -> void:
+	grupo_fichas.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
+	grupo_fichas.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
 
 func poniendo_fichas():
 	manager_juego.poniendo_fichas()

@@ -21,7 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0.41960785, 0.078431375, 1)
+color = Color(0.101960786, 0.3647059, 0.1254902, 1)
 
 [node name="RadialProgress" type="Control" parent="." unique_id=1362686982]
 layout_mode = 1
@@ -38,7 +38,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_372ep")
 radius = 90.0
-bg_color = Color(0, 0.41960785, 0.078431375, 1)
+bg_color = Color(0.101960786, 0.3647059, 0.1254902, 1)
 bar_color = Color(0.2, 0.9019608, 0.7490196, 1)
 metadata/_custom_type_script = "uid://cbc6r3x84ejtj"
 

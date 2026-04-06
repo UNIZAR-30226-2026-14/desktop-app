@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 globales="*uid://daeeyptw7j31p"
 ConectorRed="*uid://cvw1u0y51ule6"
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
 [editor]
 
 version_control/plugin_name="GitPlugin"

@@ -10,7 +10,7 @@ enum COLOR{ROJO, NEGRO, AZUL, AMARILLO, BLANCO, COMODIN}
 
 static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
 static var indice: int = -1
-const tamano_fichas : Vector2 = Vector2(70.0, 98.0)
+const tamano_fichas : Vector2 = Vector2(35.0, 49.0)
 
 var mi_indice : int
 # estado puede ser: MANO, TABLERO_FIJADA, TABLERO_NO_FIJADA
@@ -23,22 +23,19 @@ var en_blanco : bool
 var color: COLOR
 var numero: int
 
-
 static func ficha(color_in: COLOR, numero_in: int) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
-	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.z_index = 0
 	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.name = str((indice +1 ))
 	ficha_creada.cambiar_sprite(color_in, numero_in)
-	ficha_creada.get_child(1).get_child(0).shape.size = tamano_fichas
+	ficha_creada.get_child(2).get_child(0).shape.size = tamano_fichas
 	ficha_creada.jugada = false;
 	ficha_creada.color = color_in
 	ficha_creada.numero = numero_in
 	return ficha_creada
 
 func set_grupo(grupo: Grupo_fichas):
-	estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
 	miGrupo = grupo
 	
 func get_grupo() -> Grupo_fichas:
@@ -55,19 +52,28 @@ func tamano_ficha() -> Vector2:
 func cambiar_sprite(color_in: COLOR, numero_in: int):
 	en_blanco = false
 	$Numero.text = str(numero_in)
+	$auraFicha.visible = false
 	match color_in:
 		COLOR.ROJO:
 			$Numero.modulate = "b92300"
 			$assDePicas.texture = load("res://imagenes/carta.jpg")
+			$auraFicha.texture = load("res://imagenes/circulo.png")
+
 		COLOR.NEGRO: 
 			$Numero.modulate = "000000"
 			$assDePicas.texture = load("res://imagenes/carta.jpg")
+			$auraFicha.texture = load("res://imagenes/circulo.png")
+
 		COLOR.AZUL:
 			$Numero.modulate = "00aeaf"
 			$assDePicas.texture = load("res://imagenes/carta.jpg")
+			$auraFicha.texture = load("res://imagenes/circulo.png")
+
 		COLOR.AMARILLO:
 			$Numero.modulate = "cfce00"
 			$assDePicas.texture = load("res://imagenes/carta.jpg")
+			$auraFicha.texture = load("res://imagenes/circulo.png")
+
 		COLOR.BLANCO:
 			en_blanco = true
 			$Numero.text = ""
@@ -84,3 +90,9 @@ func _emitir_señal_entrada():
 
 func _emitir_señal_salida():
 	cursor_no_sobre_ficha.emit(self)
+
+func resaltar_aura():
+	$auraFicha.visible = true
+
+func desresaltar_aura():
+	$auraFicha.visible = false
