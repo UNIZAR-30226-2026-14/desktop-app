@@ -43,7 +43,7 @@ func _ready() -> void:
 
 func pasar_turno():
 	var valido = tablero.tablero_valido(abierto)
-	if valido: valido = await ConectorRed.acabo_turno(func(res:bool): return res)
+	if valido: valido = await ConectorRed.acabo_turno(func(res:bool): return res,[])
 	if(valido):
 		abierto = true
 		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
