@@ -4,8 +4,11 @@
 [ext_resource type="Script" uid="uid://db0nhy3a6a6xd" path="res://proyecto_rummikub/menuInicio/menu_inicio.gd" id="1_87g63"]
 [ext_resource type="StyleBox" uid="uid://cl44pv36u0v2l" path="res://proyecto_rummikub/menuInicio/style_box_boton_iniciar_partida.tres" id="2_ct2gx"]
 [ext_resource type="Script" uid="uid://bbt313hn2cygs" path="res://proyecto_rummikub/menuInicio/gestor_pestana_amigos.gd" id="3_87g63"]
-[ext_resource type="Texture2D" uid="uid://dmttrrp3j7sje" path="res://imagenes/joker_negro.png" id="4_u5hb0"]
+[ext_resource type="Texture2D" uid="uid://dmttrrp3j7sje" path="res://imagenes/iconos_jokers/joker_negro.png" id="4_u5hb0"]
+[ext_resource type="Texture2D" uid="uid://blpbt7yth8x3a" path="res://imagenes/imagenes_inicio/icono_amigos.png" id="6_2yd1p"]
+[ext_resource type="StyleBox" uid="uid://4nr4wk5486w8" path="res://proyecto_rummikub/menuInicio/style_box_boton_amigos.tres" id="6_3d1jw"]
 [ext_resource type="Texture2D" uid="uid://dxut78q7xni1p" path="res://imagenes/Fernando.png" id="6_182vh"]
+[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="9_u2d15"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5hb0"]
 bg_color = Color(1, 1, 1, 1)
@@ -37,7 +40,12 @@ corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
-[node name="Control" type="Control" unique_id=1337258946]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3d1jw"]
+bg_color = Color(0.16862746, 0.24313726, 0.31764707, 1)
+shadow_color = Color(0, 0, 0, 0.47843137)
+shadow_size = 10
+
+[node name="Control" type="Control" unique_id=1337258946 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,6 +53,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_87g63")
+botonAmigos = NodePath("BarraSuperior/PanelIconoBotonAmigos/Button")
+botonCerrarPestanaAmigos = NodePath("MenuAmigos/BotonCerrarPestanaAmigos")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1176407704]
 layout_mode = 1
@@ -123,9 +133,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -99.1875
+offset_left = -98.1875
 offset_top = -20.0
-offset_right = 99.1875
+offset_right = 100.1875
 offset_bottom = 29.5
 grow_horizontal = 2
 grow_vertical = 2
@@ -150,7 +160,7 @@ text = "NombreUsuario"
 
 [node name="Sprite2D" type="Sprite2D" parent="BarraSuperior" unique_id=701225809]
 
-[node name="Panel" type="Panel" parent="BarraSuperior" unique_id=1562354141]
+[node name="PanelIconoAvatar" type="Panel" parent="BarraSuperior" unique_id=1562354141]
 layout_mode = 0
 offset_left = 13.0
 offset_top = 17.0
@@ -158,13 +168,98 @@ offset_right = 84.0
 offset_bottom = 90.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_2yd1p")
 
-[node name="Fernando" type="Sprite2D" parent="BarraSuperior/Panel" unique_id=826042746]
+[node name="IconoJugador" type="Sprite2D" parent="BarraSuperior/PanelIconoAvatar" unique_id=826042746]
 position = Vector2(34, 37.000004)
 scale = Vector2(0.057593845, 0.05706519)
 texture = ExtResource("6_182vh")
 
+[node name="PanelIconoBotonAmigos" type="Panel" parent="BarraSuperior" unique_id=1579480920]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -83.0
+offset_top = -36.5
+offset_right = -12.0
+offset_bottom = 36.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_2yd1p")
+
+[node name="Button" type="Button" parent="BarraSuperior/PanelIconoBotonAmigos" unique_id=11631376]
+layout_mode = 0
+offset_left = -9.0
+offset_top = -9.0
+offset_right = 1199.0
+offset_bottom = 1199.0
+scale = Vector2(0.075, 0.075)
+theme_override_styles/normal = ExtResource("6_3d1jw")
+theme_override_styles/normal_mirrored = ExtResource("6_3d1jw")
+theme_override_styles/pressed = ExtResource("6_3d1jw")
+theme_override_styles/hover = ExtResource("6_3d1jw")
+icon = ExtResource("6_2yd1p")
+
 [node name="GestorPestanaAmigos" type="HTTPRequest" parent="." unique_id=94937616]
 script = ExtResource("3_87g63")
+
+[node name="MenuAmigos" type="Panel" parent="." unique_id=388604241]
+visible = false
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -285.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3d1jw")
+
+[node name="Amigos" type="RichTextLabel" parent="MenuAmigos" unique_id=2144392521]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -51.0
+offset_top = 27.0
+offset_right = 47.6875
+offset_bottom = 71.0
+grow_horizontal = 2
+mouse_behavior_recursive = 1
+theme_override_font_sizes/normal_font_size = 26
+text = "Amigos"
+
+[node name="BotonCerrarPestanaAmigos" type="Button" parent="MenuAmigos" unique_id=1520292430]
+layout_mode = 0
+anchor_left = 0.85057473
+anchor_top = 0.0046296297
+anchor_right = 1.0038314
+anchor_bottom = 0.06635802
+offset_right = 1960.0
+offset_bottom = 1960.0
+scale = Vector2(0.02, 0.02)
+theme_override_styles/normal = ExtResource("6_3d1jw")
+theme_override_styles/normal_mirrored = ExtResource("6_3d1jw")
+theme_override_styles/pressed_mirrored = ExtResource("6_3d1jw")
+icon = ExtResource("9_u2d15")
+metadata/_edit_use_anchors_ = true
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MenuAmigos" unique_id=582142751]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -236.0
+offset_bottom = 322.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_scroll_mode = 3
+
+[node name="contenedorAmigos" type="VBoxContainer" parent="MenuAmigos/ScrollContainer" unique_id=773451883]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [connection signal="mouse_entered" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_entered"]
 [connection signal="mouse_exited" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_exited"]

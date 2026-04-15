@@ -132,10 +132,10 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_2ymbn")
 text = "Iniciar Sesion"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1780075109]
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect/botonIniciarSesion" unique_id=1780075109]
 layout_mode = 0
-offset_left = 438.0
-offset_top = 431.0
-offset_right = 592.0
-offset_bottom = 459.0
+offset_left = -153.0
+offset_top = 2.0
+offset_right = 1.0
+offset_bottom = 30.0
 text = "¿Ya tienes cuenta?"

@@ -109,8 +109,6 @@ func insertar_grupos_fichas(grupos_insertar: Array[Grupo_fichas]) -> void:
 				grupo.position.x += (tamano_grupo.x/2) + Ficha.tamano_ficha_static().x
 			await get_tree().physics_frame
 
-
-
 func _adaptar_posicion_a_grupo(grupo_adaptar: Grupo_fichas, posicion_inicial: Vector2) -> Vector2:
 	
 	var posicion_devolver: Vector2 = Ficha.tamano_ficha_static() + posicion_inicial # para que el grupo entre con un margen de una ficha

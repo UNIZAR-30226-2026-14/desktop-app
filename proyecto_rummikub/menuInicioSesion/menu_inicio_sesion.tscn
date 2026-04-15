@@ -112,7 +112,7 @@ text = "Registrarse"
 [node name="estasRegistradoTexto" type="RichTextLabel" parent="ColorRect/botonRegistrarse" unique_id=907264072]
 layout_mode = 0
 offset_left = -153.0
-offset_top = 6.0
+offset_top = 5.0
 offset_right = 6.0
-offset_bottom = 31.0
+offset_bottom = 30.0
 text = "¿No tienes cuenta?"

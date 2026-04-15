@@ -41,6 +41,7 @@ func _ready() -> void:
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
+	#devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 10))
 	actualizar_posicion_mano()
 
 
@@ -170,17 +171,8 @@ func ordenar_por_color() -> void:
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	var grupos_fichas: Array[Grupo_fichas] = [Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7)])]
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7),Ficha.ficha(Ficha.COLOR.ROJO,5)]))
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7),Ficha.ficha(Ficha.COLOR.ROJO,5),]))
-	grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	#grupos_fichas.append(Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,6),Ficha.ficha(Ficha.COLOR.ROJO,7)]))
-	
+	var grupos_fichas: Array[Grupo_fichas] = [Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7),Ficha.ficha(Ficha.COLOR.ROJO,8),Ficha.ficha(Ficha.COLOR.ROJO,9)])]
+
 	tablero.insertar_grupos_fichas(grupos_fichas)
 
 	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )

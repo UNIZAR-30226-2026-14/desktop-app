@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgo06j6ibc1is"
-path="res://.godot/imported/circulo.png-b72f369036815fe3932d23f6d67aed2d.ctex"
+uid="uid://2uv4gd2r8i6x"
+path="res://.godot/imported/J-ROJO.png-47a2427769c295dc6995f254a9407b27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/circulo.png"
-dest_files=["res://.godot/imported/circulo.png-b72f369036815fe3932d23f6d67aed2d.ctex"]
+source_file="res://imagenes/iconos_jokers/J-ROJO.png"
+dest_files=["res://.godot/imported/J-ROJO.png-47a2427769c295dc6995f254a9407b27.ctex"]
 
 [params]
 

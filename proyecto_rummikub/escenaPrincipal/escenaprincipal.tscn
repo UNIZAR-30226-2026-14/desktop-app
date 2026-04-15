@@ -4,13 +4,17 @@
 [ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/escenaprincipal.gd" id="1_k1ots"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
 [ext_resource type="Script" uid="uid://3olcnx0nwrf0" path="res://proyecto_rummikub/escenaPrincipal/manager_juego/manager_juego.gd" id="2_pp26n"]
-[ext_resource type="Texture2D" uid="uid://dfg4w7nij8fws" path="res://imagenes/devolver_fichas.png" id="3_pp26n"]
+[ext_resource type="Texture2D" uid="uid://dfg4w7nij8fws" path="res://imagenes/imagenes_escena_principal/devolver_fichas.png" id="3_pp26n"]
 [ext_resource type="Texture2D" uid="uid://bjt762qw1b5f0" path="res://imagenes/icono_ordenar_cartas/ordenar_por_numero.png" id="4_qada0"]
-[ext_resource type="Texture2D" uid="uid://b7dnd5f3w24h2" path="res://imagenes/check.png" id="5_k1ots"]
+[ext_resource type="Texture2D" uid="uid://b7dnd5f3w24h2" path="res://imagenes/imagenes_escena_principal/check.png" id="5_k1ots"]
 [ext_resource type="Script" uid="uid://cyjdphr21mise" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/tablero/tablero.gd" id="5_nj8sc"]
-[ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/robar_carta.png" id="5_qada0"]
+[ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/imagenes_escena_principal/robar_carta.png" id="5_qada0"]
+[ext_resource type="PackedScene" uid="uid://c3ex7k8wifj4s" path="res://proyecto_rummikub/tiendaObjetosPartida/tiendaObjetosPartida.tscn" id="6_4470i"]
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
+[ext_resource type="StyleBox" uid="uid://da0wvj5ist4bp" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/ordenar/style_box_boton_solo_icono.tres" id="8_4j4ur"]
 [ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/http_request.gd" id="8_7fgi8"]
+[ext_resource type="Texture2D" uid="uid://dvske3wbsymkp" path="res://imagenes/imagenes_escena_principal/icono_moneda.png" id="12_g1hmo"]
+[ext_resource type="PackedScene" uid="uid://d225hlutlafaj" path="res://proyecto_rummikub/poder/Poder.tscn" id="14_4j4ur"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
 size = Vector2(447, 157.5)
@@ -22,6 +26,16 @@ corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pp26n"]
+bg_color = Color(0.08235294, 0.13333334, 0.105882354, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4470i"]
+size = Vector2(155, 56)
 
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 script = ExtResource("1_k1ots")
@@ -120,6 +134,7 @@ offset_top = 83.99999
 offset_right = 1019.0
 offset_bottom = 604.0
 scale = Vector2(0.1, 0.1)
+theme_override_styles/normal = ExtResource("8_4j4ur")
 icon = ExtResource("6_nj8sc")
 metadata/_edit_use_anchors_ = true
 
@@ -129,6 +144,8 @@ offset_top = 164.99997
 offset_right = 1017.9999
 offset_bottom = 685.0
 scale = Vector2(0.1, 0.1)
+theme_override_styles/normal = ExtResource("8_4j4ur")
+theme_override_styles/normal_mirrored = ExtResource("8_4j4ur")
 icon = ExtResource("4_qada0")
 metadata/_edit_use_anchors_ = true
 
@@ -141,28 +158,20 @@ colision_mano = NodePath("../mano/AreaMano/CollisionShapeMano")
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=143859430]
 script = ExtResource("8_7fgi8")
 
-[node name="ColorRect3" type="ColorRect" parent="." unique_id=1187303382]
-z_index = 5
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ColorRect2" type="ColorRect" parent="." unique_id=1522473387]
+[node name="Fondo" type="ColorRect" parent="." unique_id=1522473387]
 z_index = -999
 z_as_relative = false
-offset_left = -6964.0
-offset_top = -2567.0
-offset_right = 6154.0
-offset_bottom = 3021.0
+offset_left = -6554.0
+offset_top = -2436.0
+offset_right = 6564.0
+offset_bottom = 3152.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 2
 mouse_force_pass_scroll_events = false
 color = Color(0.059360206, 0.1829626, 0.12114481, 1)
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=969498385]
+[node name="FondoTemporal1" type="ColorRect" parent="." unique_id=969498385]
 visible = false
 z_index = -998
 offset_left = -538.0
@@ -173,3 +182,74 @@ size_flags_vertical = 4
 mouse_filter = 2
 color = Color(0.044573896, 0.15443364, 0.09951004, 1)
 metadata/_edit_use_anchors_ = true
+
+[node name="panelContadorMonedas" type="Panel" parent="." unique_id=1574399020]
+offset_left = -552.0
+offset_top = -303.0
+offset_right = -402.0
+offset_bottom = -250.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pp26n")
+metadata/_edit_use_anchors_ = true
+
+[node name="contadorMonedas" type="RichTextLabel" parent="panelContadorMonedas" unique_id=1335664240]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.19040294
+anchor_top = 0.018867925
+anchor_right = 0.78996336
+anchor_bottom = 1.018868
+offset_left = -15.56044
+offset_top = -1.0
+offset_right = -14.560425
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.7670186, 0.7670186, 0.7670186, 1)
+theme_override_font_sizes/normal_font_size = 38
+text = "200"
+horizontal_alignment = 2
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="IconoMoneda" type="Sprite2D" parent="panelContadorMonedas" unique_id=2049835933]
+position = Vector2(127, 27)
+scale = Vector2(0.04625002, 0.045625027)
+texture = ExtResource("12_g1hmo")
+
+[node name="Area2D" type="Area2D" parent="panelContadorMonedas" unique_id=1691477541]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="panelContadorMonedas/Area2D" unique_id=1337350919]
+position = Vector2(73.5, 28)
+shape = SubResource("RectangleShape2D_4470i")
+
+[node name="Poder" parent="." unique_id=1732648488 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos") instance=ExtResource("14_4j4ur")]
+position = Vector2(267, 288)
+manager_fichas = NodePath("../managerFichas")
+manager_juego = NodePath("../managerJuego")
+tienda_objetos = NodePath("../TiendaObjetosPartida")
+
+[node name="Poder2" parent="." unique_id=2033793081 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos") instance=ExtResource("14_4j4ur")]
+position = Vector2(343, 288)
+manager_fichas = NodePath("../managerFichas")
+manager_juego = NodePath("../managerJuego")
+tienda_objetos = NodePath("../TiendaObjetosPartida")
+
+[node name="Poder3" parent="." unique_id=471364883 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos") instance=ExtResource("14_4j4ur")]
+position = Vector2(418, 288)
+manager_fichas = NodePath("../managerFichas")
+manager_juego = NodePath("../managerJuego")
+tienda_objetos = NodePath("../TiendaObjetosPartida")
+
+[node name="TiendaObjetosPartida" parent="." unique_id=1093875184 node_paths=PackedStringArray("contador_dinero") instance=ExtResource("6_4470i")]
+visible = false
+offset_left = -287.0
+offset_top = -236.0
+offset_right = -25.0
+offset_bottom = -11.737793
+contador_dinero = NodePath("../panelContadorMonedas/contadorMonedas")
+
+[connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
+[connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]

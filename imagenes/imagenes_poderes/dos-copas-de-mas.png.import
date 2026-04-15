@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7dnd5f3w24h2"
-path="res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"
+uid="uid://cvpvqvw8wjexk"
+path="res://.godot/imported/dos-copas-de-mas.png-44eef38149e6f1408fcc6fbfaa2ac434.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/check.png"
-dest_files=["res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"]
+source_file="res://imagenes/imagenes_poderes/dos-copas-de-mas.png"
+dest_files=["res://.godot/imported/dos-copas-de-mas.png-44eef38149e6f1408fcc6fbfaa2ac434.ctex"]
 
 [params]
 

@@ -74,7 +74,7 @@ func anadir_grupo_fin(grupo_o_ficha) -> void:
 	_calcula_posicion_grupo(globales.LADOS.DERECHA)
 	_posicionar_fichas()
 	# comportamiento
-	for ficha in lista:
+	for ficha:Ficha in lista:
 		ficha.position.y = 0
 		globales.apropiar_hijo(self, ficha)
 		ficha.set_grupo(self)
@@ -186,6 +186,13 @@ func contengo_ficha_fijada() -> bool:
 		if ficha.estado == globales.ESTADO_FICHA.TABLERO_FIJADA:
 			return true
 	return false
+
+func todas_son_fichas_fijadas() -> bool:
+	for ficha in fichas:
+		if ficha.estado != globales.ESTADO_FICHA.TABLERO_FIJADA:
+			return false
+	return true
+
 
 func _emitir_señal_entrada_izquierda():
 	cursor_sobre_grupo.emit(self, globales.LADOS.IZQUIERDA)
