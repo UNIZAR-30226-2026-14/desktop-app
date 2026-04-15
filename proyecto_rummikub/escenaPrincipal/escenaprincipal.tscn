@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
 [ext_resource type="StyleBox" uid="uid://da0wvj5ist4bp" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/ordenar/style_box_boton_solo_icono.tres" id="8_4j4ur"]
 [ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/http_request.gd" id="8_7fgi8"]
+[ext_resource type="PackedScene" uid="uid://b8p6hfgluurlg" path="res://proyecto_rummikub/contadorTiempoTurno/contadorTiempoTurno.tscn" id="11_naapq"]
 [ext_resource type="Texture2D" uid="uid://dvske3wbsymkp" path="res://imagenes/imagenes_escena_principal/icono_moneda.png" id="12_g1hmo"]
 [ext_resource type="PackedScene" uid="uid://d225hlutlafaj" path="res://proyecto_rummikub/poder/Poder.tscn" id="14_4j4ur"]
 
@@ -44,7 +45,7 @@ script = ExtResource("1_k1ots")
 editor_draw_limits = true
 
 [node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "tablero", "mano", "manager_fichas")]
-position = Vector2(-555, 151.99994)
+position = Vector2(-563, 99)
 scale = Vector2(0.038, 0.038)
 script = ExtResource("2_pp26n")
 robarCarta = NodePath("robarCarta")
@@ -85,6 +86,11 @@ offset_bottom = 2414.7385
 scale = Vector2(2, 2)
 icon = ExtResource("5_qada0")
 metadata/_edit_use_anchors_ = true
+
+[node name="ContadorTiempoTurno" parent="managerJuego" unique_id=334267871 node_paths=PackedStringArray("manager_juego") instance=ExtResource("11_naapq")]
+position = Vector2(28315.79, 3868.4204)
+scale = Vector2(7.8947372, 7.8947372)
+manager_juego = NodePath("..")
 
 [node name="managerFichas" type="Node2D" parent="." unique_id=589849570 node_paths=PackedStringArray("mano", "tablero", "manager_juego", "robarCarta", "pasarTurno", "devolverFichas")]
 script = ExtResource("1_fdp1d")
@@ -129,20 +135,20 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_g1hmo")
 
 [node name="ordenarColor" type="Button" parent="managerFichas/mano" unique_id=995823319]
-offset_left = 498.99997
-offset_top = 83.99999
-offset_right = 1019.0
-offset_bottom = 604.0
+offset_left = 495.0001
+offset_top = 54.0
+offset_right = 1015.0001
+offset_bottom = 574.0
 scale = Vector2(0.1, 0.1)
 theme_override_styles/normal = ExtResource("8_4j4ur")
 icon = ExtResource("6_nj8sc")
 metadata/_edit_use_anchors_ = true
 
 [node name="ordenarNumero" type="Button" parent="managerFichas/mano" unique_id=1435978425]
-offset_left = 497.99988
-offset_top = 164.99997
-offset_right = 1017.9999
-offset_bottom = 685.0
+offset_left = 494.0
+offset_top = 134.99998
+offset_right = 1014.0
+offset_bottom = 655.0
 scale = Vector2(0.1, 0.1)
 theme_override_styles/normal = ExtResource("8_4j4ur")
 theme_override_styles/normal_mirrored = ExtResource("8_4j4ur")
@@ -159,6 +165,7 @@ colision_mano = NodePath("../mano/AreaMano/CollisionShapeMano")
 script = ExtResource("8_7fgi8")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1522473387]
+visible = false
 z_index = -999
 z_as_relative = false
 offset_left = -6554.0
@@ -226,19 +233,19 @@ position = Vector2(73.5, 28)
 shape = SubResource("RectangleShape2D_4470i")
 
 [node name="Poder" parent="." unique_id=1732648488 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos") instance=ExtResource("14_4j4ur")]
-position = Vector2(267, 288)
+position = Vector2(267, 287)
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 
 [node name="Poder2" parent="." unique_id=2033793081 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos") instance=ExtResource("14_4j4ur")]
-position = Vector2(343, 288)
+position = Vector2(343, 287)
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 
 [node name="Poder3" parent="." unique_id=471364883 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos") instance=ExtResource("14_4j4ur")]
-position = Vector2(418, 288)
+position = Vector2(418, 287)
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")

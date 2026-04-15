@@ -10,6 +10,9 @@ extends Node2D
 @export var mano: Node2D
 @export var manager_fichas: Node2D
 
+signal empieza_turno
+signal termina_turno
+
 class GrupoGuardado:
 	var grupo: Array[Ficha]
 	var posicion: Vector2
@@ -36,30 +39,37 @@ func _ready() -> void:
 	grupos_en_tablero_antes = []
 	abierto = false
 	robarCarta.pressed.connect(robar_carta)
-	pasarTurno.pressed.connect(pasar_turno)
-	devolverFichas.pressed.connect(devolver_fichas)
+	pasarTurno.pressed.connect(intenta_hacer_jugada)
+	devolverFichas.pressed.connect(_boton_devolver_fichas)
 	miTurno.pressed.connect(iniciar_turno)
 
-func pasar_turno():
+func intenta_hacer_jugada() -> bool:
 	if(tablero.tablero_valido(abierto)):
-		abierto = true
-		globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 		tablero.fijar_tablero()
-		robarCarta.disabled = true
-		devolverFichas.disabled = true
-		pasarTurno.disabled = true
+		guardar_estado()
+		terminar_turno()
+		return true
 	else:
 		print("TABLERO NO VALIDO")
+		return false
 
+func terminar_turno() -> void:
+	_devolver_fichas()
+	termina_turno.emit()
+	abierto = true
+	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
+	robarCarta.disabled = true
+	devolverFichas.disabled = true
+	pasarTurno.disabled = true
 
 func iniciar_turno() -> void:
 	guardar_estado()
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
-	
 	robarCarta.disabled = false
 	
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
+	empieza_turno.emit()
 
 func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
@@ -69,7 +79,7 @@ func guardar_estado() -> void:
 		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
 		globales.apropiar_hijo(self, ficha_nueva)
 		fichas_en_mano_antes.append(ficha_nueva)
-		
+	
 	
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
@@ -92,17 +102,17 @@ func poniendo_fichas() -> void:
 	
 	robarCarta.disabled = true
 
-func volver_estado_inicial() -> void:
-	pass
-
-func devolver_fichas() -> void:
-	print("DEVOLVIENDO FICHAS")
+func _boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
 	
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
 	robarCarta.disabled = false
 	
+	_devolver_fichas()
+
+
+func _devolver_fichas() -> void:
 	var arrayGrupos: Array[Grupo_fichas] = []
 	for grupo: GrupoGuardado in grupos_en_tablero_antes:
 		arrayGrupos.append(grupo.creaGrupo())
@@ -117,4 +127,4 @@ func robar_carta() -> void:
 	fich.z_index = 0
 	#if(indice_lista_fichas >= 1):
 		#lista_fichas[indice_lista_fichas-1].z_index += 1
-	pasar_turno()
+	terminar_turno()

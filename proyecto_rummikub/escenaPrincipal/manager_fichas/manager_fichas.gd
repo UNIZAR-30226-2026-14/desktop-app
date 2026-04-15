@@ -60,7 +60,9 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
 					desresaltar_grupo(grupo_arrastrado)
-					if not grupo_arrastrado.contengo_ficha_fijada() and not vengo_de_tablero:
+					if (not grupo_arrastrado.contengo_ficha_fijada()) and (not (vengo_de_tablero and (globales.ESTADO_CURSOR.LIMBO== globales.estado_cursor))):
+						# cuando no se mete un grupo fijado ni se mete un grupo que vaya desde el tablero a una posicion invalida
+						# se devuelve a la mano
 						for ficha in grupo_arrastrado.fichas :
 							print("Devuelvo a mano")
 							if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
@@ -70,7 +72,9 @@ func _unhandled_input(event: InputEvent) -> void:
 						grupo_arrastrado.queue_free()
 						quitando_fichas()
 					else:
+						# se devuelve al tablero
 						if(grupo_de_origen == null):
+							# si el grupo de donde venia ya no existe se tiene que volver a conectar y meter
 							grupo_arrastrado.transform = posicion_original_grupo
 							grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 							grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
@@ -78,6 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 							if not grupo_arrastrado.todas_son_fichas_fijadas():
 								poniendo_fichas()
 						else:
+							# si sigue existiendo se conecta
 							grupo_de_origen.anadir_grupo_fin(grupo_arrastrado)
 						
 				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
