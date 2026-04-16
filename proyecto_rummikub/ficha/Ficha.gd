@@ -57,22 +57,22 @@ func cambiar_sprite(color_in: COLOR, numero_in: int):
 	match color_in:
 		COLOR.ROJO:
 			$Numero.modulate = "b92300"
-			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.jpg")
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.NEGRO: 
 			$Numero.modulate = "000000"
-			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.jpg")
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.AZUL:
 			$Numero.modulate = "00aeaf"
-			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.jpg")
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.AMARILLO:
 			$Numero.modulate = "cfce00"
-			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.jpg")
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.BLANCO:
@@ -81,7 +81,7 @@ func cambiar_sprite(color_in: COLOR, numero_in: int):
 		
 		COLOR.COMODIN:
 			$Numero.text = ""
-			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.jpg")
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 			$caraJoker.visible = true
 		

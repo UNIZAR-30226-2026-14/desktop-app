@@ -133,15 +133,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -98.1875
-offset_top = -20.0
-offset_right = 100.1875
-offset_bottom = 29.5
+offset_left = -267.0
+offset_top = -44.5
+offset_right = 267.0
+offset_bottom = 44.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_behavior_recursive = 1
-theme_override_font_sizes/normal_font_size = 31
-text = "RUMMIPLUS"
+theme_override_font_sizes/normal_font_size = 38
+bbcode_enabled = true
+text = "[wave amp=110 freq=5][rainbow freq=0.5 sat=0.8 val=1]RUMMIPLUS"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="NombreUsuario" type="RichTextLabel" parent="BarraSuperior" unique_id=1053121180]
 layout_mode = 1

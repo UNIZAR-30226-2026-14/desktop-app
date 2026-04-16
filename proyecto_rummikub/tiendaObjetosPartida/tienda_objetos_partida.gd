@@ -2,7 +2,7 @@ extends Control
 # NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, LUPA, TOQUE_MIDAS, TRUEQUE, 
 # BOMBA_HUMO, RON, REDUCIR_TIEMPO, MENOS, GUANTE_BLANCO, TECHO_CRISTAL
 
-@export var contador_dinero: RichTextLabel
+@export var contador_dinero: PanelContadorMonedas
 @export var contenedor_botones: GridContainer
 
 signal interaccion_con_tienda
@@ -35,10 +35,10 @@ func abrir_tienda(ranura_quiere_comprar : Poder) -> globales.PODER:
 				self.visible = false
 				return globales.PODER.NINGUNO
 			OBJETO.BOTON_COMPRAR:
-				var dinero_disponible: int = contador_dinero.text.to_int()
-				if  dinero_disponible >= globales.LISTA_PRECIOS_OBJETOS[anterior_pulsado+1]:
-					dinero_disponible -= globales.LISTA_PRECIOS_OBJETOS[anterior_pulsado+1]
-					contador_dinero.text = str(dinero_disponible)
+				var dinero_disponible: int = contador_dinero.get_dinero()
+				var precio: int = globales.LISTA_PRECIOS_OBJETOS[anterior_pulsado+1]
+				if  dinero_disponible >= precio:
+					contador_dinero.reducir_dinero(precio)
 					borrar_botones()
 					self.visible = false
 					return globales.PODER.values()[anterior_pulsado+1]

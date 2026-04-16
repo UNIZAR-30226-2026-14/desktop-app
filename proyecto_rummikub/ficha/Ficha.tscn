@@ -18,7 +18,8 @@ position = Vector2(1.5, 10)
 scale = Vector2(0.11, 0.14)
 
 [node name="fondoFicha" type="Sprite2D" parent="." unique_id=579691819]
-scale = Vector2(0.1, 0.1)
+position = Vector2(1.9999999, 0)
+scale = Vector2(0.165, 0.165)
 
 [node name="caraJoker" type="Sprite2D" parent="." unique_id=274867192]
 position = Vector2(0.25, -0.6249995)

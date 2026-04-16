@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b8p6hfgluurlg"]
 
 [ext_resource type="Script" uid="uid://b7jafrsjld0vu" path="res://proyecto_rummikub/contadorTiempoTurno/contador_tiempo_turno.gd" id="1_qalt4"]
-[ext_resource type="Texture2D" uid="uid://dxut78q7xni1p" path="res://imagenes/Fernando.png" id="2_xtmm3"]
+[ext_resource type="Texture2D" uid="uid://cw11fwjy1w26d" path="res://imagenes/imagenes_contador_turno/reloj_arena.png" id="2_qalt4"]
 
 [node name="ContadorTiempoTurno" type="Node2D" unique_id=334267871]
 script = ExtResource("1_qalt4")
@@ -13,9 +13,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -59.0
-offset_top = 149.0
+offset_top = 81.0
 offset_right = 59.0
-offset_bottom = 246.0
+offset_bottom = 178.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/normal_font_size = 65
@@ -25,5 +25,6 @@ vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="relojArena" type="Sprite2D" parent="." unique_id=1899962639]
-scale = Vector2(0.35, 0.35)
-texture = ExtResource("2_xtmm3")
+position = Vector2(0, -1.9999981)
+scale = Vector2(0.1111111, 0.12034385)
+texture = ExtResource("2_qalt4")

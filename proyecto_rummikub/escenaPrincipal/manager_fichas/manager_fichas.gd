@@ -13,7 +13,7 @@ extends Node2D
 @export var pasarTurno: Button
 @export var devolverFichas: Button
 
-const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
+#const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
 var max_fichas: int = 10 # es para debuggear
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://x2v0uc0ip5qe"
-path="res://.godot/imported/flecha_izquieda.png-71dfda4a9ffb71c1466603bed79bc0ba.ctex"
+uid="uid://cw11fwjy1w26d"
+path="res://.godot/imported/reloj_arena.png-252b5736d8f9a18eae8f0f33afab9e57.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/imagenes_tienda_juego/flecha_izquieda.png"
-dest_files=["res://.godot/imported/flecha_izquieda.png-71dfda4a9ffb71c1466603bed79bc0ba.ctex"]
+source_file="res://imagenes/imagenes_contador_turno/reloj_arena.png"
+dest_files=["res://.godot/imported/reloj_arena.png-252b5736d8f9a18eae8f0f33afab9e57.ctex"]
 
 [params]
 

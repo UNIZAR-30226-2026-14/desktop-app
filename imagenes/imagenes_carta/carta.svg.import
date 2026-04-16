@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfhl6rajvusp6"
-path="res://.godot/imported/flecha_derecha.png-694707ace4a1d32da623761384023f4d.ctex"
+uid="uid://dxrgnrrema10y"
+path="res://.godot/imported/carta.svg-78166b38d66748e36e46e3f6e2cb6c78.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/imagenes_tienda_juego/flecha_derecha.png"
-dest_files=["res://.godot/imported/flecha_derecha.png-694707ace4a1d32da623761384023f4d.ctex"]
+source_file="res://imagenes/imagenes_carta/carta.svg"
+dest_files=["res://.godot/imported/carta.svg-78166b38d66748e36e46e3f6e2cb6c78.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

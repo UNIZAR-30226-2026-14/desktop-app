@@ -121,10 +121,8 @@ func _devolver_fichas() -> void:
 	mano.insertar_mano(fichas_en_mano_antes)
 
 func robar_carta() -> void:
-	var fich = manager_fichas._crear_ficha()
+	var fich: Ficha = manager_fichas._crear_ficha()
 	mano.devolver_ficha(fich)
-	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
 	fich.z_index = 0
-	#if(indice_lista_fichas >= 1):
-		#lista_fichas[indice_lista_fichas-1].z_index += 1
+	guardar_estado()
 	terminar_turno()
