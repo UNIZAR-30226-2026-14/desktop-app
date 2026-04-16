@@ -132,7 +132,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_2ymbn")
 text = "Iniciar Sesion"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1780075109]
+[node name="RichTextLabel" type="RichTextLabel" parent="ColorRect/botonIniciarSesion" unique_id=1780075109]
 layout_mode = 0
 offset_left = 437.0
 offset_top = 478.5
@@ -140,7 +140,8 @@ offset_right = 591.0
 offset_bottom = 506.5
 text = "¿Ya tienes cuenta?"
 
-[node name="MensajeError" type="RichTextLabel" parent="." unique_id=771125687]
+[node name="MensajeError" type="RichTextLabel" parent="ColorRect" unique_id=771125687]
+visible = false
 modulate = Color(0.9920512, 0.39728147, 0.8103883, 1)
 layout_mode = 0
 offset_left = 447.0

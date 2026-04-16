@@ -13,7 +13,7 @@ extends Node2D
 @export var pasarTurno: Button
 @export var devolverFichas: Button
 
-const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
+#const grupo = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 
 var max_fichas: int = 10 # es para debuggear
 
@@ -21,8 +21,9 @@ var clicando: bool = false # indica si se esta pulsando el clic izquierdo
 var grupo_arrastrado: Grupo_fichas = null
 var sobre_ficha: Ficha = null # porta el indice de la carta sobre la que esta el cursor, si no es nadie se pone un -1
 var sobre_grupo: Grupo_fichas = null
+var sobre_poder: Poder = null
 var sobre_lado_grupo
-
+var vengo_de_tablero: bool = false
 var grupo_de_origen: Grupo_fichas
 var posicion_original_grupo: Transform2D
 
@@ -40,7 +41,10 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton) and (event.button_index == MOUSE_BUTTON_LEFT):
 	# se entra cuando se pulsa o despulsa el clic iquierdo del raton
-		if (sobre_ficha != null && not sobre_ficha.en_blanco) and event.is_pressed(): 
+		if event.is_pressed() and sobre_poder != null:
+			sobre_poder.ejecutar_poder()
+		
+		elif (sobre_ficha != null && not sobre_ficha.en_blanco) and event.is_pressed(): 
 		# si se pulsa sobre un espacio no vacio 
 			posicion_clic = get_global_mouse_position()
 			clicando = true 
@@ -55,8 +59,12 @@ func _unhandled_input(event: InputEvent) -> void:
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO
 					or globales.estado_juego == globales.ESTADO_JUEGO.NO_MI_TURNO): # se suelta un grupo en la mano o en un lugar invalido
 					print("Intento devolver", )
-					if not grupo_arrastrado.contengo_ficha_fijada():
+					desresaltar_grupo(grupo_arrastrado)
+					if (not grupo_arrastrado.contengo_ficha_fijada()) and (not (vengo_de_tablero and (globales.ESTADO_CURSOR.LIMBO== globales.estado_cursor))):
+						# cuando no se mete un grupo fijado ni se mete un grupo que vaya desde el tablero a una posicion invalida
+						# se devuelve a la mano
 						for ficha in grupo_arrastrado.fichas :
+							print("Devuelvo a mano")
 							if(sobre_ficha != null and sobre_ficha.en_blanco and grupo_arrastrado.fichas.size() == 1):
 								mano.insertar_ficha(ficha, sobre_ficha)
 							else:
@@ -64,35 +72,41 @@ func _unhandled_input(event: InputEvent) -> void:
 						grupo_arrastrado.queue_free()
 						quitando_fichas()
 					else:
+						# se devuelve al tablero
 						if(grupo_de_origen == null):
+							# si el grupo de donde venia ya no existe se tiene que volver a conectar y meter
 							grupo_arrastrado.transform = posicion_original_grupo
 							grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 							grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 							$tablero.anadir_grupo_fichas(grupo_arrastrado)
-							poniendo_fichas()
+							if not grupo_arrastrado.todas_son_fichas_fijadas():
+								poniendo_fichas()
 						else:
+							# si sigue existiendo se conecta
 							grupo_de_origen.anadir_grupo_fin(grupo_arrastrado)
 						
 				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
-					poniendo_fichas()
-
+					if not grupo_arrastrado.todas_son_fichas_fijadas():
+						poniendo_fichas()
+				
 				else: # arrastra en el tablero sobre un grupo
 					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
-					poniendo_fichas()
+					if not grupo_arrastrado.todas_son_fichas_fijadas():
+						poniendo_fichas()
 			clicando = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	if (grupo_arrastrado != null) and clicando:
-		#var movido = sobre_quien
-		#if movido.get_grupo() != null: 
-		#	movido = movido.get_grupo()
+		# var movido = sobre_quien
+		# if movido.get_grupo() != null: 
+		# movido = movido.get_grupo()
 		var posicion_raton = get_global_mouse_position()
 		grupo_arrastrado.position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
@@ -105,8 +119,8 @@ func crear_ficha(color:Ficha.COLOR = Ficha.COLOR.BLANCO, num: int = -10) -> Fich
 	else: ficha = Ficha.ficha(color, num) # con parametros
 	self.add_child(ficha)
 	conectar_ficha(ficha)
-	#lista_fichas.insert(indice_lista_fichas, ficha)
-	#indice_lista_fichas += 1
+	# lista_fichas.insert(indice_lista_fichas, ficha)
+	# indice_lista_fichas += 1
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):
@@ -118,7 +132,6 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 		sobre_ficha = ficha
 		resaltar(ficha)
 		#print("entraron en " + str(ficha.name))
-		#print("prioridad: " + str(ficha.z_index))
 	else:
 		if(not mano.hay_espacio()):
 			mano.aumentar_tamano_mano()
@@ -133,21 +146,28 @@ func _salio_cursor_en_ficha(ficha: Ficha):
 			sobre_ficha = null
 
 func resaltar(ficha: Ficha):
-	ficha.z_index += 1
+	ficha.z_index = 1
 	ficha.scale = escala_aumentada
 
 func desresaltar(ficha: Ficha):
-	ficha.z_index -= 1
+	ficha.z_index = 0
 	ficha.scale = escala_por_defecto
+
+func desresaltar_grupo(grupo: Grupo_fichas):
+	for ficha: Ficha in grupo.fichas:
+		if ficha.scale == escala_aumentada:
+			desresaltar(ficha)
 
 func click_izquierdo(ficha: Ficha) -> void:
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
+		vengo_de_tablero = false
 		mano.quitar_ficha(sobre_ficha)
 		ficha.estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
 		ficha.resaltar_aura()
 		grupo_arrastrado = Grupo_fichas.Grupo_fichas([ficha])
 		globales.apropiar_hijo(self, grupo_arrastrado)
 	else:
+		vengo_de_tablero = true
 		var grupo_original = ficha.miGrupo
 		grupo_arrastrado = grupo_original.partir(ficha)
 		sobre_grupo = grupo_original
@@ -192,6 +212,14 @@ func desconectar_grupo(grupo_fichas: Grupo_fichas) -> void:
 	grupo_fichas.cursor_sobre_grupo.disconnect(_entro_cursor_en_grupo)
 	grupo_fichas.cursor_no_sobre_grupo.disconnect(_salio_cursor_en_grupo)
 
+func conectar_poder(poder:Poder) -> void:
+	poder.cursor_sobre_poder.connect(_entro_cursor_en_poder)
+	poder.cursor_no_sobre_poder.connect(_salio_cursor_en_poder)
+
+func desconectar_poder(poder:Poder) -> void:
+	poder.cursor_sobre_poder.disconnect(_entro_cursor_en_poder)
+	poder.cursor_no_sobre_poder.disconnect(_salio_cursor_en_poder)
+
 func poniendo_fichas():
 	manager_juego.poniendo_fichas()
 
@@ -201,3 +229,17 @@ func quitando_fichas():
 
 func _es_mi_turno() -> bool:
 	return (globales.estado_juego != globales.ESTADO_JUEGO.NO_MI_TURNO)
+
+func _on_panel_contador_monedas_mouse_entered() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.LIMBO
+
+func _on_panel_contador_monedas_mouse_exited() -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
+
+func _entro_cursor_en_poder(poder: Poder) -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.LIMBO
+	sobre_poder = poder
+
+func _salio_cursor_en_poder(_poder: Poder) -> void:
+	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
+	sobre_poder = null

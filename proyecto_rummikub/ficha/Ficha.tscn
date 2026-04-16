@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://diiqjqmbuekht" path="res://proyecto_rummikub/ficha/Ficha.gd" id="1_en3ta"]
 [ext_resource type="FontFile" uid="uid://cgdt6xx8my0dt" path="res://imagenes/VCR_OSD_MONO_1.001.ttf" id="2_swb5m"]
+[ext_resource type="Texture2D" uid="uid://2uv4gd2r8i6x" path="res://imagenes/iconos_jokers/J-ROJO.png" id="2_tkt68"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0wtaq"]
 size = Vector2(35, 49)
@@ -16,8 +17,14 @@ modulate = Color(1, 1, 0.70980394, 0.2)
 position = Vector2(1.5, 10)
 scale = Vector2(0.11, 0.14)
 
-[node name="assDePicas" type="Sprite2D" parent="." unique_id=579691819]
-scale = Vector2(0.1, 0.1)
+[node name="fondoFicha" type="Sprite2D" parent="." unique_id=579691819]
+position = Vector2(1.9999999, 0)
+scale = Vector2(0.165, 0.165)
+
+[node name="caraJoker" type="Sprite2D" parent="." unique_id=274867192]
+position = Vector2(0.25, -0.6249995)
+scale = Vector2(0.09, 0.08584131)
+texture = ExtResource("2_tkt68")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=105169879]
 

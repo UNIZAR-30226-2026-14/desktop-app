@@ -28,6 +28,7 @@ func _ready() -> void:
 func iniciar_sesion(usr:String, passwd:String)->Error:
 	password = passwd
 	username = usr
+	print(username)
 	return await $red.inicia_sesion(usr,passwd)
 	
 func registrar_usuario(usr:String, passwd:String)->Error:
@@ -79,7 +80,6 @@ func buscar_partida():
 	id_partida = await $red.get_partidas()
 	await $red.unirse_a_partida(id_partida)
 	await $red.espera_a_comienzo_partida(id_partida)
-	pass
 
 func forzar_inicio_partida(): $red.forzar_inicio_partida_set_true()
 #endregion

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dskcun5fuyt5a"
-path="res://.godot/imported/robar_carta.png-ea19023b7943e8abf90726f6fa543c0a.ctex"
+uid="uid://c78wogxmaelde"
+path="res://.godot/imported/mitad-de-tiempo.png-0024a81463ab52eddc0ced1dfe39dc3f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/robar_carta.png"
-dest_files=["res://.godot/imported/robar_carta.png-ea19023b7943e8abf90726f6fa543c0a.ctex"]
+source_file="res://imagenes/imagenes_poderes/mitad-de-tiempo.png"
+dest_files=["res://.godot/imported/mitad-de-tiempo.png-0024a81463ab52eddc0ced1dfe39dc3f.ctex"]
 
 [params]
 

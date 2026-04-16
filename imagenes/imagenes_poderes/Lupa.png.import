@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7dnd5f3w24h2"
-path="res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"
+uid="uid://x8wr20jdxvi7"
+path="res://.godot/imported/Lupa.png-a41064b769be450960f5f57467ad2616.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/check.png"
-dest_files=["res://.godot/imported/check.png-dbadbe9ba1ea0bf946f8d24bf3c9aafe.ctex"]
+source_file="res://imagenes/imagenes_poderes/Lupa.png"
+dest_files=["res://.godot/imported/Lupa.png-a41064b769be450960f5f57467ad2616.ctex"]
 
 [params]
 

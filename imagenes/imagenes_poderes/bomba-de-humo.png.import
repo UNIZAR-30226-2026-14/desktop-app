@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uoio4mx2sqmg"
-path="res://.godot/imported/carta.jpg-c65f9705240813026806bed30204a8f5.ctex"
+uid="uid://bu4f7qoxcf81n"
+path="res://.godot/imported/bomba-de-humo.png-5cd012c78a9b03ebafd4ef63387a17f6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/carta.jpg"
-dest_files=["res://.godot/imported/carta.jpg-c65f9705240813026806bed30204a8f5.ctex"]
+source_file="res://imagenes/imagenes_poderes/bomba-de-humo.png"
+dest_files=["res://.godot/imported/bomba-de-humo.png-5cd012c78a9b03ebafd4ef63387a17f6.ctex"]
 
 [params]
 

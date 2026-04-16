@@ -42,7 +42,7 @@ static func ficha(color_in: COLOR, numero_in: int) -> Node2D:
 	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.name = str((indice +1 ))
 	ficha_creada.cambiar_sprite(color_in, numero_in)
-	ficha_creada.get_child(2).get_child(0).shape.size = tamano_fichas
+	ficha_creada.get_child(3).get_child(0).shape.size = tamano_fichas
 	ficha_creada.jugada = false;
 	ficha_creada.color = color_in
 	ficha_creada.numero = numero_in
@@ -66,31 +66,36 @@ func cambiar_sprite(color_in: COLOR, numero_in: int):
 	en_blanco = false
 	$Numero.text = str(numero_in)
 	$auraFicha.visible = false
+	$caraJoker.visible = false
 	match color_in:
 		COLOR.ROJO:
 			$Numero.modulate = "b92300"
-			$assDePicas.texture = load("res://imagenes/carta.jpg")
-			$auraFicha.texture = load("res://imagenes/circulo.png")
-
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
+			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
+		
 		COLOR.NEGRO: 
 			$Numero.modulate = "000000"
-			$assDePicas.texture = load("res://imagenes/carta.jpg")
-			$auraFicha.texture = load("res://imagenes/circulo.png")
-
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
+			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
+		
 		COLOR.AZUL:
 			$Numero.modulate = "00aeaf"
-			$assDePicas.texture = load("res://imagenes/carta.jpg")
-			$auraFicha.texture = load("res://imagenes/circulo.png")
-
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
+			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
+		
 		COLOR.AMARILLO:
 			$Numero.modulate = "cfce00"
-			$assDePicas.texture = load("res://imagenes/carta.jpg")
-			$auraFicha.texture = load("res://imagenes/circulo.png")
-
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
+			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
+		
 		COLOR.BLANCO:
 			en_blanco = true
 			$Numero.text = ""
-
+		COLOR.COMODIN:
+			$Numero.text = ""
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
+			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
+			$caraJoker.visible = true
 
 ##Compara si numero y color es igual a Ficha o GuardaFicha
 func equiv(ficha:Ficha)->bool:

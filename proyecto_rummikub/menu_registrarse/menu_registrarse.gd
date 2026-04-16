@@ -23,6 +23,5 @@ func guardar_datos() -> void:
 				get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicioSesion/menu_inicio_sesion.tscn")
 		else:
 			$ColorRect/MensajeError.visible = true
-
 func ir_a_iniciar_sesion() -> void:
 	get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicioSesion/menu_inicio_sesion.tscn")

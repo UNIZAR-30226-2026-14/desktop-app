@@ -10,6 +10,9 @@ extends Node2D
 @export var mano: Node2D
 @export var manager_fichas: Node2D
 
+signal empieza_turno
+signal termina_turno
+
 class GrupoGuardado:
 	var grupo: Array[Ficha]
 	var posicion: Vector2
@@ -38,14 +41,38 @@ func _ready() -> void:
 	#botones
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(hacer_jugada)
-	devolverFichas.pressed.connect(devolver_fichas)
+	devolverFichas.pressed.connect(boton_devolver_fichas)
 	@warning_ignore("shadowed_variable")
 	var mano_inicial:Array[Ficha] = await ConectorRed.inicializar_partida(manager_fichas.crear_ficha)
 	mano.insertar_mano(mano_inicial)
+	#miTurno.pressed.connect(iniciar_turno)
 	guardar_estado()
+	#$ContadorTiempoTurno.proceso_contador()
 	terminar_turno()
 
 #region gestion turnos
+
+func intenta_hacer_jugada() -> bool:
+	if(tablero.tablero_valido(abierto)):
+		guardar_estado()
+		terminar_turno()
+		abierto = true
+		return true
+	else:
+		print("TABLERO NO VALIDO")
+		return false
+
+func terminar_turno() -> void:
+	_devolver_fichas()
+	#termina_turno.emit()
+	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
+	robarCarta.disabled = true
+	devolverFichas.disabled = true
+	pasarTurno.disabled = true
+	printerr("si hay bug nuevo al merge, mirar aquí")
+	termina_turno.emit()
+	await ConectorRed.espera_a_turno(llega_turno)
+	iniciar_turno()
 
 func iniciar_turno() -> void:
 	guardar_estado()
@@ -53,18 +80,7 @@ func iniciar_turno() -> void:
 	robarCarta.disabled = false
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
-
-## espera a siguiente turno
-func terminar_turno():
-	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
-	tablero.fijar_tablero()
-	robarCarta.disabled = true
-	devolverFichas.disabled = true
-	pasarTurno.disabled = true
-	
-	await ConectorRed.espera_a_turno(llega_turno)
-	
-	iniciar_turno()
+	empieza_turno.emit()
 
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
@@ -129,6 +145,7 @@ func poniendo_fichas() -> void:
 #endregion
 
 #region volver estado anterior
+
 func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
 	fichas_en_mano_antes = []
@@ -141,15 +158,18 @@ func guardar_estado() -> void:
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
 		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
+	tablero.fijar_tablero()
 
-func devolver_fichas() -> void:
-	print("DEVOLVIENDO FICHAS")
+func boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
-	
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
 	robarCarta.disabled = false
 	
+	_devolver_fichas()
+
+
+func _devolver_fichas() -> void:
 	var arrayGrupos: Array[Grupo_fichas] = []
 	for grupo: GrupoGuardado in grupos_en_tablero_antes:
 		var ungrupo: Grupo_fichas = grupo.creaGrupo()
@@ -157,7 +177,6 @@ func devolver_fichas() -> void:
 		ungrupo.cursor_no_sobre_grupo.connect(manager_fichas._salio_cursor_en_grupo)
 		arrayGrupos.append(ungrupo)
 	tablero.insertar_tablero(arrayGrupos)
-	
 	mano.insertar_mano(fichas_en_mano_antes)
 #endregion
 
@@ -176,7 +195,6 @@ func robar_carta() -> void:
 	var fich: Ficha
 	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
 	mano.devolver_ficha(fich)
-	#el ultimo objeto creado tiene mas z_index, esto arregla eso:
 	fich.z_index = 0
 	guardar_estado()
 	terminar_turno()

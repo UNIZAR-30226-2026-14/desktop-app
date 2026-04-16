@@ -11,6 +11,7 @@ func _ready() -> void:
 	actualizar_circulo_carga()
 	$forzar.pressed.connect(ConectorRed.forzar_inicio_partida)
 	await ConectorRed.buscar_partida()
+	print("PARTIDA ENCONTRADA")
 	terminar = true
 	get_tree().change_scene_to_file("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn")
 

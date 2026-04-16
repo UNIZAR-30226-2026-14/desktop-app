@@ -114,14 +114,18 @@ func _recibe_respuesta(result: int, response_code: int, _headers: PackedStringAr
 		assert(false,"Error al leer cuerpo de get partidas")
 
 func _awaiting_request_get(url:String, header:PackedStringArray = PackedStringArray()):
+	print("pido: ", url)
 	$HTTPRequest.request(url, header)
 	await $HTTPRequest.request_completed
+	print("consigo ", json.data)
 
 ##Body puede ser diccionario o array, se convierte a string dentro de esta funcion
 func _awaiting_request(url:String, body, metodo:HTTPClient.Method, header:PackedStringArray = PackedStringArray(["Content-Type: application/json"])):
 	print("POST ", url, ", Cuerpo: ",JSON.stringify(body), ", Cabecera: ",header)
 	$HTTPRequest.request(url,header,metodo,JSON.stringify(body))
 	await $HTTPRequest.request_completed
+	print("consigo ", json.data)
+
 
 ## acaba toma el valor de hacer get url y  debe devolver un bool que será true
 ## cuando se den las condiciones para acabar la espera
@@ -294,10 +298,10 @@ func info_inicial(id: int, crea_ficha: Callable)->Dictionary:
 	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
 	if _respuesta_buena():
 		var campos = json.data
-		
+
 		var res:Dictionary={}
-		res["turno"]= campos[partic_turno]
-		
+		res[turno]= campos[partic_turno]
+
 		var cartas = campos[partic_mano]
 		cartas = Array(cartas.split(","))
 		var carta_arr: Array[Ficha]

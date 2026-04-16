@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://bholk1p0y220e"]
+
+[ext_resource type="Script" uid="uid://olb1oh1xulvk" path="res://proyecto_rummikub/menuInicio/amigo/amigo.gd" id="1_l70br"]
+[ext_resource type="StyleBox" uid="uid://br3076qlg23jt" path="res://proyecto_rummikub/menuInicio/amigo/style_box_boton_retar.tres" id="2_d85t7"]
+[ext_resource type="Texture2D" uid="uid://5cum5gsue3dt" path="res://imagenes/imagenes_iniciar_sesion/inicioInsertarNombreUsuario.png" id="3_d85t7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d85t7"]
+bg_color = Color(0.17641908, 0.17641911, 0.17641902, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn8ew"]
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(0.07058824, 0.25882354, 0.09019608, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[node name="Amigo" type="Control" unique_id=838092582 node_paths=PackedStringArray("icono_conectado", "nombre_amigo", "avatar_amigo")]
+custom_minimum_size = Vector2(261, 75)
+layout_mode = 3
+anchor_left = -0.00086805556
+anchor_right = 0.22569445
+anchor_bottom = 0.11574074
+offset_right = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_l70br")
+icono_conectado = NodePath("botonRetar/iconoConectado")
+nombre_amigo = NodePath("nombreAmigo")
+avatar_amigo = NodePath("avatarAmigo")
+metadata/_edit_use_anchors_ = true
+
+[node name="botonRetar" type="Button" parent="." unique_id=503488691]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -82.0
+offset_top = -15.0
+offset_right = -4.0
+offset_bottom = 15.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = ExtResource("2_d85t7")
+theme_override_styles/normal_mirrored = ExtResource("2_d85t7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_d85t7")
+theme_override_styles/pressed_mirrored = ExtResource("2_d85t7")
+theme_override_styles/hover = ExtResource("2_d85t7")
+text = "Retar"
+
+[node name="iconoConectado" type="Panel" parent="botonRetar" unique_id=874028434]
+modulate = Color(0.4627451, 0.5176471, 0.5294118, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.33980307
+anchor_top = 0.2444494
+anchor_right = -0.18535975
+anchor_bottom = 0.59203935
+offset_left = 11.999714
+offset_top = 2.9997773
+offset_right = 9.9531355
+offset_bottom = 2.5720787
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_fn8ew")
+
+[node name="avatarAmigo" type="Sprite2D" parent="." unique_id=1350898758]
+position = Vector2(32.639206, 39.000004)
+scale = Vector2(0.06029579, 0.057971016)
+texture = ExtResource("3_d85t7")
+
+[node name="nombreAmigo" type="RichTextLabel" parent="." unique_id=1951099480]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.20350876
+anchor_top = -0.013333334
+anchor_right = 0.5508773
+anchor_bottom = 0.9866667
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 20
+text = "Jose Luis "
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
