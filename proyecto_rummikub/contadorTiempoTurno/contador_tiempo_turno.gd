@@ -35,7 +35,7 @@ func _proceso_contador() -> void:
 func _empieza_turno() -> void:
 	$relojArena.rotation = 0
 	modo = MODO.MI_TURNO
-	tiempo = 10
+	tiempo = 60
 	$contadorTiempo.text = str(tiempo)
 
 

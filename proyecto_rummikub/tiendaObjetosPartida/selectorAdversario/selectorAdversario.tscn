@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://5vgflyue4xto"]
+
+[ext_resource type="Script" uid="uid://cri4n0d1e0xrq" path="res://proyecto_rummikub/tiendaObjetosPartida/selectorAdversario/selector_adversario.gd" id="1_elhob"]
+[ext_resource type="Texture2D" uid="uid://dxut78q7xni1p" path="res://imagenes/Fernando.png" id="2_y3k5g"]
+[ext_resource type="Texture2D" uid="uid://dv38li4qkp031" path="res://imagenes/imagenes_poderes/bola-de-cristal.png" id="3_kdtds"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2nbpt"]
+texture = ExtResource("3_kdtds")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3k5g"]
+bg_color = Color(0.099985994, 0.09998601, 0.099985965, 1)
+
+[node name="Control" type="Control" unique_id=1618597266]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.97800004
+offset_right = 2.0
+offset_bottom = 16.255981
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_elhob")
+
+[node name="Panel" type="Panel" parent="." unique_id=1886908205]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel" unique_id=372981935]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -301.5
+offset_right = 301.5
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 45
+text = "elige adversario"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel2" type="Panel" parent="." unique_id=1587610357]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -144.0
+offset_top = 9.0
+offset_right = -19.0
+offset_bottom = 134.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_2nbpt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1922035795]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 163.0
+offset_right = 1148.0
+offset_bottom = 648.0
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=1495978432]
+layout_mode = 2
+theme_override_constants/icon_max_width = 160
+theme_override_font_sizes/font_size = 40
+theme_override_icons/icon = ExtResource("2_y3k5g")
+theme_override_styles/normal = SubResource("StyleBoxFlat_y3k5g")
+text = "JOSE LUIS"

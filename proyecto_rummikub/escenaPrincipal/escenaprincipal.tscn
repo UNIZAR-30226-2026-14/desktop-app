@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://b8p6hfgluurlg" path="res://proyecto_rummikub/contadorTiempoTurno/contadorTiempoTurno.tscn" id="11_naapq"]
 [ext_resource type="PackedScene" uid="uid://d225hlutlafaj" path="res://proyecto_rummikub/poder/Poder.tscn" id="14_4j4ur"]
 [ext_resource type="PackedScene" uid="uid://b2ytm7374u1u2" path="res://proyecto_rummikub/contador_monedas/panel_contador_monedas.tscn" id="14_naapq"]
+[ext_resource type="PackedScene" uid="uid://75ogdrmks05m" path="res://proyecto_rummikub/pantallaFinalPartida/pantallaFinalPartida.tscn" id="17_a1kqi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
 size = Vector2(447, 157.5)
@@ -170,10 +171,10 @@ color = Color(0.059360206, 0.1829626, 0.12114481, 1)
 [node name="FondoTemporal1" type="ColorRect" parent="." unique_id=969498385]
 visible = false
 z_index = -998
-offset_left = -538.0
-offset_top = -288.0
-offset_right = 533.0
-offset_bottom = 75.0
+offset_left = -528.0
+offset_top = -236.0
+offset_right = 543.0
+offset_bottom = 127.0
 size_flags_vertical = 4
 mouse_filter = 2
 color = Color(0.044573896, 0.15443364, 0.09951004, 1)
@@ -210,6 +211,13 @@ offset_top = -236.0
 offset_right = -25.0
 offset_bottom = -11.737793
 contador_dinero = NodePath("../panelContadorMonedas")
+
+[node name="PantallaFinalPartida" parent="." unique_id=1647612049 instance=ExtResource("17_a1kqi")]
+visible = false
+offset_left = -440.0
+offset_top = -244.0
+offset_right = 441.0
+offset_bottom = 146.0
 
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]
