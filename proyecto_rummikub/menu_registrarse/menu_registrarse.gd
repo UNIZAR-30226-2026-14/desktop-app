@@ -14,9 +14,15 @@ func _ready() -> void:
 
 func guardar_datos() -> void:
 	if((textoContrasena.text != "") and (textoNombreUsuario.text != "")) and (textoConfirmarContrasena.text == textoContrasena.text):
-		globales.contrasena = textoContrasena.text
-		globales.nombre_usuario = textoNombreUsuario.text
-		get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicio/menuInicio.tscn")
+		var err: Error =  await ConectorRed.registrar_usuario(textoNombreUsuario.text,textoContrasena.text)
+		if not err:
+			err = await ConectorRed.iniciar_sesion(textoNombreUsuario.text,textoContrasena.text)
+			if not err:
+				get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicio/menuInicio.tscn")
+			else:
+				get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicioSesion/menu_inicio_sesion.tscn")
+		else:
+			$ColorRect/MensajeError.visible = true
 
 func ir_a_iniciar_sesion() -> void:
 	get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicioSesion/menu_inicio_sesion.tscn")

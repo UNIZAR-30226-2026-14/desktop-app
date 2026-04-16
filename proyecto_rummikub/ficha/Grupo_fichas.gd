@@ -37,7 +37,26 @@ static func Grupo_fichas(listaFichas : Array[Ficha]) -> Grupo_fichas:
 	grupo.anadir_grupo_fin(listaFichas)
 	return grupo
 
+## Devuelve hash de un array de fichas o de un Grupo_fichas basado en el contenido de las fichas que contiene
+static func hash_grupo(grupo):
+	var arr: Array
+	if grupo is Grupo_fichas: arr = grupo.fichas
+	elif grupo is Array: arr = grupo
+	return arr.map( func(ficha)->int: return Ficha.hash_ficha(ficha) ).hash()
 
+##compara contenido de los grupos, grupo puede ser un Grupo_fichas
+##array de Ficha o array de Ficha.GuardaFicha
+func equiv(grupo):
+	var otro: Array
+	if grupo is Grupo_fichas: otro = grupo.fichas
+	elif grupo is Array: otro = grupo
+	else: return false
+	if fichas.size() != otro.size():
+		return false
+	else:
+		for i in range(fichas.size()):
+			if ! (fichas[i].equiv(otro[i])): return false
+		return true
 
 func _calcula_posicion_grupo(en_base_a : globales.LADOS ) -> void:
 	var distancia_inicio_a_centro = (anchura_hitbox - tamano_extra) / 2  
@@ -48,7 +67,7 @@ func _calcula_posicion_grupo(en_base_a : globales.LADOS ) -> void:
 
 func _recalcula_anchura() -> void:
 	anchura_hitbox = tamano_extra
-	fichas.map(func(f:Ficha): anchura_hitbox += f.tamano_ficha_static().x)
+	fichas.map(func(f:Ficha): anchura_hitbox += Ficha.tamano_ficha_static().x)
 	$izquierda/CollisionShape2D.shape.size.x = (anchura_hitbox / 2)
 	$derecha/CollisionShape2D.shape.size.x = (anchura_hitbox / 2)
 	$izquierda/CollisionShape2D.position.x = (-anchura_hitbox / 4)

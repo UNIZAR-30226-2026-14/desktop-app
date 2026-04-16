@@ -2,4 +2,4 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$BarraSuperior/NombreUsuario.text = globales.nombre_usuario
+	$BarraSuperior/Panel/NombreUsuario.text = ConectorRed.username

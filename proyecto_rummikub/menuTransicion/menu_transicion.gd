@@ -7,13 +7,12 @@ extends Control
 var terminar:bool = false
 
 func _ready() -> void:
-	#actualizar_puntos_suspensivos()
+	actualizar_puntos_suspensivos()
 	actualizar_circulo_carga()
-	
-	ConectorRed.buscar_partida()
-	#await ConectorRed.partida_encontrada
-	#terminar = true
-	#get_tree().change_scene_to_file("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn")
+	$forzar.pressed.connect(ConectorRed.forzar_inicio_partida)
+	await ConectorRed.buscar_partida()
+	terminar = true
+	get_tree().change_scene_to_file("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn")
 
 
 func actualizar_puntos_suspensivos() -> void:

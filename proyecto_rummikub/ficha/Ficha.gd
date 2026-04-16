@@ -6,7 +6,7 @@ class_name Ficha extends Node2D
 signal cursor_sobre_ficha
 signal cursor_no_sobre_ficha
 
-enum COLOR{ROJO, NEGRO, AZUL, AMARILLO, BLANCO, COMODIN}
+enum COLOR{ROJO=0, NEGRO=1, AZUL=2, AMARILLO=3, BLANCO=4, COMODIN=5}
 
 static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
 static var indice: int = -1
@@ -22,6 +22,19 @@ var jugada: bool
 var en_blanco : bool
 var color: COLOR
 var numero: int
+
+class GuardaFicha:
+	var numero: int
+	var color: Color
+	func _init(num:int=0, col:Ficha.COLOR=Ficha.COLOR.BLANCO) -> void:
+		numero = num ;  color = col
+	func equiv(ficha: Ficha.GuardaFicha)->bool:
+		return numero == ficha.numero && color == ficha.color
+
+
+## toma ficha o GuardaFicha
+static func hash_ficha(ficha)->int:
+	return hash(ficha.numero) ^ hash(ficha.color)
 
 static func ficha(color_in: COLOR, numero_in: int) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
@@ -77,6 +90,11 @@ func cambiar_sprite(color_in: COLOR, numero_in: int):
 		COLOR.BLANCO:
 			en_blanco = true
 			$Numero.text = ""
+
+
+##Compara si numero y color es igual a Ficha o GuardaFicha
+func equiv(ficha:Ficha)->bool:
+	return numero == ficha.numero && color == ficha.color
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

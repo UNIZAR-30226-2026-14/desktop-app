@@ -1,18 +1,16 @@
 class_name conector_red extends Node
 
-signal siguiente_turno(gruposNuevos: Array[Grupo_fichas], gruposEliminados: Array[Grupo_fichas])
+var username:String = "placeholder"
+var password:String = "placeholder"
 
 const siguiente_turno_manual: bool = false
 const num_cartas_inicial: int = 14
 
-
+var crea_ficha: Callable
 
 static var singleton_instance: conector_red = null
 
 var id_partida: int = -1
-
-
-var miTurno: bool
 
 func _init() -> void:
 	if singleton_instance == null:
@@ -23,42 +21,69 @@ func _init() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	miTurno = false
+	pass
+	#if not is_queued_for_deletion():
 
-func espera_a_turno(receptor: Callable) -> void:
-	siguiente_turno.connect(receptor)
-	siguiente_turno.emit([],[])
+#region INICIAR SESION
+func iniciar_sesion(usr:String, passwd:String)->Error:
+	password = passwd
+	username = usr
+	return await $red.inicia_sesion(usr,passwd)
+	
+func registrar_usuario(usr:String, passwd:String)->Error:
+	password = passwd
+	username = usr
+	return await $red.registrar_usuario(usr,passwd)
+#endregion
 
-func acabo_turno(receptor: Callable, tablero:Array[Grupo_fichas]):
-	return receptor.call(true)
+#region DURANTE PARTIDA
+var mi_turno: int
+##recibe_cartas toma las cartas del tablero como parametro
+func espera_a_turno(recibe_cartas: Callable) -> void:
+	while true:
+		var estado_partida = await $red.get_turno(id_partida)
+		recibe_cartas.call(estado_partida["mesa"])
+		if estado_partida["turno"] == mi_turno:
+			return
+
+func paso_turno():
+	await $red.pasar_turno_servidor(id_partida)
+
+func hacer_jugada(tablero:Array[Grupo_fichas])->bool:
+	if await $red.subir_jugada(id_partida, tablero):
+		$red.ultimo_turno = mi_turno
+		await $red.pasar_turno_servidor(id_partida)
+		return true
+	else: 
+		return false
 
 func robar(receptor: Callable):
-	var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
-	return receptor.call(posibles_fichas[randi()%4],randi()%13 )
+	var dict = await $red.robar_ficha(id_partida)
+	print(dict)
+	$red.ultimo_turno = mi_turno
+	return receptor.call(dict["color"],dict["numero"] )
 
+## devuelve mano inicial
+func inicializar_partida(funcion_crea_fichas: Callable):
+	crea_ficha = funcion_crea_fichas
+	var info = await $red.info_inicial(id_partida, crea_ficha)
+	mi_turno = info["turno"]
+	return info["mano"]
+
+func mano() -> Array[Ficha]:
+	return  await $red.mano(id_partida)
+
+#endregion
+#region BUSCAR PARTIDA
 func buscar_partida():
-	# get partidas, 
-	# si hay una partida no empezada, 
-	# 	guardar su id
-	# 	anadirse como participante y cambiar corriendo a true
-	# sino
-	#	crear partida con corriendo = false
-	#	anadirse como participante
-	#	esperar a ???????
-	print("hola")
 	id_partida = await $red.get_partidas()
+	await $red.unirse_a_partida(id_partida)
 	await $red.espera_a_comienzo_partida(id_partida)
-	get_tree().change_scene_to_file("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn")
 	pass
-	
-func mano_inicial(func_crear_ficha: Callable) -> Array:
-	var res = []
-	var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
-	
-	for i in range(num_cartas_inicial):
-		res.append(func_crear_ficha.call(posibles_fichas[randi()%4],randi()%13))
-	return res
-	
+
+func forzar_inicio_partida(): $red.forzar_inicio_partida_set_true()
+#endregion
+
 
 func fin_partida():
 	pass

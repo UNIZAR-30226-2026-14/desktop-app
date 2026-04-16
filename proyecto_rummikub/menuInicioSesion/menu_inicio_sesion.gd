@@ -8,14 +8,17 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$ColorRect/MensajeError.visible = false
 	confirmar.pressed.connect(comprobar_datos)
 	registrarse.pressed.connect(ir_a_registrarse)
 
 func comprobar_datos() -> void:
 	if((textoContrasena.text != "") and (textoNombreUsuario.text != "")):
-		globales.contrasena = textoContrasena.text
-		globales.nombre_usuario = textoNombreUsuario.text
-		get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicio/menuInicio.tscn")
+		var err: Error = await ConectorRed.iniciar_sesion(textoNombreUsuario.text,textoContrasena.text)
+		if not err :
+			get_tree().change_scene_to_file("res://proyecto_rummikub/menuInicio/menuInicio.tscn")
+		else:
+			$ColorRect/MensajeError.visible = true
 
 func ir_a_registrarse() -> void:
 	get_tree().change_scene_to_file("res://proyecto_rummikub/menu_registrarse/menu_registrarse.tscn")

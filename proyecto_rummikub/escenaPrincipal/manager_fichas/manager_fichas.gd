@@ -97,7 +97,7 @@ func _process(_delta: float) -> void:
 		grupo_arrastrado.position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
 
-func _crear_ficha(color:Ficha.COLOR = Ficha.COLOR.BLANCO, num: int = -10) -> Ficha:
+func crear_ficha(color:Ficha.COLOR = Ficha.COLOR.BLANCO, num: int = -10) -> Ficha:
 	var ficha
 	if num == -10 or color == Ficha.COLOR.BLANCO: # sin parametros
 		var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
@@ -111,13 +111,13 @@ func _crear_ficha(color:Ficha.COLOR = Ficha.COLOR.BLANCO, num: int = -10) -> Fic
 
 func _entro_cursor_en_ficha(ficha: Ficha):
 	if(ficha.en_blanco):
-		print("entraron en ficha blanca")
+		#print("entraron en ficha blanca")
 		sobre_ficha = ficha
 
 	if (not clicando):
 		sobre_ficha = ficha
 		resaltar(ficha)
-		print("entraron en " + str(ficha.name))
+		#print("entraron en " + str(ficha.name))
 		#print("prioridad: " + str(ficha.z_index))
 	else:
 		if(not mano.hay_espacio()):
@@ -129,7 +129,7 @@ func _salio_cursor_en_ficha(ficha: Ficha):
 	if ((not clicando) or ficha.en_blanco):
 		desresaltar(ficha)
 		if sobre_ficha == ficha:
-			print("salio de " + str(ficha.name))
+			#print("salio de " + str(ficha.name))
 			sobre_ficha = null
 
 func resaltar(ficha: Ficha):
@@ -141,7 +141,6 @@ func desresaltar(ficha: Ficha):
 	ficha.scale = escala_por_defecto
 
 func click_izquierdo(ficha: Ficha) -> void:
-
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		mano.quitar_ficha(sobre_ficha)
 		ficha.estado = globales.ESTADO_FICHA.TABLERO_NO_FIJADA
@@ -167,7 +166,6 @@ func click_izquierdo(ficha: Ficha) -> void:
 		#ficha.position += grupo_ficha.position
 		#if(grupo_ficha.fichas.size()==1): # si solo les queda una ficha se elimina el grupo
 		#	grupo_ficha.get_parent().remove_child(grupo_ficha)
-
 
 func _entro_cursor_en_grupo(grupo_sobrepasado : Grupo_fichas, lado) -> void:
 	sobre_lado_grupo = lado

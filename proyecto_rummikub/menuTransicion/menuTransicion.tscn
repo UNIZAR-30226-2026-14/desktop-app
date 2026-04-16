@@ -56,3 +56,11 @@ offset_bottom = -101.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Buscando oponentes..."
+
+[node name="forzar" type="Button" parent="." unique_id=357460926]
+layout_mode = 0
+offset_left = 954.0
+offset_top = 444.0
+offset_right = 1115.0
+offset_bottom = 480.0
+text = "forzar inicio partida"
