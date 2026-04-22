@@ -57,10 +57,26 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Buscando oponentes..."
 
-[node name="forzar" type="Button" parent="." unique_id=357460926]
+[node name="StatusBusqueda" type="Label" parent="." unique_id=217910437]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -2.2236025
+anchor_top = -1.25
+anchor_right = -1.0993788
+anchor_bottom = -0.6111111
+offset_left = 3049.59
+offset_top = 1284.0
+offset_right = 3044.59
+offset_bottom = 1284.0
+text = "jugadores esperando:"
+metadata/_edit_use_anchors_ = true
+
+[node name="IniciarPartida" type="Button" parent="StatusBusqueda" unique_id=357460926]
+visible = false
 layout_mode = 0
-offset_left = 954.0
-offset_top = 444.0
-offset_right = 1115.0
-offset_bottom = 480.0
-text = "forzar inicio partida"
+anchor_left = 0.27749664
+anchor_top = 0.10869565
+anchor_right = 0.4022926
+anchor_bottom = 0.19565217
+text = "Iniciar Partida"
+metadata/_edit_use_anchors_ = true

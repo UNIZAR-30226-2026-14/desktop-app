@@ -67,7 +67,7 @@ func _calcula_posicion_grupo(en_base_a : globales.LADOS ) -> void:
 
 func _recalcula_anchura() -> void:
 	anchura_hitbox = tamano_extra
-	fichas.map(func(f:Ficha): anchura_hitbox += Ficha.tamano_ficha_static().x)
+	fichas.map(func(_f:Ficha): anchura_hitbox += Ficha.tamano_ficha_static().x)
 	$izquierda/CollisionShape2D.shape.size.x = (anchura_hitbox / 2)
 	$derecha/CollisionShape2D.shape.size.x = (anchura_hitbox / 2)
 	$izquierda/CollisionShape2D.position.x = (-anchura_hitbox / 4)
@@ -160,42 +160,43 @@ func _posicionar_fichas() -> void:
 func grupo_correcto(abierto: bool) -> bool:
 	if fichas.size() < 3: return false
 	
-	var esEscalera: bool = true 
-	var colorEscalera: Ficha.COLOR
-	var esperadoEscalera: int = -1
+	var es_escalera: bool = true 
+	var color_escalera: Ficha.COLOR
+	var esperado_escalera: int = -1
 	
-	var esMismoNumero: bool = fichas.size() <= Ficha.COLOR.size() - 1 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
-	var setColores: Array[Ficha.COLOR] = []
-	var esperadoMismo: int = -1
+	var es_mismo_numero: bool = fichas.size() <= Ficha.COLOR.size() - 1 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
+	var set_colores: Array[Ficha.COLOR] = []
+	var esperado_mismo: int = -1
+	
 	for ficha in fichas:
 		if !abierto and ficha.estado != globales.ESTADO_FICHA.TABLERO_NO_FIJADA: return false #ha usado cartas de la mesa para abrir
-		if esperadoEscalera == -1: #no se ha encontrado nungún no comodín
+		if esperado_escalera == -1: #no se ha encontrado nungún no comodín
 			if ficha.color != Ficha.COLOR.COMODIN: #primera carta para evaluar validez
-				esperadoEscalera = ficha.numero + 1
-				colorEscalera = ficha.color
-				esperadoMismo = ficha.numero
-				setColores.append(ficha.color)
+				esperado_escalera = ficha.numero + 1
+				color_escalera = ficha.color
+				esperado_mismo = ficha.numero
+				set_colores.append(ficha.color)
 			continue
 		else:
-			if esEscalera:
-				esEscalera = (ficha.numero == esperadoEscalera and ficha.color == colorEscalera) or ficha.color == Ficha.COLOR.COMODIN
-				esperadoEscalera += 1
-			if esMismoNumero:
-				esMismoNumero = (ficha.numero == esperadoMismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
-				setColores.append(ficha.color)
-			if !esEscalera and !esMismoNumero: return false
-		
-	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
-	if esEscalera:
-		if ! abierto: return true
+			if es_escalera:
+				es_escalera = (ficha.numero == esperado_escalera and ficha.color == color_escalera) or ficha.color == Ficha.COLOR.COMODIN
+				esperado_escalera += 1
+			if es_mismo_numero:
+				es_mismo_numero = (ficha.numero == esperado_mismo and set_colores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
+				set_colores.append(ficha.color)
+			if !es_escalera and !es_mismo_numero: return false
+	if esperado_mismo == -1: return true # todo comodines
+	if es_escalera:
+		if abierto: return true
 		else:
-			var baseEscalera = esperadoEscalera - fichas.size()
-			var numTotal = range(baseEscalera, esperadoEscalera).reduce(func(accum,number): return accum + number, 0)
+			var baseEscalera = esperado_escalera - fichas.size()
+			var numTotal = range(baseEscalera, esperado_escalera).reduce(func(accum,number): return accum + number, 0)
 			return numTotal >= 30
-	if esMismoNumero:
-		if ! abierto: return true
+	if es_mismo_numero:
+		if abierto: 
+			return true
 		else:
-			var numTotal = esperadoMismo * fichas.size()
+			var numTotal = esperado_mismo * fichas.size()
 			return numTotal >= 30
 		
 	return false

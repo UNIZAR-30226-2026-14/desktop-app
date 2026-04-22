@@ -20,7 +20,9 @@ func _ready() -> void:
 	$BarraSuperior/NombreUsuario.text = ConectorRed.username
 	botonAmigos.pressed.connect(_sacar_amigos)
 	botonCerrarPestanaAmigos.pressed.connect(_cerrar_amigos)
-	estadoAmigos = [ estadoAmigo.new("Miguel", true), estadoAmigo.new("Dian", false),estadoAmigo.new("Miguel", true), estadoAmigo.new("Dian", false),estadoAmigo.new("Miguel", true), estadoAmigo.new("Dian", false),estadoAmigo.new("Miguel", true), estadoAmigo.new("Dian", false),estadoAmigo.new("Miguel", true), estadoAmigo.new("Dian", false)]
+	var amigos = await ConectorRed.get_amigos()
+	estadoAmigos.assign(amigos.map(func(amigo:Dictionary)->estadoAmigo:
+		return estadoAmigo.new(amigo.nombre,true)))
 	for amigo in estadoAmigos:
 		var nuevoAmigo: Amigo =  Amigo.amigo(amigo.conectado,amigo.nombre)
 		globales.apropiar_hijo($MenuAmigos/ScrollContainer/contenedorAmigos,nuevoAmigo )

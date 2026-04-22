@@ -23,7 +23,10 @@ func _init() -> void:
 func _ready() -> void:
 	pass
 	#if not is_queued_for_deletion():
-
+#region DEBUG
+func crear_amistades():
+	$red.amigo_todos()
+#endregion
 #region INICIAR SESION
 func iniciar_sesion(usr:String, passwd:String)->Error:
 	password = passwd
@@ -36,13 +39,17 @@ func registrar_usuario(usr:String, passwd:String)->Error:
 	username = usr
 	return await $red.registrar_usuario(usr,passwd)
 #endregion
-
+#region AMIGOS
+func get_amigos()->Array[Dictionary]:
+	return await $red.get_amigos()
+#endregion
 #region DURANTE PARTIDA
 var mi_turno: int
 ##recibe_cartas toma las cartas del tablero como parametro
 func espera_a_turno(recibe_cartas: Callable) -> void:
 	while true:
 		var estado_partida = await $red.get_turno(id_partida)
+		print("TABLERO: ", estado_partida["mesa"], " TURNO: ",estado_partida["turno"])
 		recibe_cartas.call(estado_partida["mesa"])
 		if estado_partida["turno"] == mi_turno:
 			return
@@ -52,8 +59,7 @@ func paso_turno():
 
 func hacer_jugada(tablero:Array[Grupo_fichas])->bool:
 	if await $red.subir_jugada(id_partida, tablero):
-		$red.ultimo_turno = mi_turno
-		await $red.pasar_turno_servidor(id_partida)
+		$red.ultimo_turno = -1
 		return true
 	else: 
 		return false
@@ -61,7 +67,7 @@ func hacer_jugada(tablero:Array[Grupo_fichas])->bool:
 func robar(receptor: Callable):
 	var dict = await $red.robar_ficha(id_partida)
 	print(dict)
-	$red.ultimo_turno = mi_turno
+	$red.ultimo_turno = -1
 	return receptor.call(dict["color"],dict["numero"] )
 
 ## devuelve mano inicial
@@ -76,10 +82,10 @@ func mano() -> Array[Ficha]:
 
 #endregion
 #region BUSCAR PARTIDA
-func buscar_partida():
-	id_partida = await $red.get_partidas()
+func buscar_partida(status_busqueda:Label, iniciar: Button):
+	id_partida = await $red.get_partidas(status_busqueda)
 	await $red.unirse_a_partida(id_partida)
-	await $red.espera_a_comienzo_partida(id_partida)
+	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
 
 func forzar_inicio_partida(): $red.forzar_inicio_partida_set_true()
 #endregion

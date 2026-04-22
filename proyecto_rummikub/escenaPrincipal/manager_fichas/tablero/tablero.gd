@@ -13,7 +13,9 @@ var grupos: Array[Grupo_fichas] = []
 
 func tablero_valido(abierto: bool) -> bool:
 	for grupo in grupos:
-		if !grupo.grupo_correcto(abierto): return false
+		if !grupo.grupo_correcto(abierto): 
+			print(grupo)
+			return false
 	return true
 
 func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:
@@ -101,7 +103,6 @@ func insertar_grupos_fichas(grupos_insertar: Array[Grupo_fichas]) -> void:
 		await get_tree().physics_frame
 		await get_tree().physics_frame
 		while(grupo.chocando_con_grupo()):
-			print("CHOCANDO")
 			grupo.position.x += Ficha.tamano_ficha_static().x / 2
 			if((grupo.position.x + (tamano_grupo.x/2) + Ficha.tamano_ficha_static().x) > esquina_superior_derecha.x): # se sale de la pantalla por la derecha
 				grupo.position.x = esquina_superior_izquierda.x

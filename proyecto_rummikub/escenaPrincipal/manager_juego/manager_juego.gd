@@ -29,14 +29,15 @@ class GrupoGuardado:
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
 # la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
-var abierto: bool = false
+var abierto: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
-	abierto = false
+	printerr("Hay que modificar el uso de la variable abierto para que funcione con los datos llegados de otros jugadores")
+	abierto = true
 	
 	#botones
 	robarCarta.pressed.connect(robar_carta)
@@ -52,16 +53,6 @@ func _ready() -> void:
 
 #region gestion turnos
 
-func intenta_hacer_jugada() -> bool:
-	if(tablero.tablero_valido(abierto)):
-		guardar_estado()
-		terminar_turno()
-		abierto = true
-		return true
-	else:
-		print("TABLERO NO VALIDO")
-		return false
-
 func terminar_turno() -> void:
 	_devolver_fichas()
 	#termina_turno.emit()
@@ -69,7 +60,7 @@ func terminar_turno() -> void:
 	robarCarta.disabled = true
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
-	printerr("si hay bug nuevo al merge, mirar aquí")
+	printerr("si hay bug nuevo al merge, mirar aquí (terminar_turno, manager_juego)")
 	termina_turno.emit()
 	await ConectorRed.espera_a_turno(llega_turno)
 	iniciar_turno()
@@ -85,6 +76,8 @@ func iniciar_turno() -> void:
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
 	var viejo_tablero: Array = tablero.grupos
+	viejo_tablero.map(func(grupo): print(Grupo_fichas.hash_grupo(grupo)))
+	nuevo_tablero.map(func(grupo): print(Grupo_fichas.hash_grupo(grupo)))
 	
 	var nuevos = [] ; var eliminados = []
 	nuevo_tablero.sort_custom(
@@ -93,7 +86,6 @@ func llega_turno(nuevo_tablero: Array):
 	viejo_tablero.sort_custom(
 		func(grupo_a:Grupo_fichas,grupo_b:Grupo_fichas):
 			return Grupo_fichas.hash_grupo(grupo_a) < Grupo_fichas.hash_grupo(grupo_b))
-
 	var i_viejo = 0
 	var i_nuevo = 0
 	while i_viejo < viejo_tablero.size() and i_nuevo < nuevo_tablero.size():
@@ -105,23 +97,25 @@ func llega_turno(nuevo_tablero: Array):
 			i_nuevo += 1
 		else:
 			i_nuevo += 1; i_viejo += 1
-			
 	if i_viejo < viejo_tablero.size():
 		eliminados.append_array(viejo_tablero.slice(i_viejo))
 	if i_nuevo < nuevo_tablero.size():
 		nuevos.append_array(nuevo_tablero.slice(i_nuevo))
 	#elimina los que hay que quitar
-	print("Elimino: ",eliminados)
 	eliminados.map(func(grupo:Grupo_fichas): tablero.quitar_grupo_fichas(grupo); grupo.queue_free())
+	
 	nuevos = nuevos.map(
-		func(grupo:Array[Ficha.GuardaFicha]): 
-		return Grupo_fichas.Grupo_fichas( 
-			grupo.map(func(ficha:Ficha.GuardaFicha): return manager_fichas.crear_ficha(ficha.color,ficha.numero))
+		func(grupo:Array): 
+		var array_fichas: Array[Ficha] = []
+		array_fichas.assign(grupo.map(
+			func(ficha)->Ficha: 
+				return manager_fichas.crear_ficha(ficha.color,ficha.numero))
 			)
+		return Grupo_fichas.Grupo_fichas(array_fichas)
 		)
+	
 	var aux:Array[Grupo_fichas]
 	aux.assign(nuevos)
-	print("Nuevos: ",aux)
 	#inserta fichas nuevas
 	tablero.insertar_grupos_fichas(aux)
 #endregion
@@ -183,16 +177,20 @@ func _devolver_fichas() -> void:
 #region avanza partida
 func hacer_jugada():
 	var valido:bool = tablero.tablero_valido(abierto)
-	if valido: valido = await ConectorRed.hacer_jugada(tablero.grupos)
-	if(valido):
-		abierto = true
-		guardar_estado()
-		terminar_turno()
+	if valido: 
+		valido = await ConectorRed.hacer_jugada(tablero.grupos)
+		if(valido):
+			abierto = true
+			guardar_estado()
+			terminar_turno()
+		else:
+			print("TABLERO NO VALIDO al subirlo")
 	else:
-		print("TABLERO NO VALIDO")
+		print("TABLERO NO VALIDO local")
 
 func robar_carta() -> void:
 	var fich: Ficha
+	robarCarta.disabled = true
 	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
 	mano.devolver_ficha(fich)
 	fich.z_index = 0
