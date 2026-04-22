@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://bjssn3wbj2whb"]
+
+[ext_resource type="Script" uid="uid://duxuuwgv27ao2" path="res://proyecto_rummikub/menuInicio/solicitud_enviada/solicitud_enviada.gd" id="1_kiwpo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qqx8h"]
+bg_color = Color(0.19607843, 0.26666668, 0.33333334, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25387004, 0.33471072, 0.41542983, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="solicitudEnviada" type="Control" unique_id=244336081 node_paths=PackedStringArray("nombre_usuario")]
+custom_minimum_size = Vector2(261, 75)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kiwpo")
+nombre_usuario = NodePath("Panel/NombreUsuario")
+
+[node name="Panel" type="Panel" parent="." unique_id=1363065047]
+layout_mode = 0
+offset_right = 260.0
+offset_bottom = 66.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qqx8h")
+
+[node name="NombreUsuario" type="RichTextLabel" parent="Panel" unique_id=221302076]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -20.0
+offset_right = 106.0
+offset_bottom = 20.0
+grow_vertical = 2
+text = "Usuario3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Pendiente" type="RichTextLabel" parent="Panel" unique_id=1196314350]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -108.0
+offset_top = -20.0
+offset_right = -17.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "PENDIENTE"
+horizontal_alignment = 1
+vertical_alignment = 1

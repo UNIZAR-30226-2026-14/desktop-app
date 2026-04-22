@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://5vgflyue4xto"]
+
+[ext_resource type="Script" uid="uid://cri4n0d1e0xrq" path="res://proyecto_rummikub/poder/selectorAdversario/selector_adversario.gd" id="1_elhob"]
+[ext_resource type="StyleBox" uid="uid://cf81hc56tn3sn" path="res://proyecto_rummikub/poder/selectorAdversario/icono_poder_selector_adversario.tres" id="2_ey1v6"]
+[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="3_kbsi6"]
+[ext_resource type="Script" uid="uid://ctraxnfcax2f3" path="res://proyecto_rummikub/poder/selectorAdversario/icono_cerrar.gd" id="4_xy6d0"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xy6d0"]
+texture = ExtResource("3_kbsi6")
+
+[node name="Control" type="Control" unique_id=1618597266]
+custom_minimum_size = Vector2(859, 448)
+layout_mode = 3
+anchor_right = 0.7456597
+anchor_bottom = 0.69135803
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_elhob")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="." unique_id=1886908205]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.3
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel" unique_id=372981935]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -427.5
+offset_right = 427.5
+offset_bottom = 134.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 45
+text = "elige adversario"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="iconoPoder" type="Panel" parent="." unique_id=1587610357]
+layout_mode = 1
+offset_left = 17.0
+offset_top = 20.0
+offset_right = 116.0
+offset_bottom = 119.0
+theme_override_styles/panel = ExtResource("2_ey1v6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1922035795]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -92.0
+offset_bottom = 232.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -9
+
+[node name="iconoCerrar" type="Button" parent="." unique_id=1873920133]
+layout_mode = 0
+anchor_left = 0.8684517
+anchor_top = 0.04910714
+anchor_right = 0.9767171
+anchor_bottom = 0.25892857
+theme_override_styles/normal = SubResource("StyleBoxTexture_xy6d0")
+script = ExtResource("4_xy6d0")
+metadata/_edit_use_anchors_ = true
