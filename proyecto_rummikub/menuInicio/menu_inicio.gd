@@ -3,8 +3,6 @@ extends Control
 @export var botonAmigos: Button
 @export var botonCerrarPestanaAmigos: Button
 
-
-
 const ANCHURA_AVATAR_MOSTRAR: float = 85.0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

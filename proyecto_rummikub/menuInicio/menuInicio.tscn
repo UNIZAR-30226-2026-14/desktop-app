@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://iwthbt8we175" path="res://imagenes/imagenes_inicio/icono_editar.png" id="13_bmu16"]
 [ext_resource type="StyleBox" uid="uid://c6ehpxy8gnjm6" path="res://proyecto_rummikub/menuInicio/style_box_boton_cerrar.tres" id="14_pnstj"]
 [ext_resource type="ButtonGroup" uid="uid://c0tandbvnvkc8" path="res://proyecto_rummikub/menuInicio/button_group_menus_amigos.tres" id="14_qutqo"]
+[ext_resource type="StyleBox" uid="uid://diim4g4d63k6x" path="res://proyecto_rummikub/menuInicio/style_box_anadir_amigo.tres" id="14_r6451"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5hb0"]
 bg_color = Color(1, 1, 1, 1)
@@ -83,6 +84,55 @@ border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
 border_color = Color(0.8, 0.8, 0.8, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k43s"]
+bg_color = Color(0.16862746, 0.24313726, 0.31764707, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jf412"]
+bg_color = Color(0.07510301, 0.08178822, 0.08847328, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tfde3"]
+bg_color = Color(0.08988928, 0.09732214, 0.10475492, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shr80"]
+bg_color = Color(0.09803922, 0.105882354, 0.11372549, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ubox"]
+bg_color = Color(0.0674905, 0.073789455, 0.08008809, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_637k7"]
+bg_color = Color(0.10980392, 0.13725491, 0.2, 1)
+border_width_left = 17
+border_color = Color(0.10980392, 0.13725491, 0.2, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38lkr"]
 bg_color = Color(0.023529412, 0.09019608, 0.03137255, 0.7490196)
@@ -415,18 +465,20 @@ metadata/_edit_use_anchors_ = true
 [node name="BotonAnadirAmigo" type="Button" parent="MenuAmigos" unique_id=706626655]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0821546
-anchor_top = -0.0030864198
-anchor_right = 0.23541152
-anchor_bottom = 0.058641974
-offset_right = 1960.0
-offset_bottom = 1960.0
+anchor_left = 0.10877193
+anchor_top = 0.0015432099
+anchor_right = 0.10877193
+anchor_bottom = 0.08011053
+offset_right = 2000.0
+offset_bottom = 1949.0884
 rotation = 0.7853982
-scale = Vector2(0.02, 0.02)
+scale = Vector2(0.018, 0.018)
 theme_override_colors/icon_normal_color = Color(2.6111224, 2.6111224, 2.6111224, 1)
 theme_override_styles/normal = ExtResource("6_3d1jw")
 theme_override_styles/normal_mirrored = ExtResource("6_3d1jw")
 theme_override_styles/pressed_mirrored = ExtResource("6_3d1jw")
+toggle_mode = true
+button_group = ExtResource("14_qutqo")
 icon = ExtResource("9_u2d15")
 metadata/_edit_use_anchors_ = true
 
@@ -492,6 +544,61 @@ toggle_mode = true
 button_group = ExtResource("14_qutqo")
 text = "Enviadas (1)
 ⎯⎯⎯⎯⎯⎯⎯"
+
+[node name="MenuAnadirAmigo" type="Panel" parent="MenuAmigos" unique_id=152851405]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0070175445
+anchor_top = 0.11111111
+anchor_right = 1.0035088
+anchor_bottom = 0.32098764
+theme_override_styles/panel = SubResource("StyleBoxFlat_1k43s")
+metadata/_edit_use_anchors_ = true
+
+[node name="BotonEnviarSolicitud" type="Button" parent="MenuAmigos/MenuAnadirAmigo" unique_id=766375365]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = -65.999985
+offset_right = 149.0
+offset_bottom = -34.999985
+grow_vertical = 0
+theme_override_styles/normal = ExtResource("14_r6451")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jf412")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tfde3")
+text = "Enviar solicitud"
+
+[node name="BotonVolver" type="Button" parent="MenuAmigos/MenuAnadirAmigo" unique_id=1371103143]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -103.0
+offset_top = -64.999985
+offset_right = -46.0
+offset_bottom = -33.999985
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_shr80")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6ubox")
+theme_override_styles/hover = ExtResource("14_r6451")
+toggle_mode = true
+button_group = ExtResource("14_qutqo")
+text = "Volver"
+
+[node name="InsertorIdNuevoAmigo" type="LineEdit" parent="MenuAmigos/MenuAnadirAmigo" unique_id=708556073]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 1.0
+offset_right = 242.0
+offset_bottom = 53.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_637k7")
+placeholder_text = "Id del usuario..."
+alignment = 1
 
 [node name="FondoEditarPerfil" type="Panel" parent="." unique_id=1997386250]
 visible = false
@@ -804,7 +911,10 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 [connection signal="pressed" from="Fondo/ModoClasico2" to="Fondo/ModoClasico2" method="_on_pressed"]
 [connection signal="pressed" from="BarraSuperior/BotonIconoAvatarUsuario" to="." method="_on_icono_avatar_usuario_pressed"]
 [connection signal="request_completed" from="GestorPestanaAmigos" to="GestorPestanaAmigos" method="_on_request_completed"]
+[connection signal="toggled" from="MenuAmigos/BotonAnadirAmigo" to="MenuAmigos" method="_on_boton_anadir_amigo_toggled"]
 [connection signal="toggled" from="MenuAmigos/BotonAmigos" to="MenuAmigos" method="_on_boton_amigos_toggled"]
 [connection signal="toggled" from="MenuAmigos/BotonPendientes" to="MenuAmigos" method="_on_boton_pendientes_toggled"]
 [connection signal="toggled" from="MenuAmigos/BotonEnviadas" to="MenuAmigos" method="_on_boton_enviadas_toggled"]
+[connection signal="pressed" from="MenuAmigos/MenuAnadirAmigo/BotonEnviarSolicitud" to="MenuAmigos" method="_on_boton_enviar_solicitud_pressed"]
+[connection signal="toggled" from="MenuAmigos/MenuAnadirAmigo/BotonVolver" to="MenuAmigos" method="_on_boton_volver_toggled"]
 [connection signal="pressed" from="FondoEditarPerfil/BotonCerrar" to="FondoEditarPerfil" method="_on_boton_cerrar_pressed"]
