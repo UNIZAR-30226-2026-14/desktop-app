@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://cqni3gh51alvx"]
+
+[ext_resource type="Script" uid="uid://fidqoelwgei3" path="res://proyecto_rummikub/menuInicio/solicitud_pendiente/solicitud_pendiente.gd" id="1_0sicp"]
+[ext_resource type="StyleBox" uid="uid://ys2xw3s1jkfu" path="res://proyecto_rummikub/menuInicio/solicitud_pendiente/stle_box_check.tres" id="2_nwtx7"]
+[ext_resource type="Texture2D" uid="uid://b7dnd5f3w24h2" path="res://imagenes/imagenes_escena_principal/check.png" id="2_pppu4"]
+[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="2_x17lk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwtx7"]
+bg_color = Color(0.19215687, 0.26666668, 0.32941177, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ru6y"]
+bg_color = Color(0.8079447, 0.19959918, 0.17191607, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x17lk"]
+bg_color = Color(0.19342202, 0.78123057, 0.45415097, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4esa"]
+bg_color = Color(0.16767311, 0.6572812, 0.3816077, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
+
+[node name="SolicitudPendiente" type="Control" unique_id=465725267 node_paths=PackedStringArray("NombreSolicitante")]
+custom_minimum_size = Vector2(261, 75)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0sicp")
+NombreSolicitante = NodePath("Panel/NombreSolicitante")
+
+[node name="Panel" type="Panel" parent="." unique_id=46696917]
+custom_minimum_size = Vector2(261, 60)
+layout_mode = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_nwtx7")
+
+[node name="NombreSolicitante" type="RichTextLabel" parent="Panel" unique_id=2066368976]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 13.0
+offset_top = -19.0
+offset_right = 122.0
+offset_bottom = 21.0
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 14
+text = "USUARIO1"
+vertical_alignment = 1
+
+[node name="Rechazar" type="Button" parent="Panel" unique_id=712686110]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -41.0
+offset_top = -12.5
+offset_right = -16.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/icon_normal_color = Color(18.892002, 18.892002, 18.892002, 1)
+theme_override_constants/icon_max_width = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_0ru6y")
+icon = ExtResource("2_x17lk")
+icon_alignment = 1
+
+[node name="Aceptar" type="Button" parent="Panel" unique_id=759806593]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -74.0
+offset_top = -11.5
+offset_right = -51.0
+offset_bottom = 11.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_normal_color = Color(18.892157, 18.892157, 18.892157, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(18.892, 18.892, 18.892, 1)
+theme_override_colors/icon_hover_color = Color(16.849344, 16.849342, 16.849344, 1)
+theme_override_constants/icon_max_width = 15
+theme_override_styles/normal = ExtResource("2_nwtx7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x17lk")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m4esa")
+icon = ExtResource("2_pppu4")
+icon_alignment = 1

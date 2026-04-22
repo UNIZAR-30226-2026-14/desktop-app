@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://bchfhraflbn74"]
+
+[ext_resource type="Script" uid="uid://0t58djatx6q6" path="res://proyecto_rummikub/tiendaObjetosPartida/tienda_objetos_partida.gd" id="1_wqbij"]
+[ext_resource type="StyleBox" uid="uid://da0wvj5ist4bp" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/ordenar/style_box_boton_solo_icono.tres" id="2_pp0vv"]
+[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="3_i2i5y"]
+[ext_resource type="StyleBox" uid="uid://c2rm6bph14sjw" path="res://proyecto_rummikub/tiendaObjetosPartida/comprar_boton.tres" id="4_cdykd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_foq01"]
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_llryb"]
+bg_color = Color(0.7921569, 0.7921569, 0, 1)
+border_color = Color(0.36453977, 0.3645399, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_806wv"]
+bg_color = Color(0.73098254, 0.730983, 3.85046e-07, 1)
+border_color = Color(0.36453977, 0.3645399, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_av275"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[node name="edicionPerfil" type="Control" unique_id=1093875184 node_paths=PackedStringArray("contenedor_botones")]
+custom_minimum_size = Vector2(262, 224.2622)
+layout_mode = 3
+anchor_right = 0.22743055
+anchor_bottom = 0.34608364
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_wqbij")
+contenedor_botones = NodePath("Panel/contenedorIconos")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="." unique_id=2036358778]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 301.0
+offset_bottom = 160.7378
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_foq01")
+
+[node name="botonCerrar" type="Button" parent="Panel" unique_id=725744741]
+layout_mode = 0
+offset_left = 518.0
+offset_top = 15.0
+offset_right = 2518.0
+offset_bottom = 2015.0
+scale = Vector2(0.015, 0.015)
+theme_override_styles/normal = ExtResource("2_pp0vv")
+theme_override_styles/normal_mirrored = ExtResource("2_pp0vv")
+theme_override_styles/pressed_mirrored = ExtResource("2_pp0vv")
+theme_override_styles/hover_pressed = ExtResource("2_pp0vv")
+icon = ExtResource("3_i2i5y")
+
+[node name="botonAceptar" type="Button" parent="Panel" unique_id=1175706739]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 320.0
+offset_right = 106.0
+offset_bottom = 366.0
+theme_override_styles/normal = ExtResource("4_cdykd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_llryb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_806wv")
+text = " Aceptar"
+icon_alignment = 2
+expand_icon = true
+
+[node name="contenedorIconos" type="GridContainer" parent="Panel" unique_id=1582359312]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.044404972
+anchor_top = 0.064935066
+anchor_right = 0.4748372
+anchor_bottom = 0.58528143
+offset_right = 160.33331
+offset_bottom = 63.666656
+scale = Vector2(0.75, 0.75)
+theme_override_constants/h_separation = 50
+theme_override_constants/v_separation = 15
+columns = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel2" type="Panel" parent="." unique_id=247308796]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 39.0
+offset_right = 118.0
+offset_bottom = 123.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_av275")
+
+[connection signal="pressed" from="Panel/botonCerrar" to="." method="_on_boton_cerrar_pressed"]
+[connection signal="pressed" from="Panel/botonAceptar" to="." method="_on_boton_aceptar_pressed"]

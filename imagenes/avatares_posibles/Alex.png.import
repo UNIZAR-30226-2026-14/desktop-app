@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxut78q7xni1p"
-path="res://.godot/imported/Fernando.png-a4643258f5b42631a7271551377db1a1.ctex"
+uid="uid://bkw4mop4qx8en"
+path="res://.godot/imported/Alex.png-546d84e5cbb5e0e3101085555401767a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://imagenes/Fernando.png"
-dest_files=["res://.godot/imported/Fernando.png-a4643258f5b42631a7271551377db1a1.ctex"]
+source_file="res://imagenes/avatares_posibles/Alex.png"
+dest_files=["res://.godot/imported/Alex.png-546d84e5cbb5e0e3101085555401767a.ctex"]
 
 [params]
 

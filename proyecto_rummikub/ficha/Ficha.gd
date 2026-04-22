@@ -64,26 +64,30 @@ func tamano_ficha() -> Vector2:
 
 func cambiar_sprite(color_in: COLOR, numero_in: int):
 	en_blanco = false
-	$Numero.text = str(numero_in)
+	$Numero.text = str(numero_in) + "\n"
 	$auraFicha.visible = false
 	$caraJoker.visible = false
 	match color_in:
 		COLOR.ROJO:
+			$Numero.text += "♡"
 			$Numero.modulate = "b92300"
 			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.NEGRO: 
+			$Numero.text += "♤"
 			$Numero.modulate = "000000"
 			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.AZUL:
+			$Numero.text += "♢"
 			$Numero.modulate = "00aeaf"
 			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 		
 		COLOR.AMARILLO:
+			$Numero.text += "♧"
 			$Numero.modulate = "cfce00"
 			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")

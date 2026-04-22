@@ -196,4 +196,13 @@ func robar_carta() -> void:
 	fich.z_index = 0
 	guardar_estado()
 	terminar_turno()
+
 #endregion
+
+var adversarios: Array[Dictionary] = [{"nombre":"jose maria", "icono": load("res://imagenes/Fernando.png") },{"nombre":"maria jose", "icono": load("res://imagenes/Fernando.png")} ]
+
+## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
+## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
+func get_adversarios() -> Array[Dictionary]:
+	push_error("manager_juego.get_adversarios sin terminar")
+	return adversarios
