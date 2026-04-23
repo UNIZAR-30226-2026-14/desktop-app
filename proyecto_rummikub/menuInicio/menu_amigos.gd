@@ -9,16 +9,14 @@ func _ready() -> void:
 	self.visible = false
 	botonAmigos.pressed.connect(_sacar_amigos)
 	botonCerrarPestanaAmigos.pressed.connect(_cerrar_amigos)
-
-
+	$MenuAnadirAmigo.visible = false
 
 func _sacar_amigos() -> void:
 	$BotonPendientes.text = "Pendientes(" + str(pendientes.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
 	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
 	$BotonEnviadas.text = "Enviadas(" + str(enviadas.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
-
-
 	self.visible = true
+	$BotonAmigos.button_pressed = true
 
 func _cerrar_amigos() -> void:
 	self.visible = false
@@ -54,6 +52,7 @@ func _on_boton_pendientes_toggled(toggled_on: bool) -> void:
 		$BotonPendientes.modulate = "dfdfdf"
 		for pendiente in pendientes:
 			pendiente.visible = false
+
 func _on_boton_enviadas_toggled(toggled_on: bool) -> void:
 	$BotonEnviadas.text = "Enviadas(" + str(enviadas.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
 	if toggled_on:
@@ -65,3 +64,22 @@ func _on_boton_enviadas_toggled(toggled_on: bool) -> void:
 		$BotonEnviadas.modulate = "dfdfdf"
 		for enviada in enviadas:
 			enviada.visible = false
+
+
+func _on_boton_anadir_amigo_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$MenuAnadirAmigo.visible = true
+	else:
+		$MenuAnadirAmigo.visible = false
+
+func _on_boton_enviar_solicitud_pressed() -> void:
+	if $MenuAnadirAmigo/InsertorIdNuevoAmigo.text != "":
+		# hacer cosas
+		$MenuAnadirAmigo.visible = false
+		$BotonAnadirAmigo.button_pressed = false
+		$MenuAnadirAmigo/InsertorIdNuevoAmigo.text = ""
+		$BotonAmigos.button_pressed = true
+		
+func _on_boton_volver_toggled(_toggled_on: bool) -> void:
+	$MenuAnadirAmigo.visible = false
+	$BotonAmigos.button_pressed = true

@@ -9,8 +9,9 @@ const num_cartas_inicial: int = 14
 var crea_ficha: Callable
 
 static var singleton_instance: conector_red = null
-
 var id_partida: int = -1
+
+var avatar: Texture2D = preload("res://imagenes/avatares_posibles/Fernando.png")
 
 func _init() -> void:
 	if singleton_instance == null:
