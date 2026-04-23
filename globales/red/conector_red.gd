@@ -6,7 +6,7 @@ signal robado(num: int, color: Ficha.COLOR)
 signal partida_encontrada(manoInicial: Array[Ficha], numJugadores: int)
 
 static var singleton_instance: conector_red = null
-
+var avatar: Texture2D = preload("res://imagenes/avatares_posibles/Fernando.png")
 func _init() -> void:
 	if singleton_instance == null:
 		singleton_instance = self

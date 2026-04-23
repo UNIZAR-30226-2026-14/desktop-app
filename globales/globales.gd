@@ -36,3 +36,12 @@ func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():
 		hijo.get_parent().remove_child(hijo)
 	nuevo_padre.add_child(hijo)
+
+const LISTA_AVATARES: Array[Texture2D] = [
+	preload("res://imagenes/avatares_posibles/Alex.png"),
+	preload("res://imagenes/avatares_posibles/Dani.png"),
+	preload("res://imagenes/avatares_posibles/Dian.png"),
+	preload("res://imagenes/avatares_posibles/Fernando.png"),
+	preload("res://imagenes/avatares_posibles/Gonzalo.png"),
+	preload("res://imagenes/avatares_posibles/Miguel.png"),
+]
