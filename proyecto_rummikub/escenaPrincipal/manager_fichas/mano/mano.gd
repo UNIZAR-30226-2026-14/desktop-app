@@ -270,4 +270,4 @@ func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 		if (not ficha.en_blanco):
 			devolver_ficha(ficha)
 			manager_fichas.conectar_ficha(ficha)
-			
+ 	
