@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://qholkstclop0" path="res://proyecto_rummikub/menuInicio/modo_clasico.gd" id="1_5dy57"]
 [ext_resource type="Script" uid="uid://db0nhy3a6a6xd" path="res://proyecto_rummikub/menuInicio/menu_inicio.gd" id="1_87g63"]
-[ext_resource type="StyleBox" uid="uid://cl44pv36u0v2l" path="res://proyecto_rummikub/menuInicio/style_box_boton_iniciar_partida.tres" id="2_ct2gx"]
 [ext_resource type="Script" uid="uid://bbt313hn2cygs" path="res://proyecto_rummikub/menuInicio/gestor_pestana_amigos.gd" id="3_87g63"]
-[ext_resource type="Texture2D" uid="uid://dmttrrp3j7sje" path="res://imagenes/iconos_jokers/joker_negro.png" id="4_u5hb0"]
+[ext_resource type="Texture2D" uid="uid://wolbkk2c8vtj" path="res://imagenes/imagenes_inicio/normal.svg" id="4_m1nat"]
+[ext_resource type="Texture2D" uid="uid://j1nd7xsbajo1" path="res://imagenes/imagenes_inicio/turbolocochon.svg" id="5_1k43s"]
 [ext_resource type="Texture2D" uid="uid://blpbt7yth8x3a" path="res://imagenes/imagenes_inicio/icono_amigos.png" id="6_2yd1p"]
 [ext_resource type="StyleBox" uid="uid://4nr4wk5486w8" path="res://proyecto_rummikub/menuInicio/style_box_boton_amigos.tres" id="6_3d1jw"]
 [ext_resource type="StyleBox" path="res://proyecto_rummikub/menuInicio/style_box_icono_avatar_mostrar.tres" id="9_tg18a"]
@@ -19,28 +19,113 @@
 [ext_resource type="StyleBox" path="res://proyecto_rummikub/menuInicio/style_box_boton_cerrar.tres" id="14_pnstj"]
 [ext_resource type="ButtonGroup" path="res://proyecto_rummikub/menuInicio/button_group_menus_amigos.tres" id="14_qutqo"]
 [ext_resource type="StyleBox" path="res://proyecto_rummikub/menuInicio/style_box_anadir_amigo.tres" id="14_r6451"]
+[ext_resource type="StyleBox" uid="uid://c6ehpxy8gnjm6" path="res://proyecto_rummikub/menuInicio/style_box_boton_cerrar.tres" id="14_pnstj"]
+[ext_resource type="ButtonGroup" uid="uid://c0tandbvnvkc8" path="res://proyecto_rummikub/menuInicio/button_group_menus_amigos.tres" id="14_qutqo"]
+[ext_resource type="StyleBox" uid="uid://diim4g4d63k6x" path="res://proyecto_rummikub/menuInicio/style_box_anadir_amigo.tres" id="14_r6451"]
+[ext_resource type="Texture2D" uid="uid://x1phbw8nbydr" path="res://imagenes/imagenes_iniciar_sesion/icono_mercado.png" id="20_1k43s"]
+[ext_resource type="Texture2D" uid="uid://bk4gj10k8cgug" path="res://imagenes/imagenes_tienda_juego/icono_modeda_fuera_partida.png" id="21_637k7"]
+[ext_resource type="Script" uid="uid://bfenb8ef73heq" path="res://proyecto_rummikub/menuInicio/tienda.gd" id="22_637k7"]
+[ext_resource type="PackedScene" uid="uid://ddfp2u6dpa8ug" path="res://proyecto_rummikub/tiendaObjetosFueraPartida/titulo.tscn" id="23_tfde3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iak3s"]
+bg_color = Color(0.17625213, 0.40654674, 0.19712326, 1)
+border_width_right = 150
+border_width_bottom = 150
+border_color = Color(0.2581125, 0.5738081, 0.28809622, 1)
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+shadow_color = Color(0.23921569, 0.39215687, 0.24705882, 1)
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vjume"]
+bg_color = Color(0.17625213, 0.40654674, 0.19712326, 1)
+border_width_right = 150
+border_width_bottom = 150
+border_color = Color(0.2581125, 0.5738081, 0.28809622, 1)
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+shadow_color = Color(0.23921569, 0.39215687, 0.24705882, 1)
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbb6t"]
+bg_color = Color(0.14901961, 0.3372549, 0.16470589, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1k43s"]
+texture = ExtResource("4_m1nat")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u5hb0"]
-bg_color = Color(1, 1, 1, 1)
-border_color = Color(1, 1, 1, 1)
+bg_color = Color(0.13074586, 0.4117275, 0.75090975, 1)
+border_width_right = 150
+border_width_bottom = 150
+border_color = Color(0.23379293, 0.528358, 0.90308964, 1)
+border_blend = true
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
-shadow_color = Color(0.09803922, 0.09803922, 0.09803922, 0.8039216)
+corner_detail = 20
+shadow_color = Color(0.2669056, 0.5499004, 0.9166613, 1)
+shadow_size = 3
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ct2gx"]
-bg_color = Color(1, 1, 1, 1)
-border_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6451"]
+bg_color = Color(0.13074586, 0.4117275, 0.75090975, 1)
+border_width_right = 150
+border_width_bottom = 150
+border_color = Color(0.23379293, 0.528358, 0.90308964, 1)
+border_blend = true
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
-expand_margin_left = 10.0
-expand_margin_top = 10.0
-expand_margin_right = 10.0
-expand_margin_bottom = 10.0
-shadow_color = Color(0.09803922, 0.09803922, 0.09803922, 0.8039216)
+corner_detail = 20
+shadow_color = Color(0.2669056, 0.5499004, 0.9166613, 1)
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e8k5y"]
+bg_color = Color(0.13074586, 0.4117275, 0.75090975, 1)
+border_width_right = 150
+border_width_bottom = 150
+border_color = Color(0.23379293, 0.528358, 0.90308964, 1)
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+shadow_color = Color(0.2669056, 0.5499004, 0.9166613, 1)
+shadow_size = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v46w8"]
+bg_color = Color(0.1254902, 0.28235295, 0.5058824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f7uhe"]
+texture = ExtResource("5_1k43s")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tg18a"]
 bg_color = Color(1, 1, 1, 1)
@@ -191,6 +276,45 @@ corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f7uhe"]
+bg_color = Color(0.023529412, 0.078431375, 0.02745098, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.05699636, 0.14113337, 0.06441328, 1)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jn6ro"]
+bg_color = Color(0.0879988, 0.19431254, 0.095333986, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.05699636, 0.14113337, 0.06441328, 1)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_neb5b"]
+bg_color = Color(0.042542547, 0.1158533, 0.049007207, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.05699636, 0.14113337, 0.06441328, 1)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3s8i0"]
 texture = ExtResource("9_u2d15")
 modulate_color = Color(0.52906674, 0.5290667, 0.5290667, 1)
@@ -199,7 +323,57 @@ modulate_color = Color(0.52906674, 0.5290667, 0.5290667, 1)
 texture = ExtResource("9_u2d15")
 modulate_color = Color(0.8992584, 0.8992584, 0.8992584, 1)
 
-[node name="MenuInicio" type="Control" unique_id=1337258946 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hy4th"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 4
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_bottom_left = 10
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ytp6o"]
+bg_color = Color(1, 1, 0.36078432, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mbi3m"]
+bg_color = Color(1, 1, 0.36078432, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3545v"]
+bg_color = Color(1, 1, 0.08235294, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kjww1"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvssi"]
+bg_color = Color(0, 0, 0, 0.59607846)
+
+[node name="MenuInicio" type="Control" unique_id=1337258946 node_paths=PackedStringArray("dinero", "botonAmigos", "botonCerrarPestanaAmigos")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,11 +381,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_87g63")
+dinero = NodePath("TiendaYDinero/Dinero")
 botonAmigos = NodePath("BarraSuperior/PanelIconoBotonAmigos/BotonSacarAmigos")
 botonCerrarPestanaAmigos = NodePath("MenuAmigos/BotonCerrarPestanaAmigos")
 metadata/_edit_use_anchors_ = true
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1176407704]
+z_index = -2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -219,6 +395,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.3647059, 0.1254902, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="ModoClasico" type="Button" parent="Fondo" unique_id=520308855]
 layout_mode = 1
@@ -227,16 +404,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -315.0
-offset_top = -132.0
-offset_right = -40.0
-offset_bottom = 195.0
+offset_left = -386.0
+offset_top = -85.0
+offset_right = -8.0
+offset_bottom = 182.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_u5hb0")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ct2gx")
-theme_override_styles/hover = ExtResource("2_ct2gx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_iak3s")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_iak3s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vjume")
 text = "          
  
   
@@ -249,27 +426,77 @@ text = "
 "
 alignment = 0
 script = ExtResource("1_5dy57")
+metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Fondo/ModoClasico" unique_id=1444729863]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -74.875
-offset_top = 15.0
-offset_right = 74.875
-offset_bottom = 55.0
+offset_left = -78.5
+offset_top = 159.0
+offset_right = 71.25
+offset_bottom = 199.0
 grow_horizontal = 2
+mouse_filter = 2
 mouse_behavior_recursive = 1
-theme_override_colors/default_color = Color(0.0253638, 0.0253638, 0.025363795, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.39215687)
 theme_override_font_sizes/normal_font_size = 23
 text = "Modo Clasico
 "
+metadata/_edit_use_anchors_ = true
 
-[node name="JokerNegro" type="Sprite2D" parent="Fondo/ModoClasico" unique_id=1559934634]
-position = Vector2(138.625, 190.68752)
-scale = Vector2(0.312, 0.31)
-texture = ExtResource("4_u5hb0")
+[node name="RichTextLabel2" type="RichTextLabel" parent="Fondo/ModoClasico" unique_id=1028118734]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.5
+offset_top = 190.0
+offset_right = 71.25
+offset_bottom = 230.0
+grow_horizontal = 2
+mouse_filter = 2
+mouse_behavior_recursive = 1
+theme_override_colors/default_color = Color(1, 1, 1, 0.7254902)
+theme_override_font_sizes/normal_font_size = 12
+text = "Las reglas de siempre
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel2" type="Panel" parent="Fondo/ModoClasico" unique_id=1616726811]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -32.0
+offset_top = 19.0
+offset_right = 32.0
+offset_bottom = 97.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cbb6t")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="Fondo/ModoClasico/Panel2" unique_id=1435869844]
+custom_minimum_size = Vector2(63.5, 76)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -38.0
+offset_right = 32.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_1k43s")
+metadata/_edit_use_anchors_ = true
 
 [node name="ModoClasico2" type="Button" parent="Fondo" unique_id=409688436]
 layout_mode = 1
@@ -278,16 +505,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 27.0
-offset_top = -132.0
-offset_right = 302.0
-offset_bottom = 195.0
+offset_left = 24.0
+offset_top = -85.0
+offset_right = 402.0
+offset_bottom = 182.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_u5hb0")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ct2gx")
-theme_override_styles/hover = ExtResource("2_ct2gx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_r6451")
+theme_override_styles/hover = SubResource("StyleBoxFlat_e8k5y")
 text = "          
  
   
@@ -300,26 +527,78 @@ text = "
 "
 alignment = 0
 script = ExtResource("1_5dy57")
+metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Fondo/ModoClasico2" unique_id=578451850]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -74.875
-offset_top = 15.0
-offset_right = 74.875
-offset_bottom = 55.0
+offset_left = -68.5
+offset_top = 163.0
+offset_right = 87.5
+offset_bottom = 203.0
 grow_horizontal = 2
+mouse_filter = 2
 mouse_behavior_recursive = 1
-theme_override_colors/default_color = Color(0.0253638, 0.0253638, 0.025363795, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.39215687)
 theme_override_font_sizes/normal_font_size = 23
 text = "Modo Arcade"
+metadata/_edit_use_anchors_ = true
 
-[node name="JokerNegro" type="Sprite2D" parent="Fondo/ModoClasico2" unique_id=1237181308]
-position = Vector2(138.625, 190.68752)
-scale = Vector2(0.312, 0.31)
-texture = ExtResource("4_u5hb0")
+[node name="Panel3" type="Panel" parent="Fondo/ModoClasico2" unique_id=1897969711]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.5
+offset_top = -110.0
+offset_right = 34.5
+offset_bottom = -28.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v46w8")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel2" type="Panel" parent="Fondo/ModoClasico2/Panel3" unique_id=442075237]
+custom_minimum_size = Vector2(63.5, 76)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.75
+offset_top = -39.0
+offset_right = 31.75
+offset_bottom = 37.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_f7uhe")
+metadata/_edit_use_anchors_ = true
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="Fondo/ModoClasico2" unique_id=179670032]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -70.5
+offset_top = 194.0
+offset_right = 79.25
+offset_bottom = 234.0
+grow_horizontal = 2
+mouse_filter = 2
+mouse_behavior_recursive = 1
+theme_override_colors/default_color = Color(1, 1, 1, 0.7254902)
+theme_override_font_sizes/normal_font_size = 12
+text = "Power-ups y caos"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="BarraSuperior" type="ColorRect" parent="." unique_id=111327994]
 layout_mode = 1
@@ -330,6 +609,7 @@ offset_bottom = -543.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.07058824, 0.25882354, 0.09019608, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="RUMMIPLUS" type="RichTextLabel" parent="BarraSuperior" unique_id=1721607257]
 layout_mode = 1
@@ -348,6 +628,7 @@ bbcode_enabled = true
 text = "[wave amp=70 freq=5][rainbow freq=0.5 sat=0.8 val=1]RUMMIPLUS"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="NombreUsuario" type="RichTextLabel" parent="BarraSuperior" unique_id=1053121180]
 layout_mode = 1
@@ -363,6 +644,7 @@ mouse_behavior_recursive = 1
 theme_override_colors/default_color = Color(1, 1, 1, 0.84705883)
 theme_override_font_sizes/normal_font_size = 23
 text = "NombreUsuario"
+metadata/_edit_use_anchors_ = true
 
 [node name="PanelIconoBotonAmigos" type="Panel" parent="BarraSuperior" unique_id=1579480920]
 layout_mode = 1
@@ -378,6 +660,7 @@ offset_bottom = 36.5
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = ExtResource("9_tg18a")
+metadata/_edit_use_anchors_ = true
 
 [node name="BotonSacarAmigos" type="Button" parent="BarraSuperior/PanelIconoBotonAmigos" unique_id=11631376]
 layout_mode = 0
@@ -391,6 +674,7 @@ theme_override_styles/normal_mirrored = ExtResource("6_3d1jw")
 theme_override_styles/pressed = ExtResource("6_3d1jw")
 theme_override_styles/hover = ExtResource("6_3d1jw")
 icon = ExtResource("6_2yd1p")
+metadata/_edit_use_anchors_ = true
 
 [node name="BotonIconoAvatarUsuario" type="Button" parent="BarraSuperior" unique_id=1656056081]
 clip_children = 2
@@ -405,6 +689,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_tg18a")
 theme_override_styles/hover = ExtResource("9_tg18a")
 icon_alignment = 1
 script = SubResource("GDScript_r6451")
+metadata/_edit_use_anchors_ = true
 
 [node name="IconoAvatarUsuario" type="Panel" parent="BarraSuperior/BotonIconoAvatarUsuario" unique_id=475210352]
 layout_mode = 1
@@ -415,11 +700,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_tg18a")
+metadata/_edit_use_anchors_ = true
 
 [node name="GestorPestanaAmigos" type="HTTPRequest" parent="." unique_id=94937616]
 script = ExtResource("3_87g63")
 
 [node name="MenuAmigos" type="Panel" parent="." unique_id=388604241 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
+visible = false
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -601,6 +888,7 @@ placeholder_text = "Id del usuario..."
 alignment = 1
 
 [node name="FondoEditarPerfil" type="Panel" parent="." unique_id=1997386250 node_paths=PackedStringArray("menuInicio")]
+visible = false
 layout_mode = 0
 anchor_top = 0.16203703
 anchor_right = 0.9982639
@@ -888,6 +1176,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MenuSeleccionAvatar" type="Panel" parent="FondoEditarPerfil/MarcoEditarPerfil" unique_id=796245450]
+visible = false
 z_index = 1
 layout_mode = 0
 offset_right = 888.0
@@ -926,6 +1215,17 @@ theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
 columns = 3
 
+[node name="Volver" type="Button" parent="FondoEditarPerfil/MarcoEditarPerfil/MenuSeleccionAvatar" unique_id=724415066]
+layout_mode = 0
+offset_left = 571.0
+offset_top = 10.75
+offset_right = 678.0
+offset_bottom = 58.75
+theme_override_styles/normal = SubResource("StyleBoxFlat_f7uhe")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jn6ro")
+theme_override_styles/hover = SubResource("StyleBoxFlat_neb5b")
+text = "← Volver"
+
 [node name="BotonCerrar" type="Button" parent="FondoEditarPerfil" unique_id=283947437]
 layout_mode = 1
 anchors_preset = 1
@@ -939,6 +1239,145 @@ grow_horizontal = 0
 theme_override_styles/normal = ExtResource("14_pnstj")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
+
+[node name="TiendaYDinero" type="Control" parent="." unique_id=963192625]
+layout_mode = 1
+anchor_left = 0.7144097
+anchor_top = 0.043209877
+anchor_right = 0.8489583
+anchor_bottom = 0.125
+metadata/_edit_use_anchors_ = true
+
+[node name="Dinero" type="RichTextLabel" parent="TiendaYDinero" unique_id=1704306392]
+layout_direction = 3
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.09677419
+anchor_bottom = 0.11320755
+offset_right = 82.0
+offset_bottom = 47.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_hy4th")
+text = "10      "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+autowrap_trim_flags = 0
+horizontal_alignment = 2
+vertical_alignment = 1
+text_direction = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="BotonTienda" type="Button" parent="TiendaYDinero" unique_id=1775685059]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9714541
+anchor_right = 1.3677421
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/icon_max_width = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_ytp6o")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mbi3m")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3545v")
+icon = ExtResource("20_1k43s")
+icon_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="iconoDinero" type="Sprite2D" parent="TiendaYDinero/BotonTienda" unique_id=1818204060]
+position = Vector2(-19.574219, 28)
+scale = Vector2(0.018616637, 0.019211804)
+texture = ExtResource("21_637k7")
+
+[node name="Tienda" type="Control" parent="." unique_id=846956217 node_paths=PackedStringArray("menuInicio", "botonTienda", "botonCerrarTienda", "ContenedorTableros")]
+visible = false
+layout_mode = 1
+anchor_left = -0.00086805556
+anchor_top = 0.16203703
+anchor_right = 1.0008681
+anchor_bottom = 1.0030864
+mouse_filter = 2
+script = ExtResource("22_637k7")
+menuInicio = NodePath("..")
+botonTienda = NodePath("../TiendaYDinero/BotonTienda")
+botonCerrarTienda = NodePath("BotonCerrar")
+ContenedorTableros = NodePath("ScrollTienda/VBoxContainer/GridContainerTableros")
+metadata/_edit_use_anchors_ = true
+
+[node name="ScrollTienda" type="ScrollContainer" parent="Tienda" unique_id=1168490826]
+custom_minimum_size = Vector2(683, 540)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -341.5
+offset_top = -270.0
+offset_right = 341.5
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kjww1")
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+scroll_deadzone = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tienda/ScrollTienda" unique_id=1541467459]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TituloTableros" parent="Tienda/ScrollTienda/VBoxContainer" unique_id=247675677 instance=ExtResource("23_tfde3")]
+layout_mode = 2
+text = "Tableros"
+
+[node name="GridContainerTableros" type="GridContainer" parent="Tienda/ScrollTienda/VBoxContainer" unique_id=1079591804]
+clip_contents = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+columns = 3
+
+[node name="TituloSkinFichas" parent="Tienda/ScrollTienda/VBoxContainer" unique_id=11217582 instance=ExtResource("23_tfde3")]
+layout_mode = 2
+text = "Skins de Fichas"
+
+[node name="GridContainerSkinDeFichas" type="GridContainer" parent="Tienda/ScrollTienda/VBoxContainer" unique_id=1576153087]
+clip_contents = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 10
+columns = 3
+
+[node name="BotonCerrar" type="Button" parent="Tienda" unique_id=1508576880]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -62.0
+offset_top = 7.0
+offset_right = -4.0
+offset_bottom = 65.0
+grow_horizontal = 0
+theme_override_styles/normal = ExtResource("14_pnstj")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
+theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
+
+[node name="FondoTienda" type="Panel" parent="Tienda" unique_id=190748916]
+z_index = -1
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wvssi")
 
 [connection signal="mouse_entered" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_entered"]
 [connection signal="mouse_exited" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_exited"]
@@ -955,4 +1394,5 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 [connection signal="pressed" from="MenuAmigos/MenuAnadirAmigo/BotonEnviarSolicitud" to="MenuAmigos" method="_on_boton_enviar_solicitud_pressed"]
 [connection signal="toggled" from="MenuAmigos/MenuAnadirAmigo/BotonVolver" to="MenuAmigos" method="_on_boton_volver_toggled"]
 [connection signal="pressed" from="FondoEditarPerfil/MarcoEditarPerfil/PanelIconoBotonAmigos2/BotonEditarAvatar" to="FondoEditarPerfil" method="_on_boton_editar_avatar_pressed"]
+[connection signal="pressed" from="FondoEditarPerfil/MarcoEditarPerfil/MenuSeleccionAvatar/Volver" to="FondoEditarPerfil" method="_on_volver_pressed"]
 [connection signal="pressed" from="FondoEditarPerfil/BotonCerrar" to="FondoEditarPerfil" method="_on_boton_cerrar_pressed"]

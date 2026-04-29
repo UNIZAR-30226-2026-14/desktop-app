@@ -74,6 +74,7 @@ func iniciar_turno() -> void:
 	pasarTurno.disabled = true
 	empieza_turno.emit()
 
+<<<<<<< HEAD
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
 	var viejo_tablero: Array = tablero.grupos
@@ -117,6 +118,21 @@ func llega_turno(nuevo_tablero: Array):
 			)
 		return Grupo_fichas.Grupo_fichas(array_fichas)
 		)
+=======
+func guardar_estado() -> void:
+	print("GUARDANDO FICHAS")
+	fichas_en_mano_antes = []
+	var ficha_nueva: Ficha
+	for ficha in mano.fichas_en_mano:
+		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
+		globales.apropiar_hijo(self, ficha_nueva)
+		fichas_en_mano_antes.append(ficha_nueva)
+	var fichas_no_blancas: int = 0
+	for ficha in fichas_en_mano_antes:
+		if !ficha.en_blanco:
+			fichas_no_blancas += 1
+	print("Guardo "+ str(fichas_no_blancas))
+>>>>>>> origin/offline
 	
 	var aux:Array[Grupo_fichas]
 	aux.assign(nuevos)
@@ -207,6 +223,7 @@ func robar_carta() -> void:
 	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
 	mano.devolver_ficha(fich)
 	fich.z_index = 0
+	print("Guardar estado y terminar turno")
 	guardar_estado()
 	terminar_turno()
 

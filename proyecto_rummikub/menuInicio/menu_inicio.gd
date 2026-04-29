@@ -1,5 +1,6 @@
 extends Control
 
+@export var dinero: RichTextLabel
 @export var botonAmigos: Button
 @export var botonCerrarPestanaAmigos: Button
 
@@ -13,6 +14,11 @@ func _ready() -> void:
 	nuevoIcono.texture = globales.avatar
 	$BarraSuperior/BotonIconoAvatarUsuario/IconoAvatarUsuario.add_theme_stylebox_override("panel",nuevoIcono)
 	$BarraSuperior/BotonIconoAvatarUsuario/IconoAvatarUsuario.size.y = ratio * ANCHURA_AVATAR_MOSTRAR
+<<<<<<< HEAD
+=======
+	set_dinero(10)
+	print("DINERO: " + str(get_dinero()))
+>>>>>>> origin/offline
 
 const ANCHURA_AVATAR_EDITAR: float = 133.5
 
@@ -30,3 +36,9 @@ func actualizar_avatar()->void:
 	nuevoIcono.texture = globales.avatar
 	$BarraSuperior/BotonIconoAvatarUsuario/IconoAvatarUsuario.add_theme_stylebox_override("panel",nuevoIcono)
 	$BarraSuperior/BotonIconoAvatarUsuario/IconoAvatarUsuario.size.y = ratio * ANCHURA_AVATAR_MOSTRAR
+
+func set_dinero(nueva_cantidad: int)-> void:
+	dinero.text = str(nueva_cantidad) + "      "
+
+func get_dinero() -> int:
+	return int(dinero.text)

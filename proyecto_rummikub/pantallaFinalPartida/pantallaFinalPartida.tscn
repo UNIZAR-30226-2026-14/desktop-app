@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://75ogdrmks05m"]
 
 [ext_resource type="Texture2D" uid="uid://drm35o82qvtd5" path="res://imagenes/avatares_posibles/Fernando.png" id="1_86rnl"]
-[ext_resource type="Script" path="res://proyecto_rummikub/pantallaFinalPartida/pantalla_final_partida.gd" id="1_rlb6q"]
-[ext_resource type="StyleBox" path="res://proyecto_rummikub/pantallaFinalPartida/style_box_continua_victoria.tres" id="2_6g23v"]
+[ext_resource type="Script" uid="uid://bep4w0yxmcm7w" path="res://proyecto_rummikub/pantallaFinalPartida/pantalla_final_partida.gd" id="1_rlb6q"]
+[ext_resource type="StyleBox" uid="uid://bkdofc3evnegb" path="res://proyecto_rummikub/pantallaFinalPartida/style_box_continua_victoria.tres" id="2_6g23v"]
 [ext_resource type="Texture2D" uid="uid://bk4gj10k8cgug" path="res://imagenes/imagenes_tienda_juego/icono_modeda_fuera_partida.png" id="2_6w6un"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxo20"]

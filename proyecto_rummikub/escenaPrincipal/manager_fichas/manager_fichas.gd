@@ -52,8 +52,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			grupo_arrastrado.z_index += 1 # se aumenta su prioridad para que aparezca sobre el resto de cartas
 
 		elif event.is_released():
+			print("soltar")
 		# si se deja de clicar
 			if(grupo_arrastrado != null && clicando): # se suelta un grupo
+				if grupo_arrastrado.fichas.size() == 0:
+					print("GRUPO DE TAMANO 0")
 				grupo_arrastrado.z_index -= 1 
 				if(globales.estado_cursor==globales.ESTADO_CURSOR.MANO 
 					or globales.estado_cursor==globales.ESTADO_CURSOR.LIMBO
@@ -73,7 +76,9 @@ func _unhandled_input(event: InputEvent) -> void:
 						quitando_fichas()
 					else:
 						# se devuelve al tablero
+						print("Devolver a tablero")
 						if(grupo_de_origen == null):
+							print("origen no existe")
 							# si el grupo de donde venia ya no existe se tiene que volver a conectar y meter
 							grupo_arrastrado.transform = posicion_original_grupo
 							grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
@@ -82,10 +87,16 @@ func _unhandled_input(event: InputEvent) -> void:
 							if not grupo_arrastrado.todas_son_fichas_fijadas():
 								poniendo_fichas()
 						else:
+							print("ORIGEN EXISTENTE")
 							# si sigue existiendo se conecta
 							grupo_de_origen.anadir_grupo_fin(grupo_arrastrado)
 						
-				elif(sobre_grupo == null || sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
+				elif(sobre_grupo == null ) || (sobre_grupo == grupo_arrastrado): # se arrastra sobre lugar del tablero vacio
+					print("Se arrastra sobre zona vacia")
+					if sobre_grupo == null:
+						print("sobre_grupo null")
+					if sobre_grupo == grupo_arrastrado:
+						print("sobre_grupo igual a grupo_arrastrado")
 					grupo_arrastrado.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 					grupo_arrastrado.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)
 					$tablero.anadir_grupo_fichas(grupo_arrastrado)
@@ -93,12 +104,17 @@ func _unhandled_input(event: InputEvent) -> void:
 						poniendo_fichas()
 				
 				else: # arrastra en el tablero sobre un grupo
+					print("Arrastra sobre zona llena")
 					if(sobre_lado_grupo == globales.LADOS.IZQUIERDA):
 						sobre_grupo.anadir_grupo_principio(grupo_arrastrado)
 					else:
 						sobre_grupo.anadir_grupo_fin(grupo_arrastrado)
 					if not grupo_arrastrado.todas_son_fichas_fijadas():
 						poniendo_fichas()
+			elif grupo_arrastrado == null :
+				print("EL GRUPO ES NULL")
+			elif !clicando:
+				print("NO ESTABA CLICANDO")
 			clicando = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -172,10 +188,13 @@ func click_izquierdo(ficha: Ficha) -> void:
 		grupo_arrastrado = grupo_original.partir(ficha)
 		sobre_grupo = grupo_original
 		if grupo_arrastrado == grupo_original: # nos llevamos todo el grupo
+			print("Todo")
 			posicion_original_grupo = grupo_original.transform
 			grupo_de_origen = null
+			sobre_grupo = null
 			$tablero.quitar_grupo_fichas(grupo_arrastrado)
 		else: # nos llevamos solo parte
+			print("Parte")
 			grupo_de_origen = grupo_original
 		
 		globales.apropiar_hijo(self, grupo_arrastrado)
@@ -188,8 +207,9 @@ func click_izquierdo(ficha: Ficha) -> void:
 		#	grupo_ficha.get_parent().remove_child(grupo_ficha)
 
 func _entro_cursor_en_grupo(grupo_sobrepasado : Grupo_fichas, lado) -> void:
-	sobre_lado_grupo = lado
-	sobre_grupo = grupo_sobrepasado
+	if grupo_sobrepasado != grupo_arrastrado:
+		sobre_lado_grupo = lado
+		sobre_grupo = grupo_sobrepasado
 
 func _salio_cursor_en_grupo(_grupo_sobrepasado : Grupo_fichas, _lado) -> void:
 	if sobre_grupo==_grupo_sobrepasado && sobre_lado_grupo==_lado:

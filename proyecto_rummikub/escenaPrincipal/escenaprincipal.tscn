@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bxlkgyvjo1kko"]
 
 [ext_resource type="Script" uid="uid://dchryuwijo7j8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/manager_fichas.gd" id="1_fdp1d"]
+[ext_resource type="Script" uid="uid://caxyet7tuyrfj" path="res://proyecto_rummikub/escenaPrincipal/escenaprincipal.gd" id="1_k1ots"]
 [ext_resource type="Script" uid="uid://ocrutm3j7a8" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/mano.gd" id="2_l7e7q"]
 [ext_resource type="Script" uid="uid://3olcnx0nwrf0" path="res://proyecto_rummikub/escenaPrincipal/manager_juego/manager_juego.gd" id="2_pp26n"]
 [ext_resource type="Texture2D" uid="uid://dfg4w7nij8fws" path="res://imagenes/imagenes_escena_principal/devolver_fichas.png" id="3_pp26n"]
@@ -165,7 +166,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 2
 mouse_force_pass_scroll_events = false
-color = Color(0.059360206, 0.1829626, 0.12114481, 1)
 
 [node name="FondoTemporal1" type="ColorRect" parent="." unique_id=969498385]
 visible = false
@@ -215,6 +215,7 @@ offset_bottom = -11.737793
 contador_dinero = NodePath("../panelContadorMonedas")
 
 [node name="PantallaFinalPartida" parent="." unique_id=1647612049 instance=ExtResource("17_a1kqi")]
+visible = false
 offset_left = -440.0
 offset_top = -244.0
 offset_right = 441.0

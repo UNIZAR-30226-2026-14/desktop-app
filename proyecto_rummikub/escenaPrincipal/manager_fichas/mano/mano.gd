@@ -36,6 +36,27 @@ func _ready() -> void:
 	for i in num_maximo_fichas:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
+<<<<<<< HEAD
+=======
+	#temporal para probar cosas
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 13))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
+	#devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 10))
+>>>>>>> origin/offline
 	actualizar_posicion_mano()
 
 
@@ -58,7 +79,11 @@ func insertar_ficha(ficha_origen: Ficha, ficha_destino: Ficha) -> void:
 
 func quitar_ficha(ficha:Node) -> void:
 	#self.remove_child(ficha)
+	
 	var ficha_sacada: int = fichas_en_mano.find(ficha)
+	if ficha_sacada == -1:
+		return
+#	print("Quito: " + str(ficha_sacada))
 	var ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0) 
 	globales.apropiar_hijo(self, ficha_blanca)
 	manager_fichas.conectar_ficha(ficha_blanca)
@@ -187,7 +212,7 @@ func aumentar_tamano_mano() -> void:
 	$AreaMano/CollisionShapeMano/Panel.position.x -= aumento / 2
 	
 	#$AreaMano/CollisionShapeMano/Panel.position = Vector2
-	num_maximo_fichas += num_filas
+	num_maximo_fichas += 2
 	for i in num_filas :
 		print("poner blanca")
 		var nueva_ficha_blanca: Ficha = Ficha.ficha(Ficha.COLOR.BLANCO, 0)
@@ -228,19 +253,27 @@ func _contar_blancas() -> int:
 	return fichas_en_mano.reduce(_acumular_blancas,0)
 
 func insertar_mano(nueva_mano :Array[Ficha]) -> void:
+	
 	for ficha in fichas_en_mano:
-		if(not ficha.en_blanco):
-			print("Quitando ficha: " + str(ficha.mi_indice))
+		if !ficha.en_blanco:
 			quitar_ficha(ficha)
 			self.remove_child(ficha)
-
+	
+	for ficha in fichas_en_mano: 
+		if !ficha.en_blanco:
+			quitar_ficha(ficha)
+			self.remove_child(ficha)
+	
 	for ficha in nueva_mano:
-		if(not ficha.en_blanco):
-			print("Metiendo ficha: " + str(ficha.mi_indice))
+		if (not ficha.en_blanco):
 			devolver_ficha(ficha)
 			manager_fichas.conectar_ficha(ficha)
+<<<<<<< HEAD
 	actualizar_posicion_mano()
 
 func vacia()-> bool:
 	return fichas_en_mano.all(func(ficha)->bool:
 		return ficha.en_blanco)
+=======
+ 	
+>>>>>>> origin/offline
