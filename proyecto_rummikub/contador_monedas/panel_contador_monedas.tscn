@@ -44,7 +44,8 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_colors/default_color = Color(0.7670186, 0.7670186, 0.7670186, 1)
 theme_override_font_sizes/normal_font_size = 38
-text = "200"
+text = "20"
+scroll_active = false
 horizontal_alignment = 2
 vertical_alignment = 1
 

@@ -2,6 +2,7 @@ extends Control
 
 @export var confirmar: Button
 @export var registrarse: Button
+@export var cambiarContrasena: Button
 
 @export var textoNombreUsuario: LineEdit
 @export var textoContrasena: LineEdit
@@ -10,6 +11,7 @@ extends Control
 func _ready() -> void:
 	confirmar.pressed.connect(comprobar_datos)
 	registrarse.pressed.connect(ir_a_registrarse)
+	cambiarContrasena.pressed.connect(ir_a_cambiar_contrasena)
 
 func comprobar_datos() -> void:
 	if((textoContrasena.text != "") and (textoNombreUsuario.text != "")):
@@ -19,3 +21,6 @@ func comprobar_datos() -> void:
 
 func ir_a_registrarse() -> void:
 	get_tree().change_scene_to_file("res://proyecto_rummikub/menu_registrarse/menu_registrarse.tscn")
+
+func ir_a_cambiar_contrasena() -> void:
+	get_tree().change_scene_to_file("res://proyecto_rummikub/menuCambiarContrasena/menuCambiarContrasena.tscn")

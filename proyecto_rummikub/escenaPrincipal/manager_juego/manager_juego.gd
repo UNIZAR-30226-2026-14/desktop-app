@@ -79,7 +79,11 @@ func guardar_estado() -> void:
 		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
 		globales.apropiar_hijo(self, ficha_nueva)
 		fichas_en_mano_antes.append(ficha_nueva)
-	
+	var fichas_no_blancas: int = 0
+	for ficha in fichas_en_mano_antes:
+		if !ficha.en_blanco:
+			fichas_no_blancas += 1
+	print("Guardo "+ str(fichas_no_blancas))
 	
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
@@ -124,6 +128,7 @@ func robar_carta() -> void:
 	var fich: Ficha = manager_fichas._crear_ficha()
 	mano.devolver_ficha(fich)
 	fich.z_index = 0
+	print("Guardar estado y terminar turno")
 	guardar_estado()
 	terminar_turno()
 
