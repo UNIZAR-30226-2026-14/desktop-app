@@ -11,8 +11,6 @@ var crea_ficha: Callable
 static var singleton_instance: conector_red = null
 var id_partida: int = -1
 
-var avatar: Texture2D = preload("res://imagenes/avatares_posibles/Fernando.png")
-
 func _init() -> void:
 	if singleton_instance == null:
 		singleton_instance = self
@@ -41,16 +39,29 @@ func registrar_usuario(usr:String, passwd:String)->Error:
 	return await $red.registrar_usuario(usr,passwd)
 #endregion
 #region AMIGOS
-func get_amigos()->Array[Dictionary]:
-	return await $red.get_amigos()
+func get_amigos(_amigos: Array[Amigo],_solicitud_env:Array[SolicitudEnviada],
+				_solicitud_pen:Array[SolicitudPendiente]):
+	var aux_amigos = []; var aux_env = []; var aux_reciv = []
+	await $red.get_amigos(aux_amigos, aux_env, aux_reciv)
+	_amigos.assign(aux_amigos.map(func(amigo):
+		print(amigo["icono"])
+		return Amigo.amigo(globales.get_avatar(amigo["icono"]), 
+					amigo["nombre"])) )
+	_solicitud_env.assign(aux_env.map(func(amigo):
+		return SolicitudEnviada.solicitud(amigo["nombre"])) )
+	_solicitud_pen.assign(aux_reciv.map(func(amigo):
+		return SolicitudPendiente.solicitud(amigo["nombre"])) )
 #endregion
 #region DURANTE PARTIDA
 var mi_turno: int
 ##recibe_cartas toma las cartas del tablero como parametro
-func espera_a_turno(recibe_cartas: Callable) -> void:
+func espera_a_turno(recibe_cartas: Callable, fin_partida: Callable) -> void:
 	while true:
 		var estado_partida = await $red.get_turno(id_partida)
-		print("TABLERO: ", estado_partida["mesa"], " TURNO: ",estado_partida["turno"])
+		#print("fiTABLERO: ", estado_partida["mesa"], " TURNO: ",estado_partida["turno"])
+		if estado_partida["estado"] == "FINISHED":
+			fin_partida.call(estado_partida["ganadorId"],estado_partida["puntuacion"])
+			return
 		recibe_cartas.call(estado_partida["mesa"])
 		if estado_partida["turno"] == mi_turno:
 			return
@@ -67,7 +78,7 @@ func hacer_jugada(tablero:Array[Grupo_fichas])->bool:
 
 func robar(receptor: Callable):
 	var dict = await $red.robar_ficha(id_partida)
-	print(dict)
+	print("ficha robada: ",dict)
 	$red.ultimo_turno = -1
 	return receptor.call(dict["color"],dict["numero"] )
 
@@ -82,15 +93,31 @@ func mano() -> Array[Ficha]:
 	return  await $red.mano(id_partida)
 
 #endregion
-#region BUSCAR PARTIDA
+#region BUSCAR-INICIAR PARTIDA
+func partida_con_lobby(partida:int)->Error:
+	return await $red.unirse_a_partida(partida)
+	
 func buscar_partida(status_busqueda:Label, iniciar: Button):
 	id_partida = await $red.get_partidas(status_busqueda)
 	await $red.unirse_a_partida(id_partida)
 	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
 
 func forzar_inicio_partida(): $red.forzar_inicio_partida_set_true()
-#endregion
 
+## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
+## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
+func get_adversarios() -> Array[Dictionary]:
+	return await $red.get_adversarios(id_partida)
+#endregion
+#region COSMETICO
+func cambia_perfil(icono: String):
+	globales.set_avatar(icono)
+	await $red.cambia_perfil(icono)
+func get_perfil():
+	push_error("sin terminar")
+	var perfil = await $red.get_perfil()
+	globales.set_avatar(perfil)
+#endregion
 
 func fin_partida():
 	pass

@@ -54,6 +54,7 @@ func amigo_todos():
 	await _awaiting_request_get(base_url+jugadores)
 	var amistades = json.data.map(func(jug): return jug.id)
 	for amigo in amistades:
+		print(amigo)
 		if amigo != mi_id:
 			await _awaiting_request(base_url+amigos,{amis1:mi_id,amis2:amigo,"estado":"ACEPTADO","fecha":"2026-04-05"},
 			HTTPClient.METHOD_POST,header())
@@ -68,7 +69,7 @@ func header()->PackedStringArray:
 func ficha_to_string(ficha)->String:
 	var res: String = ""
 	if ficha.color == Ficha.COLOR.COMODIN:
-		return JOKER_RED + "1"
+		return JOKER_RED + "*"
 	
 	match ficha.color:
 		Ficha.COLOR.ROJO:
@@ -117,13 +118,6 @@ func string_to_ficha(s:String) -> Dictionary:
 	res["numero"] = s.substr(1).to_int()
 	return res
 
-func get_imagen(url: String)->Texture2D:
-	$HTTPRequest.request_completed.disconnect(_recibe_respuesta_json)
-	$HTTPRequest.request_completed.connect(_recibe_respuesta_imagen)
-	await _awaiting_request_get(url)
-	$HTTPRequest.request_completed.connect(_recibe_respuesta_json)
-	return textura
-
 
 var codigo_respuesta: int
 var textura: ImageTexture = ImageTexture.new()
@@ -152,15 +146,21 @@ func _recibe_respuesta_json(result: int, response_code: int, _headers: PackedStr
 
 @warning_ignore("shadowed_variable")
 func _awaiting_request_get(url:String, header:PackedStringArray = PackedStringArray()):
-	$HTTPRequest.request(url, header)
-	await $HTTPRequest.request_completed
+	if $HTTPRequest.request(url, header) == ERR_BUSY:
+		await $HTTPRequest.request_completed
+		await _awaiting_request_get(url,header)
+	else:
+		await $HTTPRequest.request_completed
 
 ##Body puede ser diccionario o array, se convierte a string dentro de esta funcion
 @warning_ignore("shadowed_variable")
 func _awaiting_request(url:String, body, metodo:HTTPClient.Method, header:PackedStringArray = PackedStringArray(["Content-Type: application/json"])):
 	print("POST ", url, ", Cuerpo: ",JSON.stringify(body), ", Cabecera: ",header)
-	$HTTPRequest.request(url,header,metodo,JSON.stringify(body))
-	await $HTTPRequest.request_completed
+	if $HTTPRequest.request(url,header,metodo,JSON.stringify(body)) == ERR_BUSY:
+		await $HTTPRequest.request_completed
+		await _awaiting_request(url,body,metodo,header)
+	else:
+		await $HTTPRequest.request_completed
 
 
 ## acaba toma el valor de hacer get url y  debe devolver un bool que será true
@@ -180,26 +180,62 @@ func _respuesta_buena() -> bool:
 #endregion
 #region amigos
 const nom_jugador = "nombre"
-const url_jugador ="urlImgPerfil"
+const imagen_perfil ="urlImgPerfil"
 const amigos = "/api/amigos"
 const amigos_de_jugador = "/api/amigos?jugadorId="
 const perfiles_de_amigos = "/amigos/perfiles"
 const amis1 = "jugador1Id"
 const amis2 = "jugador2Id"
+const estado_amis = "estado"
+const estado_aceptado = "ACEPTADO"
+const estado_pendiente = "PENDIENTE"
 const amigo_nom = "nombre"
 const amigo_icono = "urlImgPerfil"
 
+func categoriza_solicitudes(_aceptadas,_enviadas,_recibidas):
+	var todos_amigos = json.data
+	var solic_pendientes_env: Array = todos_amigos.filter(func(amistad):
+		print(amistad[amis1] == mi_id, amistad[estado_amis] == estado_pendiente)
+		return amistad[amis1] == mi_id\
+		and amistad[estado_amis] == estado_pendiente )
+	var solic_pendientes_reciv: Array = todos_amigos.filter(func(amistad):
+		return  amistad[amis2] == mi_id \
+		and amistad[estado_amis] == estado_pendiente)
+	var solic_aceptadas: Array = todos_amigos.filter(func(amistad):
+		return (amistad[amis1] == mi_id or amistad[amis2] == mi_id) \
+		and amistad[estado_amis] == estado_aceptado)
+		
+	_enviadas.assign(solic_pendientes_env.map(func(amistad):
+		return amistad[amis2]) )
+	_recibidas.assign(solic_pendientes_reciv.map(func(amistad):
+		return amistad[amis1]) )
+	_aceptadas.assign(solic_aceptadas.map(func(amistad):
+		if amistad[amis1]==mi_id: return amistad[amis2]
+		else: return amistad[amis1] ) )
+	pass
+
 ## Campos return: "icono", "nombre", "conectado"
-func get_amigos()->Array[Dictionary]:
+func get_amigos(_aceptadas,_enviadas,_recibidas):
+	await _awaiting_request_get(base_url+amigos)
+	assert(_respuesta_buena())
+	var aux_aceptadas = []; var aux_enviadas = []; var aux_recibidas = []
+	categoriza_solicitudes(aux_aceptadas,aux_enviadas,aux_recibidas)
+	
 	await _awaiting_request_get(base_url+jugadores+"/"+str(mi_id)+perfiles_de_amigos)
 	if _respuesta_buena():
 		@warning_ignore("shadowed_variable")
 		var amigos: Array[Dictionary]
 		amigos.assign(json.data)
+		print(json.data)
 		amigos.assign(amigos.map(func(amigo)->Dictionary:
-			return {"icono":amigo[amigo_icono],"nombre":amigo[amigo_nom]}))#,"conectado":amigo[p]}))
-		return amigos
-	return []
+			print("un amigo")
+			return {"icono":amigo[amigo_icono],"nombre":amigo[amigo_nom],
+			"id":amigo["id"] }))
+		for grupo in [aux_aceptadas,aux_enviadas,aux_recibidas]:
+			grupo.assign(amigos.filter(func(amigo):return amigo["id"] in grupo))
+		_aceptadas.assign(aux_aceptadas)
+		_enviadas.assign(aux_enviadas)
+		_recibidas.assign(aux_recibidas)
 
 #endregion
 #region inicio sesion
@@ -217,7 +253,7 @@ var guarda_con:String
 var login_timer:Timer 
 
 func registrar_usuario(nombre: String, contrasena: String) -> Error:
-	await _awaiting_request(base_url+jugadores,{login_nom_usuario:nombre,login_passw:contrasena},HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+jugadores,{login_nom_usuario:nombre,login_passw:contrasena,imagen_perfil:"dani"},HTTPClient.METHOD_POST)
 	if _respuesta_buena():
 		print("Bien", json.data)
 		return Error.OK
@@ -231,7 +267,7 @@ func inicia_sesion(nombre: String, contrasena: String) -> Error:
 	await _awaiting_request(base_url+inicio_sesion, {login_nom_usuario:nombre, login_passw:contrasena}, HTTPClient.METHOD_POST)
 	if _respuesta_buena():
 		var res = json.data
-		
+		globales.set_avatar(res[login_jugador][imagen_perfil])
 		mi_token = res[login_token]
 		mi_id = res[login_jugador][login_id]
 
@@ -320,14 +356,14 @@ func get_partidas(status_busqueda:Label) -> int:
 	if body is Array: # varias partidas
 		for partida in body:
 			print(partida)
-			if !partida[partida_empezada]:
-				print("encontrada partida ", partida[id_partida])
+			if partida[estado_partida] == "ESPERANDO":
+				print("encontrada la partida ", partida[id_partida])
 				status_busqueda.text = "Partida encontrada"
 				ultima_info_partida = partida
 				return ultima_info_partida[id_partida]
 	elif body is Dictionary:# una partida
 		print(body)
-		if !body[partida_empezada]:
+		if body[estado_partida] == "ESPERANDO":
 			print("encontrada partida ", body[id_partida])
 			ultima_info_partida = body
 			status_busqueda.text = "Partida encontrada"
@@ -353,9 +389,19 @@ func crear_partida() -> Dictionary:
 		assert(false, "Error creando partida")
 	print("respuesta: ", json.data)
 	return json.data
-
 #endregion
+#region parar y continuar partida
+## Separado entre he_iniciado y me_he_unido
+func partidas_iniciadas()->Dictionary:
+	await _awaiting_request_get(base_url+partidas)
+	var body = json.data
+	for partida in body:
+		pass
+	return {}
 
+func parar_partida(id:int):
+	await _awaiting_request(base_url+partidas+"/"+str(id),{},HTTPClient.METHOD_POST)
+#endregion
 #region partida
 const partic_mano = "manoActual"
 const partic_turno = "ordenTurno"
@@ -365,6 +411,17 @@ const jugar_tipo = "moveType"
 const jugar_tipo_cambio_tablero = "replace_board"
 const jugar_tablero = "newBoard"
 const partida_pasar = "/pasar"
+
+## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
+## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
+func get_adversarios(id: int) -> Array[Dictionary]:
+	await _awaiting_request_get(base_url+participiaciones_por_partida+str(id))
+	assert(_respuesta_buena())
+	var aux :Array[Dictionary] = []
+	aux.assign( json.data.map(func(part)->Dictionary:
+		return {"nombre":part["jugadorNombre"], "icono":globales.get_avatar(part["jugadorUrlImgPerfil"]),
+				"id":part["idJugador"]}))
+	return aux.filter(func(part): return part["id"] != mi_id)
 
 
 ##Devuelve la mano y el turno que tiene
@@ -386,7 +443,7 @@ func info_inicial(id: int, crea_ficha: Callable)->Dictionary:
 		res["mano"]= carta_arr
 		return res
 	else:
-		push_error("Error al obtener informacion inicial", json.data)
+		assert(false,"Error al obtener informacion inicial " + str(json.data))
 		return {}
 
 func mano(id: int, crea_ficha: Callable)->Array[Ficha]:
@@ -409,6 +466,7 @@ func mano(id: int, crea_ficha: Callable)->Array[Ficha]:
 func get_turno(id: int):
 	await _espera_a_resultado(
 		func(data)->bool:
+			if data[estado_partida] == "FINISHED": return true
 			ultima_info_partida = data
 			if data[turno] != ultimo_turno: 
 				ultimo_turno = data[turno]
@@ -418,7 +476,17 @@ func get_turno(id: int):
 				print("esperando")
 				return false,
 		base_url+partidas+"/"+str(id), 0.3)
-	var res={"turno"=ultimo_turno, "mesa" = string_to_grupos(json.data[mesa])};
+	var datos = json.data
+	var mi_puntuacion: Array = datos["puntuacionFinal"].split(",")
+	mi_puntuacion = mi_puntuacion.filter(func(s:String):
+		@warning_ignore("shadowed_variable")
+		var id_jugador: String = s.get_slice(",",0).left(-1).right(-1)
+		print("puntuacion de jugador: ",id_jugador)
+		return id_jugador == str(mi_id))
+	if mi_puntuacion.is_empty(): mi_puntuacion = ["a"]
+	var res={"turno":ultimo_turno, "mesa":string_to_grupos(datos[mesa]),
+				"estado":datos["estado"],"ganadorId":datos["ganadorId"],
+				"puntuacion":mi_puntuacion[0].get_slice(",",1)}
 	return res
 
 func subir_jugada(id:int, tablero: Array[Grupo_fichas]):
@@ -438,20 +506,38 @@ func pasar_turno_servidor(id:int):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+partida_pasar,{},HTTPClient.METHOD_POST,header())
 	
 	
-func robar_ficha(id: int)->Dictionary:
+func robar_ficha(id: int, fichas_robar: int = 1)->Dictionary:
 	var dict_id = {id_jugador: mi_id}
-	await _awaiting_request(base_url+partidas+"/"+str(id)+partida_robar,dict_id,
-	HTTPClient.METHOD_POST,header())
-	assert(_respuesta_buena(),"Error al robar ficha-roba request: "+str(json.data))
-	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
-	assert(_respuesta_buena(),"Error al robar ficha-mano request: "+str(json.data))
-	var nueva_mano: String = json.data[fichas_mano]
-	var aux = nueva_mano.split(",")
-	aux.reverse()
+	if ultima_info_partida[bolsa_robar].split(",").size() >= fichas_robar:
+		await _awaiting_request(base_url+partidas+"/"+str(id)+partida_robar,dict_id,
+		HTTPClient.METHOD_POST,header())
+		print("RECIBIDO DE PARTIDA ROBAR: ", json.data)
+		assert(_respuesta_buena(),"Error al robar ficha-roba request: "+str(json.data))
+		await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
+		assert(_respuesta_buena(),"Error al robar ficha-mano request: "+str(json.data))
+		var nueva_mano: String = json.data[fichas_mano]
+		var aux = nueva_mano.split(",")
+		aux.reverse()
 
-	return string_to_ficha(aux[0])
+		return string_to_ficha(aux[0])
+	else:
+		return {"color": Ficha.COLOR.BLANCO,"numero":1}
 	
 func pasa_turno(_id:int):
 	pass
 	# BUG desde donde llame a esto, hacer ultimo_turno = mi_turno
+#endregion
+#region perfil
+func get_perfil()->String:
+	await _awaiting_request_get(base_url+jugadores+"/"+str(mi_id)+perfil,header())
+	assert(_respuesta_buena(),json.data)
+	return json.data[imagen_perfil]
+
+func cambia_perfil(icono: String):
+	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,{imagen_perfil:icono},HTTPClient.METHOD_PATCH,header())
+	assert(_respuesta_buena(),json.data)
+
+func cambiar_contrasena(contra: String):
+	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,
+		{id_jugador:mi_id},HTTPClient.METHOD_PUT,header())
 #endregion

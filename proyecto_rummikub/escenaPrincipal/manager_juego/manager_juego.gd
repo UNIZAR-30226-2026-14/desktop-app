@@ -10,6 +10,8 @@ extends Node2D
 @export var mano: Node2D
 @export var manager_fichas: Node2D
 
+var partida_terminada = false
+
 signal empieza_turno
 signal termina_turno
 
@@ -38,7 +40,7 @@ func _ready() -> void:
 	grupos_en_tablero_antes = []
 	printerr("Hay que modificar el uso de la variable abierto para que funcione con los datos llegados de otros jugadores")
 	abierto = true
-	
+	adversarios = await ConectorRed.get_adversarios()
 	#botones
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(hacer_jugada)
@@ -60,10 +62,9 @@ func terminar_turno() -> void:
 	robarCarta.disabled = true
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
-	printerr("si hay bug nuevo al merge, mirar aquí (terminar_turno, manager_juego)")
 	termina_turno.emit()
-	await ConectorRed.espera_a_turno(llega_turno)
-	iniciar_turno()
+	await ConectorRed.espera_a_turno(llega_turno, terminar_partida)
+	if not partida_terminada: iniciar_turno()
 
 func iniciar_turno() -> void:
 	guardar_estado()
@@ -76,9 +77,12 @@ func iniciar_turno() -> void:
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
 	var viejo_tablero: Array = tablero.grupos
-	viejo_tablero.map(func(grupo): print(Grupo_fichas.hash_grupo(grupo)))
-	nuevo_tablero.map(func(grupo): print(Grupo_fichas.hash_grupo(grupo)))
-	
+	print("nuevo:")
+	print(nuevo_tablero)
+	print("viejo")
+	viejo_tablero.map(func(grupo:Grupo_fichas): 
+		print(grupo.fichas.reduce(func(accum, ficha:Ficha):
+			return accum + str(ficha.color) + str(ficha.numero)+",","")))	
 	var nuevos = [] ; var eliminados = []
 	nuevo_tablero.sort_custom(
 		func(grupo_a,grupo_b)-> bool: 
@@ -117,7 +121,17 @@ func llega_turno(nuevo_tablero: Array):
 	var aux:Array[Grupo_fichas]
 	aux.assign(nuevos)
 	#inserta fichas nuevas
-	tablero.insertar_grupos_fichas(aux)
+	await tablero.insertar_grupos_fichas(aux)
+	guardar_estado()
+	
+func terminar_partida(id_ganador, puntuacion):
+	for jugador in adversarios:
+		if jugador["id"] == id_ganador:
+			$"../PantallaFinalPartida".sacar_pantalla_victoria(jugador["icono"],jugador["nombre"],puntuacion)
+			return
+	$"../PantallaFinalPartida".sacar_pantalla_victoria(globales.avatar,ConectorRed.username,puntuacion)
+	partida_terminada = true
+
 #endregion
 
 #region estados
@@ -139,7 +153,6 @@ func poniendo_fichas() -> void:
 #endregion
 
 #region volver estado anterior
-
 func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
 	fichas_en_mano_antes = []
@@ -199,10 +212,9 @@ func robar_carta() -> void:
 
 #endregion
 
-var adversarios: Array[Dictionary] = [{"nombre":"jose maria", "icono": load("res://imagenes/Fernando.png") },{"nombre":"maria jose", "icono": load("res://imagenes/Fernando.png")} ]
+var adversarios: Array[Dictionary] = [{"nombre":"debug", "icono": load("res://imagenes/Fernando.png") },{"nombre":"maria jose", "icono": load("res://imagenes/Fernando.png")} ]
 
 ## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
 ## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
 func get_adversarios() -> Array[Dictionary]:
-	push_error("manager_juego.get_adversarios sin terminar")
 	return adversarios

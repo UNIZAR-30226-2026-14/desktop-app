@@ -240,3 +240,7 @@ func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 			devolver_ficha(ficha)
 			manager_fichas.conectar_ficha(ficha)
 	actualizar_posicion_mano()
+
+func vacia()-> bool:
+	return fichas_en_mano.all(func(ficha)->bool:
+		return ficha.en_blanco)

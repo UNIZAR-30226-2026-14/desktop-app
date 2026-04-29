@@ -32,16 +32,24 @@ static var estado_anterior_cursor: ESTADO_CURSOR
 static var nombre_usuario: String = ""
 static var contrasena: String = ""
 static var avatar: Texture2D = preload("res://imagenes/avatares_posibles/Dani.png")
+
+const LISTA_AVATARES: Dictionary[String,Texture2D] = {
+	"alex": preload("res://imagenes/avatares_posibles/Alex.png"),
+	"dani" : preload("res://imagenes/avatares_posibles/Dani.png"),
+	"dian" : preload("res://imagenes/avatares_posibles/Dian.png"),
+	"fernando" : preload("res://imagenes/avatares_posibles/Fernando.png"),
+	"gonzalo" : preload("res://imagenes/avatares_posibles/Gonzalo.png"),
+	"miguel" : preload("res://imagenes/avatares_posibles/Miguel.png"),
+}
+func set_avatar(av: String):
+	if av != "": avatar = LISTA_AVATARES[av.to_lower()]
+	else: avatar = LISTA_AVATARES["dani"]
+func get_avatar(av: String):
+	if av.to_lower() in LISTA_AVATARES.keys():
+		return LISTA_AVATARES[av.to_lower()]
+	else:
+		return LISTA_AVATARES["dani"]
 func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():
 		hijo.get_parent().remove_child(hijo)
 	nuevo_padre.add_child(hijo)
-
-const LISTA_AVATARES: Array[Texture2D] = [
-	preload("res://imagenes/avatares_posibles/Alex.png"),
-	preload("res://imagenes/avatares_posibles/Dani.png"),
-	preload("res://imagenes/avatares_posibles/Dian.png"),
-	preload("res://imagenes/avatares_posibles/Fernando.png"),
-	preload("res://imagenes/avatares_posibles/Gonzalo.png"),
-	preload("res://imagenes/avatares_posibles/Miguel.png"),
-]

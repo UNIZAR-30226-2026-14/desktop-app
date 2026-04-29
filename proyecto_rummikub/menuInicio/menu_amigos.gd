@@ -3,6 +3,9 @@ extends Panel
 @export var botonAmigos: Button
 @export var botonCerrarPestanaAmigos: Button
 
+var amigos: Array[Amigo] = []#[Amigo.amigo(preload("res://imagenes/avatares_posibles/Miguel.png"), "Miguel"), Amigo.amigo(preload("res://imagenes/avatares_posibles/Dian.png"), "Dian")]
+var enviadas: Array[SolicitudEnviada] = [SolicitudEnviada.solicitud("Miguel"), SolicitudEnviada.solicitud("Dian")]
+var pendientes: Array[SolicitudPendiente] = [SolicitudPendiente.solicitud("Miguel"), SolicitudPendiente.solicitud("Dian")]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,6 +13,13 @@ func _ready() -> void:
 	botonAmigos.pressed.connect(_sacar_amigos)
 	botonCerrarPestanaAmigos.pressed.connect(_cerrar_amigos)
 	$MenuAnadirAmigo.visible = false
+	amigos_actualizado()
+
+func amigos_actualizado():
+	while true:
+		print("amigos actualizado")
+		await ConectorRed.get_amigos(amigos, enviadas, pendientes) 
+		await get_tree().create_timer(3).timeout
 
 func _sacar_amigos() -> void:
 	$BotonPendientes.text = "Pendientes(" + str(pendientes.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
@@ -21,12 +31,6 @@ func _sacar_amigos() -> void:
 func _cerrar_amigos() -> void:
 	self.visible = false
 
-var amigos: Array[Amigo] = [Amigo.amigo(preload("res://imagenes/avatares_posibles/Miguel.png"), "Miguel"), Amigo.amigo(preload("res://imagenes/avatares_posibles/Dian.png"), "Dian")]
-var enviadas: Array[SolicitudEnviada] = [SolicitudEnviada.solicitud("Miguel"), SolicitudEnviada.solicitud("Dian")]
-var pendientes: Array[SolicitudPendiente] = [SolicitudPendiente.solicitud("Miguel"), SolicitudPendiente.solicitud("Dian")]
-
-var amigos_usando: Array[Amigo] = []
-var enviadas_usando: Array[SolicitudEnviada] =[]
 func _on_boton_amigos_toggled(toggled_on: bool) -> void:
 	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
 	if toggled_on:

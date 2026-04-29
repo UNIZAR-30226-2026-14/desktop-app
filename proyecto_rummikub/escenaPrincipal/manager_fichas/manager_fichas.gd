@@ -203,7 +203,6 @@ func desconectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)
 	ficha.cursor_no_sobre_ficha.disconnect(_salio_cursor_en_ficha)
 
-
 func conectar_grupo(grupo_fichas: Grupo_fichas) -> void:
 	grupo_fichas.cursor_sobre_grupo.connect(_entro_cursor_en_grupo)
 	grupo_fichas.cursor_no_sobre_grupo.connect(_salio_cursor_en_grupo)

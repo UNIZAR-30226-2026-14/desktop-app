@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dskcun5fuyt5a" path="res://imagenes/imagenes_escena_principal/robar_carta.png" id="5_qada0"]
 [ext_resource type="PackedScene" uid="uid://c3ex7k8wifj4s" path="res://proyecto_rummikub/tiendaObjetosPartida/tiendaObjetosPartida.tscn" id="6_4470i"]
 [ext_resource type="Texture2D" uid="uid://bue21kvqcax5u" path="res://imagenes/icono_ordenar_cartas/ordenar_por_color.png" id="6_nj8sc"]
-[ext_resource type="StyleBox" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/ordenar/style_box_boton_solo_icono.tres" id="8_4j4ur"]
+[ext_resource type="StyleBox" uid="uid://da0wvj5ist4bp" path="res://proyecto_rummikub/escenaPrincipal/manager_fichas/mano/ordenar/style_box_boton_solo_icono.tres" id="8_4j4ur"]
 [ext_resource type="Script" uid="uid://01rkl37dyspm" path="res://proyecto_rummikub/escenaPrincipal/http_request.gd" id="8_7fgi8"]
 [ext_resource type="PackedScene" uid="uid://b8p6hfgluurlg" path="res://proyecto_rummikub/contadorTiempoTurno/contadorTiempoTurno.tscn" id="11_naapq"]
 [ext_resource type="PackedScene" uid="uid://d225hlutlafaj" path="res://proyecto_rummikub/poder/Poder.tscn" id="14_4j4ur"]
@@ -157,10 +157,10 @@ script = ExtResource("8_7fgi8")
 [node name="Fondo" type="ColorRect" parent="." unique_id=1522473387]
 z_index = -999
 z_as_relative = false
-offset_left = -6554.0
-offset_top = -2436.0
-offset_right = 6564.0
-offset_bottom = 3152.0
+offset_left = -6557.0
+offset_top = -2569.0
+offset_right = 6561.0
+offset_bottom = 3019.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 2
@@ -221,7 +221,6 @@ offset_right = 441.0
 offset_bottom = 146.0
 
 [node name="SelectorAdversario" parent="." unique_id=1618597266 node_paths=PackedStringArray("manager_juego") instance=ExtResource("18_3k6q8")]
-visible = false
 offset_left = 50.0
 offset_top = -76.0
 offset_right = 909.0

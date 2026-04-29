@@ -14,14 +14,14 @@ func _on_boton_cerrar_pressed() -> void:
 
 func _on_boton_editar_avatar_pressed() -> void:
 	$MarcoEditarPerfil/MenuSeleccionAvatar.visible = true
-	for avatar: Texture2D in globales.LISTA_AVATARES:
+	for avatar: String in globales.LISTA_AVATARES:
 		var nuevo_avatar_seleccionable: AvatarSeleccionable = AvatarSeleccionable.AvatarSeleccionable(avatar)
 		nuevo_avatar_seleccionable.custom_toggled.connect(_on_avatar_seleccionable_toggled)
 		globales.apropiar_hijo($MarcoEditarPerfil/MenuSeleccionAvatar/ContenedorAvataresSeleccionables, nuevo_avatar_seleccionable)
-		if avatar == ConectorRed.avatar:
+		if globales.LISTA_AVATARES[avatar] == globales.avatar:
 			nuevo_avatar_seleccionable.marco.button_pressed = true
 
 func _on_avatar_seleccionable_toggled(toggled_on: bool, avatar_seleccionado: AvatarSeleccionable)->void:
 	if toggled_on:
-		ConectorRed.avatar = avatar_seleccionado.mi_icono
+		ConectorRed.cambia_perfil(avatar_seleccionado.nom_icono)
 		menuInicio.actualizar_avatar()
