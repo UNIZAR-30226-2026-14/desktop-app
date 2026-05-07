@@ -66,6 +66,9 @@ func cambiar_poder(nuevo_poder: PODER):
 	icono_poder.texture = LISTA_TEXTURAS_PODERES[nuevo_poder]
 	poder = nuevo_poder
 
+func get_poder() -> PODER:
+	return poder
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	mi_indice = indice

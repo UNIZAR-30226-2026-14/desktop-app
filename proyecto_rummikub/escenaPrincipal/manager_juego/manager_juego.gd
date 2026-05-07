@@ -9,6 +9,12 @@ extends Node2D
 @export var tablero: Node2D
 @export var mano: Node2D
 @export var manager_fichas: Node2D
+@export var panel_contador_monedas: PanelContadorMonedas
+
+@export var poder1: Poder
+@export var poder2: Poder
+@export var poder3: Poder
+
 
 signal empieza_turno
 signal termina_turno
@@ -75,8 +81,8 @@ func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
 	fichas_en_mano_antes = []
 	var ficha_nueva: Ficha
-	for ficha in mano.fichas_en_mano:
-		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
+	for ficha: Ficha in mano.fichas_en_mano:
+		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero, ficha.especial)
 		globales.apropiar_hijo(self, ficha_nueva)
 		fichas_en_mano_antes.append(ficha_nueva)
 	var fichas_no_blancas: int = 0
@@ -138,3 +144,22 @@ var adversarios: Array[Dictionary] = [{"nombre":"jose maria", "icono": load("res
 ## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
 func get_adversarios() -> Array[Dictionary]:
 	return adversarios
+
+func puntuar_ficha(especial: Ficha.ESPECIAL):
+	match(especial):
+		Ficha.ESPECIAL.NO:
+			panel_contador_monedas.aumentar_dinero(1)
+			
+		Ficha.ESPECIAL.DORADO:
+			panel_contador_monedas.aumentar_dinero(2)
+			
+		Ficha.ESPECIAL.ARCOIRIS:
+			panel_contador_monedas.aumentar_dinero(1)
+			var generador = RandomNumberGenerator.new()
+			var poder_elegido: Poder.PODER =  generador.randi_range(1, 8) as Poder.PODER 
+			if poder1.get_poder() == Poder.PODER.NINGUNO:
+				poder1.cambiar_poder(poder_elegido)
+			elif poder2.get_poder() == Poder.PODER.NINGUNO:
+				poder2.cambiar_poder(poder_elegido)
+			elif poder3.get_poder() == Poder.PODER.NINGUNO:
+				poder3.cambiar_poder(poder_elegido)

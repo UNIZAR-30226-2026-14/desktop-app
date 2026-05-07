@@ -16,6 +16,8 @@ func _ready() -> void:
 	$BarraSuperior/BotonIconoAvatarUsuario/IconoAvatarUsuario.size.y = ratio * ANCHURA_AVATAR_MOSTRAR
 	set_dinero(10)
 	print("DINERO: " + str(get_dinero()))
+	
+	$Fondo/ModoClasico.pressed.connect(_abrir_lobby_clasico)
 
 const ANCHURA_AVATAR_EDITAR: float = 133.5
 
@@ -39,3 +41,6 @@ func set_dinero(nueva_cantidad: int)-> void:
 
 func get_dinero() -> int:
 	return int(dinero.text)
+
+func _abrir_lobby_clasico()->void:
+	$FondoLobbyClasico.visible = true

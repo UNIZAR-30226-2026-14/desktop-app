@@ -37,6 +37,13 @@ func _ready() -> void:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
 	#temporal para probar cosas
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12, Ficha.ESPECIAL.ARCOIRIS))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 12, Ficha.ESPECIAL.ARCOIRIS))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12, Ficha.ESPECIAL.DORADO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12, Ficha.ESPECIAL.DORADO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12, Ficha.ESPECIAL.DORADO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12, Ficha.ESPECIAL.DORADO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 12, Ficha.ESPECIAL.DORADO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 13))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
@@ -257,17 +264,17 @@ func _contar_blancas() -> int:
 func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 	
 	for ficha in fichas_en_mano:
-		if !ficha.en_blanco:
+		if (not ficha.en_blanco):
 			quitar_ficha(ficha)
 			self.remove_child(ficha)
 	
 	for ficha in fichas_en_mano: 
-		if !ficha.en_blanco:
+		if (not ficha.en_blanco):
 			quitar_ficha(ficha)
 			self.remove_child(ficha)
 	
 	for ficha in nueva_mano:
-		if (not ficha.en_blanco):
-			devolver_ficha(ficha)
-			manager_fichas.conectar_ficha(ficha)
+		#if (not ficha.en_blanco):
+		devolver_ficha(ficha)
+		manager_fichas.conectar_ficha(ficha)
  	

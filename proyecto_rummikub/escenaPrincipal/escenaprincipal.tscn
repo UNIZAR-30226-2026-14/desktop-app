@@ -36,7 +36,7 @@ script = ExtResource("1_k1ots")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 editor_draw_limits = true
 
-[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "tablero", "mano", "manager_fichas")]
+[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "poder1", "poder2", "poder3")]
 position = Vector2(-563, 99)
 scale = Vector2(0.038, 0.038)
 script = ExtResource("2_pp26n")
@@ -47,6 +47,10 @@ miTurno = NodePath("miTurno")
 tablero = NodePath("../managerFichas/tablero")
 mano = NodePath("../managerFichas/mano")
 manager_fichas = NodePath("../managerFichas")
+panel_contador_monedas = NodePath("../panelContadorMonedas")
+poder1 = NodePath("../Poder")
+poder2 = NodePath("../Poder2")
+poder3 = NodePath("../Poder3")
 
 [node name="miTurno" type="Button" parent="managerJuego" unique_id=1857705721]
 offset_top = -3394.7354
@@ -147,16 +151,18 @@ theme_override_styles/normal_mirrored = ExtResource("8_4j4ur")
 icon = ExtResource("4_qada0")
 metadata/_edit_use_anchors_ = true
 
-[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano")]
+[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano", "manager_juego")]
 z_index = -5
 script = ExtResource("5_nj8sc")
 manager_fichas = NodePath("..")
 colision_mano = NodePath("../mano/AreaMano/CollisionShapeMano")
+manager_juego = NodePath("../../managerJuego")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=143859430]
 script = ExtResource("8_7fgi8")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1522473387]
+visible = false
 z_index = -999
 z_as_relative = false
 offset_left = -6554.0
