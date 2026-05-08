@@ -14,3 +14,6 @@ func set_imagen(nueva_imagen: Texture2D)-> void:
 
 func set_dinero(cantidad: String) -> void:
 	$contadorMonedas.text = cantidad
+
+func _ready() -> void:
+	set_dinero("0")

@@ -125,6 +125,27 @@ corner_detail = 20
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f7uhe"]
 texture = ExtResource("5_1k43s")
 
+[sub_resource type="Shader" id="Shader_tfde3"]
+code = "shader_type canvas_item;
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV);
+	float hue = (UV.x+UV.y) * 0.25 + mod(TIME * 0.05, 1.0);
+	//float hue = -UV.y * 0.25 + mod(TIME * 0.25, 1.0);
+	COLOR.rgb *= hsv2rgb(vec3(hue,0.6, 1.0));
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shr80"]
+shader = SubResource("Shader_tfde3")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tg18a"]
 bg_color = Color(1, 1, 1, 1)
 border_width_left = 4
@@ -775,6 +796,7 @@ color = Color(0.07058824, 0.25882354, 0.09019608, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="RUMMIPLUS" type="RichTextLabel" parent="BarraSuperior" unique_id=1721607257]
+material = SubResource("ShaderMaterial_shr80")
 custom_minimum_size = Vector2(356.5, 104)
 layout_mode = 1
 anchors_preset = 5
@@ -788,7 +810,7 @@ mouse_behavior_recursive = 1
 theme_override_colors/default_color = Color(0, 0.4010601, 0.40136003, 1)
 theme_override_font_sizes/normal_font_size = 42
 bbcode_enabled = true
-text = "[wave amp=70 freq=5][rainbow freq=0.5 sat=0.8 val=1]RUMMIPLUS"
+text = "[wave amp=70 freq=5]RUMMIPLUS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1747,6 +1769,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 
 [node name="PanelCreacionPartidaPrivada" type="Panel" parent="FondoLobbyClasico" unique_id=964690319]
+visible = false
 custom_minimum_size = Vector2(583, 552)
 layout_mode = 1
 anchors_preset = 8

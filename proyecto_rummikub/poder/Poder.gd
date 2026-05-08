@@ -76,7 +76,7 @@ func _ready() -> void:
 	area_poder.mouse_entered.connect(_actualizar_estado_cursor_entra)
 	area_poder.mouse_exited.connect(_actualizar_estado_cursor_sale)
 	manager_fichas.conectar_poder(self)
-	cambiar_poder(Poder.PODER.NINGUNO)
+	cambiar_poder(Poder.PODER.TOQUE_MIDAS)
 
 func _actualizar_estado_cursor_entra() -> void:
 	cursor_sobre_poder.emit(self)
@@ -97,7 +97,8 @@ func ejecutar_poder() -> void:
 		PODER.LUPA:
 			pass
 		PODER.TOQUE_MIDAS:
-			pass
+			cambiar_poder(PODER.NINGUNO)
+			manager_juego.toque_de_midas()
 		PODER.TRUEQUE:
 			pass
 		PODER.BOMBA_HUMO:

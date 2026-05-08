@@ -7,7 +7,7 @@ signal cursor_sobre_ficha
 signal cursor_no_sobre_ficha
 
 enum COLOR{ROJO, NEGRO, AZUL, AMARILLO, BLANCO, COMODIN}
-enum ESPECIAL{NO, ARCOIRIS, DORADO}
+enum ESPECIAL{NO, ARCOIRIS, DORADO, DORADARCOIRIS}
 const shader_arcoiris: Shader = preload("res://shaders/efectoArcoiris.gdshader")
 const shader_metalico: Shader = preload("res://shaders/efectoMetalico.gdshader")
 
@@ -112,7 +112,18 @@ func cambiar_sprite(color_in: COLOR, numero_in: int, especial_in: ESPECIAL):
 			my_mat.shader = shader_metalico
 			$fondoFicha.material = my_mat
 			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta_dorada.png")
-
+		
+		ESPECIAL.DORADARCOIRIS:
+			var my_mat = ShaderMaterial.new()
+			if (color_in == COLOR.AMARILLO):
+				$Numero.modulate = "929200"
+			my_mat.shader = shader_metalico
+			$fondoFicha.material = my_mat
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta_dorada.png")
+			my_mat.shader = shader_arcoiris
+			$auraFicha.material = my_mat
+			$caraJoker.material = my_mat
+			$Numero.material = my_mat
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -132,3 +143,16 @@ func resaltar_aura():
 
 func desresaltar_aura():
 	$auraFicha.visible = false
+
+func volver_dorada()->void:
+	var my_mat = ShaderMaterial.new()
+	if (color == COLOR.AMARILLO):
+		$Numero.modulate = "929200"
+	my_mat.shader = shader_metalico
+	$fondoFicha.material = my_mat
+	$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta_dorada.png")
+	if especial == ESPECIAL.ARCOIRIS:
+		especial = ESPECIAL.DORADARCOIRIS
+		
+	else:
+		especial = ESPECIAL.DORADO

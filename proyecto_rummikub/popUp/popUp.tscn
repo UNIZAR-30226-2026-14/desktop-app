@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://b4hp71th6rqom"]
+
+[ext_resource type="Script" uid="uid://by1rv6a0mxrbr" path="res://proyecto_rummikub/popUp/pop_up.gd" id="1_4087e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4087e"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.18717611, 0.18717617, 0.18717602, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.21950114, 0.21950099, 0.21950093, 1)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 20
+shadow_color = Color(0, 0, 0, 0.6392157)
+
+[node name="Texto" type="RichTextLabel" unique_id=738017525]
+offset_right = 20.0
+offset_bottom = 20.0
+theme_override_font_sizes/normal_font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxFlat_4087e")
+text = "Esto es un ejemplo.
+Esto es un ejemplo en la linea de abajo."
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_4087e")
