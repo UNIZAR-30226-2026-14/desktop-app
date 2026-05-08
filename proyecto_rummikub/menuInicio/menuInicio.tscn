@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://dmruc2iiqflai"]
 
-[ext_resource type="Script" uid="uid://qholkstclop0" path="res://proyecto_rummikub/menuInicio/modo_clasico.gd" id="1_5dy57"]
 [ext_resource type="Script" uid="uid://db0nhy3a6a6xd" path="res://proyecto_rummikub/menuInicio/menu_inicio.gd" id="1_87g63"]
 [ext_resource type="Texture2D" uid="uid://wolbkk2c8vtj" path="res://imagenes/imagenes_inicio/normal.svg" id="4_m1nat"]
 [ext_resource type="Texture2D" uid="uid://j1nd7xsbajo1" path="res://imagenes/imagenes_inicio/turbolocochon.svg" id="5_1k43s"]
@@ -22,6 +21,8 @@
 [ext_resource type="Texture2D" uid="uid://bk4gj10k8cgug" path="res://imagenes/imagenes_tienda_juego/icono_modeda_fuera_partida.png" id="21_637k7"]
 [ext_resource type="Script" uid="uid://bfenb8ef73heq" path="res://proyecto_rummikub/menuInicio/tienda.gd" id="22_637k7"]
 [ext_resource type="PackedScene" uid="uid://ddfp2u6dpa8ug" path="res://proyecto_rummikub/tiendaObjetosFueraPartida/titulo.tscn" id="23_tfde3"]
+[ext_resource type="PackedScene" uid="uid://bvs76ue2w8evs" path="res://proyecto_rummikub/marcoIcono/marcoIcono.tscn" id="24_6ubox"]
+[ext_resource type="Script" uid="uid://djv3s0t0ehc44" path="res://proyecto_rummikub/menuInicio/fondo_lobby_clasico.gd" id="24_tfde3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iak3s"]
 bg_color = Color(0.17625213, 0.40654674, 0.19712326, 1)
@@ -122,6 +123,27 @@ corner_detail = 20
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f7uhe"]
 texture = ExtResource("5_1k43s")
+
+[sub_resource type="Shader" id="Shader_tfde3"]
+code = "shader_type canvas_item;
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void fragment() {
+	COLOR = texture(TEXTURE, UV);
+	float hue = (UV.x+UV.y) * 0.25 + mod(TIME * 0.05, 1.0);
+	//float hue = -UV.y * 0.25 + mod(TIME * 0.25, 1.0);
+	COLOR.rgb *= hsv2rgb(vec3(hue,0.6, 1.0));
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shr80"]
+shader = SubResource("Shader_tfde3")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tg18a"]
 bg_color = Color(1, 1, 1, 1)
@@ -355,6 +377,173 @@ bg_color = Color(0, 0, 0, 0)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvssi"]
 bg_color = Color(0, 0, 0, 0.59607846)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s6361"]
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0.70980394)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14lq6"]
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8kp1q"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_corpu"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxjcy"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4qac6"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3qhr8"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dr23u"]
+bg_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgfsb"]
+bg_color = Color(0.09411765, 0.09411765, 0.09411765, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ov1t"]
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+corner_detail = 20
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i67tl"]
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+corner_detail = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_45nqm"]
+texture = ExtResource("9_u2d15")
+modulate_color = Color(0.52906674, 0.5290667, 0.5290667, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y0x6a"]
+texture = ExtResource("9_u2d15")
+modulate_color = Color(0.8992584, 0.8992584, 0.8992584, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22o8s"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_odu0a"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hgf5o"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_silre"]
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+corner_detail = 20
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
 [node name="MenuInicio" type="Control" unique_id=1337258946 node_paths=PackedStringArray("dinero", "botonAmigos", "botonCerrarPestanaAmigos")]
 layout_mode = 3
 anchors_preset = 15
@@ -381,10 +570,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="ModoClasico" type="Button" parent="Fondo" unique_id=520308855]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.49479166
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.49479166
 anchor_bottom = 0.5
 offset_left = -386.0
 offset_top = -85.0
@@ -407,7 +596,6 @@ text = "
  
 "
 alignment = 0
-script = ExtResource("1_5dy57")
 metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Fondo/ModoClasico" unique_id=1444729863]
@@ -482,10 +670,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="ModoClasico2" type="Button" parent="Fondo" unique_id=409688436]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = -1
+anchor_left = 0.49479166
 anchor_top = 0.5
-anchor_right = 0.5
+anchor_right = 0.49479166
 anchor_bottom = 0.5
 offset_left = 24.0
 offset_top = -85.0
@@ -508,7 +696,6 @@ text = "
  
 "
 alignment = 0
-script = ExtResource("1_5dy57")
 metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Fondo/ModoClasico2" unique_id=578451850]
@@ -594,23 +781,23 @@ color = Color(0.07058824, 0.25882354, 0.09019608, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="RUMMIPLUS" type="RichTextLabel" parent="BarraSuperior" unique_id=1721607257]
+material = SubResource("ShaderMaterial_shr80")
+custom_minimum_size = Vector2(356.5, 104)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -124.5
-offset_top = 9.0
-offset_right = 124.5
-offset_bottom = 98.0
+offset_left = -178.25
+offset_right = 178.25
+offset_bottom = 104.0
 grow_horizontal = 2
 mouse_behavior_recursive = 1
 theme_override_colors/default_color = Color(0, 0.4010601, 0.40136003, 1)
-theme_override_font_sizes/normal_font_size = 38
+theme_override_font_sizes/normal_font_size = 42
 bbcode_enabled = true
-text = "[wave amp=70 freq=5][rainbow freq=0.5 sat=0.8 val=1]RUMMIPLUS"
+text = "[wave amp=70 freq=5]RUMMIPLUS"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="NombreUsuario" type="RichTextLabel" parent="BarraSuperior" unique_id=1053121180]
 layout_mode = 1
@@ -630,10 +817,10 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PanelIconoBotonAmigos" type="Panel" parent="BarraSuperior" unique_id=1579480920]
 layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.9991319
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.9991319
 anchor_bottom = 0.5
 offset_left = -83.0
 offset_top = -36.5
@@ -685,6 +872,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="MenuAmigos" type="Panel" parent="." unique_id=388604241 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
 visible = false
+z_index = 1
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -739,9 +927,9 @@ offset_bottom = 1949.0884
 rotation = 0.7853982
 scale = Vector2(0.018, 0.018)
 theme_override_colors/icon_normal_color = Color(2.6111224, 2.6111224, 2.6111224, 1)
+theme_override_colors/icon_pressed_color = Color(2.6111224, 2.6111224, 2.6111224, 1)
 theme_override_styles/normal = ExtResource("6_3d1jw")
-theme_override_styles/normal_mirrored = ExtResource("6_3d1jw")
-theme_override_styles/pressed_mirrored = ExtResource("6_3d1jw")
+theme_override_styles/pressed = ExtResource("6_3d1jw")
 toggle_mode = true
 button_group = ExtResource("14_qutqo")
 icon = ExtResource("9_u2d15")
@@ -1356,6 +1544,350 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wvssi")
+
+[node name="FondoLobbyClasico" type="Panel" parent="." unique_id=361203403 node_paths=PackedStringArray("icono0", "icono1", "icono2", "icono3")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s6361")
+script = ExtResource("24_tfde3")
+icono0 = NodePath("PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos/MarcoIcono")
+icono1 = NodePath("PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos/MarcoIcono2")
+icono2 = NodePath("PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos/MarcoIcono3")
+icono3 = NodePath("PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos/MarcoIcono4")
+
+[node name="PanelLobbyClasico" type="Panel" parent="FondoLobbyClasico" unique_id=2147375390]
+custom_minimum_size = Vector2(583, 552)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -291.5
+offset_top = -276.0
+offset_right = 291.5
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_14lq6")
+
+[node name="TituloModo" type="RichTextLabel" parent="FondoLobbyClasico/PanelLobbyClasico" unique_id=1496104349]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -168.5
+offset_top = 14.0
+offset_right = 168.5
+offset_bottom = 93.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 27
+text = "MODO CLASICO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BotonPartidaPublica" type="Button" parent="FondoLobbyClasico/PanelLobbyClasico" unique_id=19771059]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -251.0
+offset_top = -182.0
+offset_right = -7.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_8kp1q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_corpu")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gxjcy")
+text = "🌎
+Partida
+Publica
+
+ 
+
+
+
+
+ "
+
+[node name="DescripcionPartidaPublica" type="RichTextLabel" parent="FondoLobbyClasico/PanelLobbyClasico/BotonPartidaPublica" unique_id=1124811848]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -102.5
+offset_top = -64.0
+offset_right = 102.5
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+text = "Busca una mesa libre para jugar ahora"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BotonPartidaPrivada" type="Button" parent="FondoLobbyClasico/PanelLobbyClasico" unique_id=44598134]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -279.5
+offset_top = -181.0
+offset_right = -35.0
+offset_bottom = 71.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_8kp1q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4qac6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gxjcy")
+text = "🔑
+Crear Partida 
+Privada
+ 
+ 
+
+ 
+ 
+  "
+
+[node name="DescripcionPartidaPrivada" type="RichTextLabel" parent="FondoLobbyClasico/PanelLobbyClasico/BotonPartidaPrivada" unique_id=186000328]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -102.5
+offset_top = -65.0
+offset_right = 102.5
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+text = "Genera un codigo para invitar a un amigo"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BotonUnriseConCodigo" type="Button" parent="FondoLobbyClasico/PanelLobbyClasico" unique_id=1769508047]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -255.5
+offset_top = -188.0
+offset_right = 255.5
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_8kp1q")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3qhr8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gxjcy")
+text = "⌨️
+Unirse con codigo
+
+
+
+  "
+
+[node name="InsertadorCodigo" type="LineEdit" parent="FondoLobbyClasico/PanelLobbyClasico/BotonUnriseConCodigo" unique_id=1120276362]
+layout_mode = 0
+offset_left = 143.5
+offset_top = 112.0
+offset_right = 278.5
+offset_bottom = 152.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_dr23u")
+placeholder_text = "RUM-000"
+alignment = 1
+max_length = 15
+
+[node name="BotonEntrarPartidaConCodigo" type="Button" parent="FondoLobbyClasico/PanelLobbyClasico/BotonUnriseConCodigo" unique_id=536431846]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 39.0
+offset_top = -60.0
+offset_right = 133.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_lgfsb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lgfsb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lgfsb")
+text = "ENTRAR"
+
+[node name="BotonCerrar" type="Button" parent="FondoLobbyClasico/PanelLobbyClasico" unique_id=931431728]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -74.0
+offset_top = 20.0
+offset_right = -16.0
+offset_bottom = 78.0
+grow_horizontal = 0
+theme_override_styles/normal = ExtResource("14_pnstj")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
+theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
+
+[node name="PanelCreacionPartidaPrivada" type="Panel" parent="FondoLobbyClasico" unique_id=964690319]
+visible = false
+custom_minimum_size = Vector2(583, 552)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -496.0
+offset_top = -276.0
+offset_right = 541.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ov1t")
+
+[node name="PanelIconosJugadores" type="Panel" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada" unique_id=2046580129]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -183.75
+offset_top = 25.0
+offset_right = 183.75
+offset_bottom = 127.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_i67tl")
+
+[node name="contenedorIconos" type="HBoxContainer" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelIconosJugadores" unique_id=181279931]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -161.5
+offset_top = -34.0
+offset_right = 161.5
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="MarcoIcono" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos" unique_id=551917140 instance=ExtResource("24_6ubox")]
+layout_mode = 2
+metadata/colorBorde = Color(0.32156864, 0.6509804, 0.3882353, 1)
+metadata/colorFondo = Color(0.101960786, 0.101960786, 0.101960786, 1)
+metadata/tamano_minimo = Vector2(71, 71)
+metadata/anchura = 71
+
+[node name="MarcoIcono2" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos" unique_id=71367320 instance=ExtResource("24_6ubox")]
+layout_mode = 2
+metadata/colorBorde = Color(0.32156864, 0.6509804, 0.3882353, 1)
+metadata/colorFondo = Color(0.101960786, 0.101960786, 0.101960786, 1)
+metadata/tamano_minimo = Vector2(71, 71)
+metadata/anchura = 71
+
+[node name="MarcoIcono3" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos" unique_id=250771187 instance=ExtResource("24_6ubox")]
+layout_mode = 2
+metadata/colorBorde = Color(0.32156864, 0.6509804, 0.3882353, 1)
+metadata/colorFondo = Color(0.101960786, 0.101960786, 0.101960786, 1)
+metadata/tamano_minimo = Vector2(71, 71)
+metadata/anchura = 71
+
+[node name="MarcoIcono4" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelIconosJugadores/contenedorIconos" unique_id=1318408651 instance=ExtResource("24_6ubox")]
+layout_mode = 2
+metadata/colorBorde = Color(0.32156864, 0.6509804, 0.3882353, 1)
+metadata/colorFondo = Color(0.101960786, 0.101960786, 0.101960786, 1)
+metadata/tamano_minimo = Vector2(71, 71)
+metadata/anchura = 71
+
+[node name="BotonCerrar" type="Button" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada" unique_id=2048486650]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -74.0
+offset_top = 20.0
+offset_right = -16.0
+offset_bottom = 78.0
+grow_horizontal = 0
+theme_override_styles/normal = ExtResource("14_pnstj")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_45nqm")
+theme_override_styles/hover = SubResource("StyleBoxTexture_y0x6a")
+
+[node name="BotonPartidaPublica" type="Button" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada" unique_id=2061193429]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -123.0
+offset_top = 157.0
+offset_right = 118.0
+offset_bottom = 251.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_22o8s")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_odu0a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
+text = "empezar"
+
+[node name="PanelSeleccionAmigos" type="Panel" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada" unique_id=958247161]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.84375
+offset_top = -110.75
+offset_right = 136.84375
+offset_bottom = 110.75
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_silre")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelSeleccionAmigos" unique_id=1567470089]
+custom_minimum_size = Vector2(276.75, 221.5)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.375
+offset_top = -110.75
+offset_right = 138.375
+offset_bottom = 110.75
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="contenedorAmigos" type="VBoxContainer" parent="FondoLobbyClasico/PanelCreacionPartidaPrivada/PanelSeleccionAmigos/ScrollContainer" unique_id=924218584]
+layout_mode = 2
 
 [connection signal="mouse_entered" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_entered"]
 [connection signal="mouse_exited" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_exited"]

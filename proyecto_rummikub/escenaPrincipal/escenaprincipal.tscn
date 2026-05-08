@@ -19,8 +19,40 @@
 [ext_resource type="PackedScene" uid="uid://75ogdrmks05m" path="res://proyecto_rummikub/pantallaFinalPartida/pantallaFinalPartida.tscn" id="17_a1kqi"]
 [ext_resource type="PackedScene" uid="uid://5vgflyue4xto" path="res://proyecto_rummikub/poder/selectorAdversario/selectorAdversario.tscn" id="18_3k6q8"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw2xd"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqkyq"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 0.5058824)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmsr4"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 0)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d6euy"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 0)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj8sc"]
-size = Vector2(447, 157.5)
+size = Vector2(447, 134)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g1hmo"]
 resource_name = "panel"
@@ -30,57 +62,125 @@ corner_radius_top_right = 50
 corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3k6q8"]
+bg_color = Color(0.13319641, 0.13319641, 0.13319635, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yonda"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_frcik"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4y4ov"]
+bg_color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 script = ExtResource("1_k1ots")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 editor_draw_limits = true
 
-[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "tablero", "mano", "manager_fichas")]
-position = Vector2(-563, 99)
+[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "poder1", "poder2", "poder3", "pantalla_partida_pausada", "boton_volver_partida_pausada")]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(-859.99994, 65)
 scale = Vector2(0.038, 0.038)
 script = ExtResource("2_pp26n")
 robarCarta = NodePath("robarCarta")
 pasarTurno = NodePath("pasarTurno")
 devolverFichas = NodePath("devolverFichas")
 miTurno = NodePath("miTurno")
+escena_principal = NodePath("..")
 tablero = NodePath("../managerFichas/tablero")
 mano = NodePath("../managerFichas/mano")
 manager_fichas = NodePath("../managerFichas")
+panel_contador_monedas = NodePath("../panelContadorMonedas")
+poder1 = NodePath("../Poder")
+poder2 = NodePath("../Poder2")
+poder3 = NodePath("../Poder3")
+pantalla_partida_pausada = NodePath("../PantallaPartidaPausada")
+boton_volver_partida_pausada = NodePath("../PantallaPartidaPausada/Volver")
 
 [node name="miTurno" type="Button" parent="managerJuego" unique_id=1857705721]
-offset_top = -3394.7354
-offset_right = 8.0
-offset_bottom = -3386.7354
+offset_left = 8052.6304
+offset_top = -1368.4211
+offset_right = 8060.6304
+offset_bottom = -1360.4211
 scale = Vector2(100, 100)
 metadata/_edit_use_anchors_ = true
 
 [node name="devolverFichas" type="Button" parent="managerJuego" unique_id=947377310]
-offset_right = 1032.0
-offset_bottom = 1032.0
+offset_left = 7973.6836
+offset_top = 1684.2106
+offset_right = 9005.684
+offset_bottom = 2716.2104
+theme_override_styles/normal = SubResource("StyleBoxFlat_tw2xd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tw2xd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xqkyq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_tmsr4")
 icon = ExtResource("3_pp26n")
 metadata/_edit_use_anchors_ = true
 
 [node name="pasarTurno" type="Button" parent="managerJuego" unique_id=1250822187]
-offset_left = -26.31543
-offset_top = -1789.4722
-offset_right = 1981.6846
-offset_bottom = 218.52783
+offset_left = 8026.315
+offset_top = 236.84204
+offset_right = 10034.314
+offset_bottom = 2244.842
 scale = Vector2(0.5, 0.5)
+theme_override_styles/normal = SubResource("StyleBoxFlat_tw2xd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tw2xd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xqkyq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_d6euy")
 icon = ExtResource("5_k1ots")
 metadata/_edit_use_anchors_ = true
 
 [node name="robarCarta" type="Button" parent="managerJuego" unique_id=532416471]
-offset_left = 26.316254
-offset_top = 1894.7385
-offset_right = 546.3163
-offset_bottom = 2414.7385
+offset_left = 8026.315
+offset_top = 3210.5264
+offset_right = 8546.314
+offset_bottom = 3730.5264
 scale = Vector2(2, 2)
+theme_override_styles/normal = SubResource("StyleBoxFlat_tw2xd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tw2xd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xqkyq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_tmsr4")
 icon = ExtResource("5_qada0")
 metadata/_edit_use_anchors_ = true
 
 [node name="ContadorTiempoTurno" parent="managerJuego" unique_id=334267871 node_paths=PackedStringArray("manager_juego") instance=ExtResource("11_naapq")]
-position = Vector2(28552.63, 4000.0002)
+position = Vector2(36447.37, 4710.527)
 scale = Vector2(7.8947372, 7.8947372)
 manager_juego = NodePath("..")
 
@@ -107,7 +207,7 @@ position = Vector2(64, -6)
 collision_layer = 2
 
 [node name="CollisionShapeMano" type="CollisionShape2D" parent="managerFichas/mano/AreaMano" unique_id=1873937284]
-position = Vector2(-67, 247.75)
+position = Vector2(-64, 247)
 shape = SubResource("RectangleShape2D_nj8sc")
 
 [node name="Panel" type="Panel" parent="managerFichas/mano/AreaMano/CollisionShapeMano" unique_id=1473587882]
@@ -147,16 +247,18 @@ theme_override_styles/normal_mirrored = ExtResource("8_4j4ur")
 icon = ExtResource("4_qada0")
 metadata/_edit_use_anchors_ = true
 
-[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano")]
+[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano", "manager_juego")]
 z_index = -5
 script = ExtResource("5_nj8sc")
 manager_fichas = NodePath("..")
 colision_mano = NodePath("../mano/AreaMano/CollisionShapeMano")
+manager_juego = NodePath("../../managerJuego")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=143859430]
 script = ExtResource("8_7fgi8")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1522473387]
+visible = false
 z_index = -999
 z_as_relative = false
 offset_left = -6541.0
@@ -187,21 +289,21 @@ offset_right = -412.0
 offset_bottom = -257.0
 
 [node name="Poder" parent="." unique_id=1732648488 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
-position = Vector2(267, 287)
+position = Vector2(-535, 278)
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 selector_adversario = NodePath("../SelectorAdversario")
 
 [node name="Poder2" parent="." unique_id=2033793081 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
-position = Vector2(343, 287)
+position = Vector2(-459, 278)
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 selector_adversario = NodePath("../SelectorAdversario")
 
 [node name="Poder3" parent="." unique_id=471364883 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
-position = Vector2(418, 287)
+position = Vector2(-384, 278)
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
@@ -229,6 +331,38 @@ offset_right = 909.0
 offset_bottom = 372.0
 scale = Vector2(0.5, 0.5)
 manager_juego = NodePath("../managerJuego")
+
+[node name="PantallaPartidaPausada" type="RichTextLabel" parent="." unique_id=1755617516]
+visible = false
+offset_left = -134.0
+offset_top = -250.0
+offset_right = 134.0
+offset_bottom = -153.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_3k6q8")
+text = "LA PARTIDA SE HA PAUSADO
+ 
+ "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Volver" type="Button" parent="PantallaPartidaPausada" unique_id=421182303]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -53.5
+offset_top = -49.0
+offset_right = 53.5
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_yonda")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_frcik")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4y4ov")
+text = "VOLVER"
 
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]

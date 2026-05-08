@@ -7,6 +7,9 @@ signal cursor_sobre_ficha
 signal cursor_no_sobre_ficha
 
 enum COLOR{ROJO=0, NEGRO=1, AZUL=2, AMARILLO=3, BLANCO=4, COMODIN=5}
+enum ESPECIAL{NO, ARCOIRIS, DORADO, DORADARCOIRIS}
+const shader_arcoiris: Shader = preload("res://shaders/efectoArcoiris.gdshader")
+const shader_metalico: Shader = preload("res://shaders/efectoMetalico.gdshader")
 
 static var escena_ficha: PackedScene = preload("res://proyecto_rummikub/ficha/Ficha.tscn")
 static var indice: int = -1
@@ -22,6 +25,7 @@ var jugada: bool
 var en_blanco : bool
 var color: COLOR
 var numero: int
+var especial: ESPECIAL
 
 class GuardaFicha:
 	var numero: int
@@ -37,16 +41,18 @@ class GuardaFicha:
 static func hash_ficha(ficha)->int:
 	return hash(ficha.numero) ^ hash(ficha.color)
 
-static func ficha(color_in: COLOR, numero_in: int) -> Node2D:
+
+static func ficha(color_in: COLOR, numero_in: int, especial_in: ESPECIAL =  ESPECIAL.NO) -> Node2D:
 	var ficha_creada: Node2D = escena_ficha.instantiate()
 	ficha_creada.z_index = 0
 	ficha_creada.estado = globales.ESTADO_FICHA.MANO
 	ficha_creada.name = str((indice +1 ))
-	ficha_creada.cambiar_sprite(color_in, numero_in)
+	ficha_creada.cambiar_sprite(color_in, numero_in, especial_in)
 	ficha_creada.get_child(3).get_child(0).shape.size = tamano_fichas
 	ficha_creada.jugada = false;
 	ficha_creada.color = color_in
 	ficha_creada.numero = numero_in
+	ficha_creada.especial = especial_in
 	return ficha_creada
 
 func set_grupo(grupo: Grupo_fichas):
@@ -63,7 +69,7 @@ static func tamano_ficha_static() -> Vector2:
 func tamano_ficha() -> Vector2:
 	return Vector2($Area2D/CollisionShape2D.shape.get_size())
 
-func cambiar_sprite(color_in: COLOR, numero_in: int):
+func cambiar_sprite(color_in: COLOR, numero_in: int, especial_in: ESPECIAL):
 	en_blanco = false
 	$Numero.text = str(numero_in) + "\n"
 	$auraFicha.visible = false
@@ -101,6 +107,36 @@ func cambiar_sprite(color_in: COLOR, numero_in: int):
 			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta.svg")
 			$auraFicha.texture = load("res://imagenes/imagenes_carta/circulo.png")
 			$caraJoker.visible = true
+	match especial_in:
+		ESPECIAL.NO:
+			pass
+		ESPECIAL.ARCOIRIS:
+			var my_mat = ShaderMaterial.new()
+			my_mat.shader = shader_arcoiris
+			#$fondoFicha.material = my_mat
+			$auraFicha.material = my_mat
+			$caraJoker.material = my_mat
+			$Numero.material = my_mat
+			#$Numero.text = "[rainbow freq=0.5 sat=0.8 val=1]" + $Numero.text
+		ESPECIAL.DORADO:
+			var my_mat = ShaderMaterial.new()
+			if (color_in == COLOR.AMARILLO):
+				$Numero.modulate = "929200"
+			my_mat.shader = shader_metalico
+			$fondoFicha.material = my_mat
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta_dorada.png")
+		
+		ESPECIAL.DORADARCOIRIS:
+			var my_mat = ShaderMaterial.new()
+			if (color_in == COLOR.AMARILLO):
+				$Numero.modulate = "929200"
+			my_mat.shader = shader_metalico
+			$fondoFicha.material = my_mat
+			$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta_dorada.png")
+			my_mat.shader = shader_arcoiris
+			$auraFicha.material = my_mat
+			$caraJoker.material = my_mat
+			$Numero.material = my_mat
 
 ##Compara si numero y color es igual a Ficha o GuardaFicha
 @warning_ignore("shadowed_variable")
@@ -125,3 +161,16 @@ func resaltar_aura():
 
 func desresaltar_aura():
 	$auraFicha.visible = false
+
+func volver_dorada()->void:
+	var my_mat = ShaderMaterial.new()
+	if (color == COLOR.AMARILLO):
+		$Numero.modulate = "929200"
+	my_mat.shader = shader_metalico
+	$fondoFicha.material = my_mat
+	$fondoFicha.texture = load("res://imagenes/imagenes_carta/carta_dorada.png")
+	if especial == ESPECIAL.ARCOIRIS:
+		especial = ESPECIAL.DORADARCOIRIS
+		
+	else:
+		especial = ESPECIAL.DORADO

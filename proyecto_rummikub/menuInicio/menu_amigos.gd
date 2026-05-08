@@ -35,12 +35,10 @@ func _on_boton_amigos_toggled(toggled_on: bool) -> void:
 	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
 	if toggled_on:
 		$BotonAmigos.modulate = "338bc8"
-		print("ON")
 		for amigo in amigos:
 			amigo.visible = true
 			globales.apropiar_hijo($ScrollContainer/contenedorAmigos,amigo )
 	else:
-		print("OFF")
 		$BotonAmigos.modulate = "dfdfdf"
 		for amigo in amigos:
 			amigo.visible = false
@@ -86,4 +84,5 @@ func _on_boton_enviar_solicitud_pressed() -> void:
 		
 func _on_boton_volver_toggled(_toggled_on: bool) -> void:
 	$MenuAnadirAmigo.visible = false
+	$MenuAnadirAmigo/InsertorIdNuevoAmigo.text = ""
 	$BotonAmigos.button_pressed = true

@@ -35,7 +35,6 @@ func _ready() -> void:
 	$AreaMano.mouse_exited.connect(actualizar_estado_cursor_limbo)
 	for i in num_maximo_fichas:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
-	
 	actualizar_posicion_mano()
 
 
@@ -206,7 +205,7 @@ func actualizar_espacio() -> void:
 		aumentar_tamano_mano()
 
 func disminuir()->void:
-	if((_contar_blancas()>=2) and (num_maximo_fichas > num_minimo_fichas)):
+	if((contar_blancas()>=2) and (num_maximo_fichas > num_minimo_fichas)):
 		num_maximo_fichas -=2
 		var disminucion: float = (fichas_en_mano[0].tamano_ficha().x) + distancia_entre_fichas_horizontal
 		hitbox_mano.shape.size.x -= disminucion
@@ -228,25 +227,24 @@ func _acumular_blancas(accum: int, ficha: Ficha) -> int:
 	else:
 		return accum
 
-func _contar_blancas() -> int:
+func contar_blancas() -> int:
 	return fichas_en_mano.reduce(_acumular_blancas,0)
 
 func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 	
 	for ficha in fichas_en_mano:
-		if !ficha.en_blanco:
+		if (not ficha.en_blanco):
 			quitar_ficha(ficha)
 			self.remove_child(ficha)
 	
 	for ficha in fichas_en_mano: 
-		if !ficha.en_blanco:
+		if (not ficha.en_blanco):
 			quitar_ficha(ficha)
 			self.remove_child(ficha)
 	
 	for ficha in nueva_mano:
-		if (not ficha.en_blanco):
-			devolver_ficha(ficha)
-			manager_fichas.conectar_ficha(ficha)
+		devolver_ficha(ficha)
+		manager_fichas.conectar_ficha(ficha)
 
 func vacia()-> bool:
 	return fichas_en_mano.all(func(ficha)->bool:

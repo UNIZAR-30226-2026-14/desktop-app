@@ -4,7 +4,9 @@ extends Node2D
 
 enum MODO {MI_TURNO, ESPERANDO_TURNO}
 
+const TIEMPO_TURNO: int = 60
 var tiempo: int
+var mitad_de_tiempo: bool = false
 
 var modo: MODO = MODO.ESPERANDO_TURNO
 
@@ -35,10 +37,16 @@ func proceso_contador() -> void:
 func _empieza_turno() -> void:
 	$relojArena.rotation = 0
 	modo = MODO.MI_TURNO
-	tiempo = 600
+	tiempo = TIEMPO_TURNO
+	if mitad_de_tiempo:
+		tiempo /= 2
 	$contadorTiempo.text = str(tiempo)
 
 
 func _termina_turno() -> void:
 	modo = MODO.ESPERANDO_TURNO
 	$contadorTiempo.text = ""
+	mitad_de_tiempo = false
+
+func reducir_a_mitad_tiempo() -> void:
+	mitad_de_tiempo = true

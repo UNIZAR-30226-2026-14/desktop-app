@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://bvs76ue2w8evs"]
+
+[ext_resource type="Script" uid="uid://ccmvdubm363r6" path="res://proyecto_rummikub/marcoIcono/marco_icono.gd" id="1_wmqc5"]
+[ext_resource type="Texture2D" uid="uid://drm35o82qvtd5" path="res://imagenes/avatares_posibles/Fernando.png" id="2_24sl5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24sl5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmpii"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 1000
+corner_radius_top_right = 1000
+corner_radius_bottom_right = 1000
+corner_radius_bottom_left = 1000
+corner_detail = 20
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hev66"]
+texture = ExtResource("2_24sl5")
+
+[node name="MarcoIcono" type="Control" unique_id=551917140]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1049.0
+offset_bottom = -553.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wmqc5")
+metadata/colorBorde = Color(0, 0.7882353, 0, 1)
+metadata/colorFondo = Color(0.20871013, 0.20871016, 0.20871013, 1)
+metadata/icono = ExtResource("2_24sl5")
+metadata/tamano_minimo = Vector2(40, 40)
+metadata/anchura = 40
+
+[node name="Borde" type="Panel" parent="." unique_id=332869235]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_24sl5")
+
+[node name="Fondo" type="Panel" parent="Borde" unique_id=405239068]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kmpii")
+
+[node name="Imagen" type="Panel" parent="Borde/Fondo" unique_id=53702177]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_hev66")
