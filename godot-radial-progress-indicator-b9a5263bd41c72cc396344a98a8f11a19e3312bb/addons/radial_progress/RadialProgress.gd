@@ -36,6 +36,7 @@ func animate(duration: float, clockwise: bool = true, initial_value: float = 0.0
 	await tween.finished
 
 
+@warning_ignore("shadowed_variable")
 func draw_circle_arc(center: Vector2, radius: float, angle_from: float,\
 		angle_to: float, color: Color) -> void:
 	var points_arc := PackedVector2Array()

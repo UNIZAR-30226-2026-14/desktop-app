@@ -2,23 +2,19 @@
 
 [ext_resource type="Script" uid="uid://qholkstclop0" path="res://proyecto_rummikub/menuInicio/modo_clasico.gd" id="1_5dy57"]
 [ext_resource type="Script" uid="uid://db0nhy3a6a6xd" path="res://proyecto_rummikub/menuInicio/menu_inicio.gd" id="1_87g63"]
-[ext_resource type="Script" uid="uid://bbt313hn2cygs" path="res://proyecto_rummikub/menuInicio/gestor_pestana_amigos.gd" id="3_87g63"]
 [ext_resource type="Texture2D" uid="uid://wolbkk2c8vtj" path="res://imagenes/imagenes_inicio/normal.svg" id="4_m1nat"]
 [ext_resource type="Texture2D" uid="uid://j1nd7xsbajo1" path="res://imagenes/imagenes_inicio/turbolocochon.svg" id="5_1k43s"]
 [ext_resource type="Texture2D" uid="uid://blpbt7yth8x3a" path="res://imagenes/imagenes_inicio/icono_amigos.png" id="6_2yd1p"]
 [ext_resource type="StyleBox" uid="uid://4nr4wk5486w8" path="res://proyecto_rummikub/menuInicio/style_box_boton_amigos.tres" id="6_3d1jw"]
-[ext_resource type="StyleBox" path="res://proyecto_rummikub/menuInicio/style_box_icono_avatar_mostrar.tres" id="9_tg18a"]
+[ext_resource type="StyleBox" uid="uid://c5c4mcqumq7wf" path="res://proyecto_rummikub/menuInicio/style_box_icono_avatar_mostrar.tres" id="9_tg18a"]
 [ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="9_u2d15"]
 [ext_resource type="Script" uid="uid://bfo0r48k1u32c" path="res://proyecto_rummikub/menuInicio/menu_amigos.gd" id="10_qutqo"]
 [ext_resource type="Script" uid="uid://bfhilxjk2tc0d" path="res://proyecto_rummikub/menuInicio/fondo_editar_perfil.gd" id="11_rn7sa"]
 [ext_resource type="Texture2D" uid="uid://drm35o82qvtd5" path="res://imagenes/avatares_posibles/Fernando.png" id="11_v2sjx"]
-[ext_resource type="StyleBox" path="res://style_box_panel_editar_perfil.tres" id="12_pt8b4"]
+[ext_resource type="StyleBox" uid="uid://dj26cnjhiycra" path="res://style_box_panel_editar_perfil.tres" id="12_pt8b4"]
 [ext_resource type="StyleBox" uid="uid://d3010w2d4p5ka" path="res://proyecto_rummikub/tiendaObjetosPartida/boton_sin_fondo.tres" id="12_tg18a"]
 [ext_resource type="StyleBox" uid="uid://im7jd6f27x07" path="res://proyecto_rummikub/menuInicio/edicionPerfil/style_box_boton_editar_avatar.tres" id="13_3s8i0"]
 [ext_resource type="Texture2D" uid="uid://iwthbt8we175" path="res://imagenes/imagenes_inicio/icono_editar.png" id="13_bmu16"]
-[ext_resource type="StyleBox" path="res://proyecto_rummikub/menuInicio/style_box_boton_cerrar.tres" id="14_pnstj"]
-[ext_resource type="ButtonGroup" path="res://proyecto_rummikub/menuInicio/button_group_menus_amigos.tres" id="14_qutqo"]
-[ext_resource type="StyleBox" path="res://proyecto_rummikub/menuInicio/style_box_anadir_amigo.tres" id="14_r6451"]
 [ext_resource type="StyleBox" uid="uid://c6ehpxy8gnjm6" path="res://proyecto_rummikub/menuInicio/style_box_boton_cerrar.tres" id="14_pnstj"]
 [ext_resource type="ButtonGroup" uid="uid://c0tandbvnvkc8" path="res://proyecto_rummikub/menuInicio/button_group_menus_amigos.tres" id="14_qutqo"]
 [ext_resource type="StyleBox" uid="uid://diim4g4d63k6x" path="res://proyecto_rummikub/menuInicio/style_box_anadir_amigo.tres" id="14_r6451"]
@@ -139,20 +135,6 @@ corner_radius_top_right = 100
 corner_radius_bottom_right = 100
 corner_radius_bottom_left = 100
 corner_detail = 20
-
-[sub_resource type="GDScript" id="GDScript_r6451"]
-script/source = "extends Button
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tg18a"]
 texture = ExtResource("11_v2sjx")
@@ -688,7 +670,6 @@ theme_override_styles/normal = ExtResource("9_tg18a")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tg18a")
 theme_override_styles/hover = ExtResource("9_tg18a")
 icon_alignment = 1
-script = SubResource("GDScript_r6451")
 metadata/_edit_use_anchors_ = true
 
 [node name="IconoAvatarUsuario" type="Panel" parent="BarraSuperior/BotonIconoAvatarUsuario" unique_id=475210352]
@@ -701,9 +682,6 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_tg18a")
 metadata/_edit_use_anchors_ = true
-
-[node name="GestorPestanaAmigos" type="HTTPRequest" parent="." unique_id=94937616]
-script = ExtResource("3_87g63")
 
 [node name="MenuAmigos" type="Panel" parent="." unique_id=388604241 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
 visible = false
@@ -1386,7 +1364,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_wvssi")
 [connection signal="mouse_exited" from="Fondo/ModoClasico2" to="." method="_on_modo_clasico_mouse_exited"]
 [connection signal="pressed" from="Fondo/ModoClasico2" to="Fondo/ModoClasico2" method="_on_pressed"]
 [connection signal="pressed" from="BarraSuperior/BotonIconoAvatarUsuario" to="." method="_on_icono_avatar_usuario_pressed"]
-[connection signal="request_completed" from="GestorPestanaAmigos" to="GestorPestanaAmigos" method="_on_request_completed"]
 [connection signal="toggled" from="MenuAmigos/BotonAnadirAmigo" to="MenuAmigos" method="_on_boton_anadir_amigo_toggled"]
 [connection signal="toggled" from="MenuAmigos/BotonAmigos" to="MenuAmigos" method="_on_boton_amigos_toggled"]
 [connection signal="toggled" from="MenuAmigos/BotonPendientes" to="MenuAmigos" method="_on_boton_pendientes_toggled"]

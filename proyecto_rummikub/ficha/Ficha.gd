@@ -33,6 +33,7 @@ class GuardaFicha:
 
 
 ## toma ficha o GuardaFicha
+@warning_ignore("shadowed_variable")
 static func hash_ficha(ficha)->int:
 	return hash(ficha.numero) ^ hash(ficha.color)
 
@@ -102,6 +103,7 @@ func cambiar_sprite(color_in: COLOR, numero_in: int):
 			$caraJoker.visible = true
 
 ##Compara si numero y color es igual a Ficha o GuardaFicha
+@warning_ignore("shadowed_variable")
 func equiv(ficha:Ficha)->bool:
 	return numero == ficha.numero && color == ficha.color
 

@@ -74,7 +74,6 @@ func iniciar_turno() -> void:
 	pasarTurno.disabled = true
 	empieza_turno.emit()
 
-<<<<<<< HEAD
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
 	var viejo_tablero: Array = tablero.grupos
@@ -118,28 +117,13 @@ func llega_turno(nuevo_tablero: Array):
 			)
 		return Grupo_fichas.Grupo_fichas(array_fichas)
 		)
-=======
-func guardar_estado() -> void:
-	print("GUARDANDO FICHAS")
-	fichas_en_mano_antes = []
-	var ficha_nueva: Ficha
-	for ficha in mano.fichas_en_mano:
-		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
-		globales.apropiar_hijo(self, ficha_nueva)
-		fichas_en_mano_antes.append(ficha_nueva)
-	var fichas_no_blancas: int = 0
-	for ficha in fichas_en_mano_antes:
-		if !ficha.en_blanco:
-			fichas_no_blancas += 1
-	print("Guardo "+ str(fichas_no_blancas))
->>>>>>> origin/offline
-	
+
 	var aux:Array[Grupo_fichas]
 	aux.assign(nuevos)
 	#inserta fichas nuevas
 	await tablero.insertar_grupos_fichas(aux)
 	guardar_estado()
-	
+
 func terminar_partida(id_ganador, puntuacion):
 	for jugador in adversarios:
 		if jugador["id"] == id_ganador:
@@ -229,7 +213,7 @@ func robar_carta() -> void:
 
 #endregion
 
-var adversarios: Array[Dictionary] = [{"nombre":"debug", "icono": load("res://imagenes/Fernando.png") },{"nombre":"maria jose", "icono": load("res://imagenes/Fernando.png")} ]
+var adversarios: Array[Dictionary] = [{"nombre":"debug", "icono": load("res://imagenes/avatares_posibles/Fernando.png") },{"nombre":"maria jose", "icono": load("res://imagenes/avatares_posibles/Fernando.png")} ]
 
 ## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
 ## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario

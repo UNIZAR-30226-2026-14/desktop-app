@@ -38,6 +38,10 @@ clicar={
 ]
 }
 
+[network]
+
+tls/certificate_bundle_override="res://globales/red/localhost.pem"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

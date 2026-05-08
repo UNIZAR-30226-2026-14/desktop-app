@@ -216,8 +216,9 @@ func _salio_cursor_en_grupo(_grupo_sobrepasado : Grupo_fichas, _lado) -> void:
 		sobre_grupo = null
 
 func conectar_ficha(ficha: Ficha):
-	ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
-	ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
+	if (! ficha.cursor_sobre_ficha.is_connected(_entro_cursor_en_ficha)):
+		ficha.cursor_sobre_ficha.connect(_entro_cursor_en_ficha)
+		ficha.cursor_no_sobre_ficha.connect(_salio_cursor_en_ficha)
 
 func desconectar_ficha(ficha: Ficha):
 	ficha.cursor_sobre_ficha.disconnect(_entro_cursor_en_ficha)

@@ -6,7 +6,7 @@ static var escena_elemento_tienda: PackedScene = preload("res://proyecto_rummiku
 
 @export var icono_skin: Panel
 @export var descripcion_skin: RichTextLabel
-@export var boton_comprar: Button
+@export var boton_comprar: Button 
 @export var fondo: Panel
 
 enum TIPO_SKIN {FICHA, TABLERO}
@@ -52,7 +52,6 @@ static func ElementoTienda (icono, precio: String, descripcion: String, tipo: TI
 	
 	return nuevo_elemento_tienda
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Fondo/BotonComprar.toggled.connect(_ineteraccion_con_skin)
 

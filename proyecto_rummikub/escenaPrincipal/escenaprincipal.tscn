@@ -31,6 +31,7 @@ corner_radius_bottom_right = 50
 corner_radius_bottom_left = 50
 
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
+script = ExtResource("1_k1ots")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 editor_draw_limits = true
@@ -158,10 +159,10 @@ script = ExtResource("8_7fgi8")
 [node name="Fondo" type="ColorRect" parent="." unique_id=1522473387]
 z_index = -999
 z_as_relative = false
-offset_left = -6557.0
-offset_top = -2569.0
-offset_right = 6561.0
-offset_bottom = 3019.0
+offset_left = -6541.0
+offset_top = -2622.0
+offset_right = 6577.0
+offset_bottom = 2966.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 2

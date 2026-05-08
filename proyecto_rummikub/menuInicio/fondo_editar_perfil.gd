@@ -10,8 +10,8 @@ func _ready() -> void:
 	$MarcoEditarPerfil/MenuSeleccionAvatar.visible = false
 
 	var nuevoIcono: StyleBoxTexture = $MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.get_theme_stylebox("panel").duplicate()
-	var ratio: float = ConectorRed.avatar.get_size().y /  ConectorRed.avatar.get_size().x 
-	nuevoIcono.texture = ConectorRed.avatar
+	var ratio: float = globales.avatar.get_size().y /  globales.avatar.get_size().x 
+	nuevoIcono.texture = globales.avatar
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.add_theme_stylebox_override("panel",nuevoIcono)
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.size.y = ratio * ANCHURA_AVATAR
 
@@ -42,7 +42,7 @@ func _on_volver_pressed() -> void:
 		avatar.queue_free()
 
 	var nuevoIcono: StyleBoxTexture = $MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.get_theme_stylebox("panel").duplicate()
-	var ratio: float = ConectorRed.avatar.get_size().y /  ConectorRed.avatar.get_size().x 
-	nuevoIcono.texture = ConectorRed.avatar
+	var ratio: float = globales.avatar.get_size().y /  globales.avatar.get_size().x 
+	nuevoIcono.texture = globales.avatar
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.add_theme_stylebox_override("panel",nuevoIcono)
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.size.y = ratio * ANCHURA_AVATAR

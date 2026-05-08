@@ -1,5 +1,7 @@
 class_name conector_red extends Node
 
+signal perfil_actualizado
+
 var username:String = "placeholder"
 var password:String = "placeholder"
 
@@ -9,6 +11,7 @@ const num_cartas_inicial: int = 14
 var crea_ficha: Callable
 
 static var singleton_instance: conector_red = null
+var partida_en_curso: bool = false
 var id_partida: int = -1
 
 func _init() -> void:
@@ -22,6 +25,14 @@ func _init() -> void:
 func _ready() -> void:
 	pass
 	#if not is_queued_for_deletion():
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if partida_en_curso:
+			await $red.salir_de_partida(id_partida)
+		await $red.cerrar_sesion()
+		get_tree().quit() # default behavior
+
 #region DEBUG
 func crear_amistades():
 	$red.amigo_todos()
@@ -60,9 +71,12 @@ func espera_a_turno(recibe_cartas: Callable, fin_partida: Callable) -> void:
 		var estado_partida = await $red.get_turno(id_partida)
 		#print("fiTABLERO: ", estado_partida["mesa"], " TURNO: ",estado_partida["turno"])
 		if estado_partida["estado"] == "FINISHED":
+			partida_en_curso = false
 			fin_partida.call(estado_partida["ganadorId"],estado_partida["puntuacion"])
 			return
-		recibe_cartas.call(estado_partida["mesa"])
+		if estado_partida["estado"] == "PAUSED":
+			push_warning("CONECTAR CON MENU DE PARTIDA PAUSADA")
+		await recibe_cartas.call(estado_partida["mesa"])
 		if estado_partida["turno"] == mi_turno:
 			return
 
@@ -77,10 +91,14 @@ func hacer_jugada(tablero:Array[Grupo_fichas])->bool:
 		return false
 
 func robar(receptor: Callable):
-	var dict = await $red.robar_ficha(id_partida)
-	print("ficha robada: ",dict)
+	var robada = await $red.robar_ficha(id_partida)
 	$red.ultimo_turno = -1
-	return receptor.call(dict["color"],dict["numero"] )
+	return receptor.call(robada["color"],robada["numero"] ) 
+
+func robar_sin_pasar(receptor: Callable, num_fichas : int = 1)->Array:
+	var robadas: Array = await $red.robar_fichas_sin_pasar(id_partida, num_fichas)
+	return robadas.map(func(ficha):
+		return receptor.call(ficha["color"],ficha["numero"]))
 
 ## devuelve mano inicial
 func inicializar_partida(funcion_crea_fichas: Callable):
@@ -94,30 +112,63 @@ func mano() -> Array[Ficha]:
 
 #endregion
 #region BUSCAR-INICIAR PARTIDA
-func partida_con_lobby(partida:int)->Error:
-	return await $red.unirse_a_partida(partida)
-	
+func mis_partidas():
+	var me_retan
+	var a_medias
+	$red
+func crear_partida_privada(status_busqueda:Label, iniciar: Button):
+	var partida = await $red.crear_partida_publico(true)
+	await $red.esperar_a_comienzo_partida(partida, status_busqueda, iniciar)
+
+func unirse_a_partida_con_lobby(partida:int,status_busqueda:Label, iniciar: Button)->Error:
+	var err = await $red.unirse_a_partida(partida)
+	if not err:
+		await $red.esperar_a_comienzo_partida(partida, status_busqueda, iniciar)
+		partida_en_curso = true
+	return err
 func buscar_partida(status_busqueda:Label, iniciar: Button):
 	id_partida = await $red.get_partidas(status_busqueda)
 	await $red.unirse_a_partida(id_partida)
 	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
+	partida_en_curso = true
 
-func forzar_inicio_partida(): $red.forzar_inicio_partida_set_true()
+func forzar_inicio_partida(): 
+	$red.forzar_inicio_partida_set_true()
 
 ## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
 ## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
 func get_adversarios() -> Array[Dictionary]:
 	return await $red.get_adversarios(id_partida)
 #endregion
+#region CAMBIAR ESTADO PARTIDA
+func parar_partida():
+	if(partida_en_curso):
+		await $red.pausar_partida(id_partida)
+#endregion
 #region COSMETICO
 func cambia_perfil(icono: String):
 	globales.set_avatar(icono)
 	await $red.cambia_perfil(icono)
-func get_perfil():
-	push_error("sin terminar")
-	var perfil = await $red.get_perfil()
-	globales.set_avatar(perfil)
-#endregion
+func _parse_tableros(skins:String):
+	for skin: String in skins.split(","):
+		if(skin != "" and skin[0] == "*"):
+			globales.skin_tablero_equipada = skin.substr(1,-1)
+			globales.mis_skins_tablero.push_back(globales.skin_tablero_equipada)
+		elif skin != "":
+			globales.mis_skins_tablero.push_back(skin)
 
-func fin_partida():
-	pass
+func get_perfil():
+	var perfil = await $red.get_perfil()
+	globales.set_avatar(perfil["avatar"])
+	globales.monedas = perfil["monedas"]
+	_parse_tableros(perfil["tableros"])
+	perfil_actualizado.emit()
+func set_skins():
+	await $red.set_perfil(globales.skin_tablero_equipada, globales.monedas)
+
+#endregion
+func cambiar_contrasena(contrasena: String):
+	if (await $red.cambiar_contrasena(contrasena)):
+		password = contrasena
+		await $red.iniciar_sesion(username,password)
+	

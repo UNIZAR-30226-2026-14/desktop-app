@@ -36,27 +36,6 @@ func _ready() -> void:
 	for i in num_maximo_fichas:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
-<<<<<<< HEAD
-=======
-	#temporal para probar cosas
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 13))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 12))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 12))
-	#devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 10))
->>>>>>> origin/offline
 	actualizar_posicion_mano()
 
 
@@ -268,12 +247,7 @@ func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 		if (not ficha.en_blanco):
 			devolver_ficha(ficha)
 			manager_fichas.conectar_ficha(ficha)
-<<<<<<< HEAD
-	actualizar_posicion_mano()
 
 func vacia()-> bool:
 	return fichas_en_mano.all(func(ficha)->bool:
 		return ficha.en_blanco)
-=======
- 	
->>>>>>> origin/offline

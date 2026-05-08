@@ -1,6 +1,7 @@
 extends Node
+
 #region constantes
-static var base_url: String = "http://localhost:8080"
+static var base_url: String = "https://localhost:8443"
 static var jugadores: String = "/api/jugadores"
 static var perfil: String = "/perfil"
 static var partidas: String = "/api/partidas"
@@ -30,6 +31,7 @@ const NARANJA_RED = "O"
 const JOKER_RED = "J"
 
 const ESTADO_PARTIDA_SIN_EMPEZAR="WAITING"
+const ESTADO_PARTIDA_PAUSADA="PAUSED"
 const ESTADO_PARTIDA_EMPEZADA="RUNNING"
 const ESTADO_PARTIDA_TERMINADA="FINISHED"
 #endregion
@@ -180,7 +182,7 @@ func _respuesta_buena() -> bool:
 #endregion
 #region amigos
 const nom_jugador = "nombre"
-const imagen_perfil ="urlImgPerfil"
+const imagen_perfil ="imagenPerfil"
 const amigos = "/api/amigos"
 const amigos_de_jugador = "/api/amigos?jugadorId="
 const perfiles_de_amigos = "/amigos/perfiles"
@@ -190,7 +192,7 @@ const estado_amis = "estado"
 const estado_aceptado = "ACEPTADO"
 const estado_pendiente = "PENDIENTE"
 const amigo_nom = "nombre"
-const amigo_icono = "urlImgPerfil"
+const amigo_icono = "imagenPerfil"
 
 func categoriza_solicitudes(_aceptadas,_enviadas,_recibidas):
 	var todos_amigos = json.data
@@ -281,7 +283,8 @@ func inicia_sesion(nombre: String, contrasena: String) -> Error:
 	else:
 		printerr("Error al iniciar sesion",json.data)
 		return Error.FAILED
-
+func cerrar_sesion():
+	await _awaiting_request(base_url+inicio_sesion+"/logout",{},HTTPClient.METHOD_POST,header())
 #endregion
 var ultimo_turno = -1
 #region iniciar partida
@@ -326,7 +329,7 @@ func check_iniciar_partida(res):
 	status_label.text = texto
 	return forzar_inicio_partida or (res is Array and res.size() == maximos_jugadores)
 
-func espera_a_comienzo_partida(id: int,status_busqueda:Label, iniciar: Button,
+func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 			 max_jugadores: int=3,)->void:
 	maximos_jugadores = max_jugadores
 	status_label = status_busqueda
@@ -374,12 +377,11 @@ func get_partidas(status_busqueda:Label) -> int:
 	else:
 		assert(false, "body con estructura o tipo inesperado en get_partidas: " + str(body))
 	
-	ultima_info_partida = await crear_partida()
+	ultima_info_partida = await _crear_partida()
 	status_busqueda.text = "Partida creada"
-	print (ultima_info_partida)
 	return ultima_info_partida[id_partida]
 
-func crear_partida() -> Dictionary:
+func _crear_partida() -> Dictionary:
 	creado_partida = true
 	print("crear partida ")
 	var partida = {fecha:Time.get_date_string_from_system()}
@@ -387,8 +389,20 @@ func crear_partida() -> Dictionary:
 	if not _respuesta_buena():
 		printerr("Error creando partida, recibido:", json.data)
 		assert(false, "Error creando partida")
-	print("respuesta: ", json.data)
 	return json.data
+
+func crear_partida_publico(es_privada):
+	var tipo_partida = "publica"
+	if es_privada:
+		tipo_partida = "privada"
+	creado_partida = true
+	print("crear partida ")
+	var partida = {fecha:Time.get_date_string_from_system()}
+	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST)
+	assert(_respuesta_buena(), "Error creando partida, recibido: " + str(json.data) )
+	ultima_info_partida = json.data
+	return ultima_info_partida[id_partida]
+
 #endregion
 #region parar y continuar partida
 ## Separado entre he_iniciado y me_he_unido
@@ -406,6 +420,7 @@ func parar_partida(id:int):
 const partic_mano = "manoActual"
 const partic_turno = "ordenTurno"
 const partida_robar = "/robar"
+const partida_robar_sin_pasar = "/solo-robar"
 const partida_jugar = "/jugar-avanzado"
 const jugar_tipo = "moveType"
 const jugar_tipo_cambio_tablero = "replace_board"
@@ -419,10 +434,9 @@ func get_adversarios(id: int) -> Array[Dictionary]:
 	assert(_respuesta_buena())
 	var aux :Array[Dictionary] = []
 	aux.assign( json.data.map(func(part)->Dictionary:
-		return {"nombre":part["jugadorNombre"], "icono":globales.get_avatar(part["jugadorUrlImgPerfil"]),
+		return {"nombre":part["jugadorNombre"], "icono":globales.get_avatar(part["jugadorImagenPerfil"]),
 				"id":part["idJugador"]}))
 	return aux.filter(func(part): return part["id"] != mi_id)
-
 
 ##Devuelve la mano y el turno que tiene
 ##crea_ficha debe tomar como parametro 
@@ -430,10 +444,10 @@ func info_inicial(id: int, crea_ficha: Callable)->Dictionary:
 	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
 	if _respuesta_buena():
 		var campos = json.data
-
+		
 		var res:Dictionary={}
 		res[turno]= campos[partic_turno]
-
+		
 		var cartas = campos[partic_mano]
 		cartas = Array(cartas.split(","))
 		var carta_arr: Array[Ficha]
@@ -466,8 +480,10 @@ func mano(id: int, crea_ficha: Callable)->Array[Ficha]:
 func get_turno(id: int):
 	await _espera_a_resultado(
 		func(data)->bool:
-			if data[estado_partida] == "FINISHED": return true
 			ultima_info_partida = data
+			if data[estado_partida] == ESTADO_PARTIDA_TERMINADA or\
+					data[estado_partida] == ESTADO_PARTIDA_PAUSADA:
+				return true
 			if data[turno] != ultimo_turno: 
 				ultimo_turno = data[turno]
 				return true
@@ -504,11 +520,23 @@ func subir_jugada(id:int, tablero: Array[Grupo_fichas]):
 
 func pasar_turno_servidor(id:int):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+partida_pasar,{},HTTPClient.METHOD_POST,header())
-	
-	
-func robar_ficha(id: int, fichas_robar: int = 1)->Dictionary:
+
+const num_fichas_robar = "cantidadRobar"
+func robar_fichas_sin_pasar(id:int, num_fichas: int = 1)->Array:
+	var dict_id = {id_jugador: mi_id, num_fichas_robar: num_fichas }
+	if ultima_info_partida[bolsa_robar].split(",").size() >= num_fichas:
+		await _awaiting_request(base_url+partidas+"/"+str(id)+partida_robar_sin_pasar,dict_id,
+		HTTPClient.METHOD_POST,header())
+		print("RECIBIDO DE PARTIDA ROBAR: ", json.data)
+		assert(_respuesta_buena(),"Error en solo-robar request: "+str(json.data))
+		var aux = json.data["fichasRobadas"]
+		return aux.map(string_to_ficha)
+	else:
+		return []
+
+func robar_ficha(id: int)->Dictionary:
 	var dict_id = {id_jugador: mi_id}
-	if ultima_info_partida[bolsa_robar].split(",").size() >= fichas_robar:
+	if ultima_info_partida[bolsa_robar].split(",").size() >= 1:
 		await _awaiting_request(base_url+partidas+"/"+str(id)+partida_robar,dict_id,
 		HTTPClient.METHOD_POST,header())
 		print("RECIBIDO DE PARTIDA ROBAR: ", json.data)
@@ -518,26 +546,51 @@ func robar_ficha(id: int, fichas_robar: int = 1)->Dictionary:
 		var nueva_mano: String = json.data[fichas_mano]
 		var aux = nueva_mano.split(",")
 		aux.reverse()
-
 		return string_to_ficha(aux[0])
 	else:
 		return {"color": Ficha.COLOR.BLANCO,"numero":1}
-	
+		
 func pasa_turno(_id:int):
 	pass
 	# BUG desde donde llame a esto, hacer ultimo_turno = mi_turno
 #endregion
 #region perfil
-func get_perfil()->String:
-	await _awaiting_request_get(base_url+jugadores+"/"+str(mi_id)+perfil,header())
+const num_monedas: String = "monedas"
+const skins_fichas: String = "skinFichas"
+const skins_tablero: String = "skinTablero"
+
+func get_perfil()->Dictionary:
+	await _awaiting_request_get(base_url+jugadores+"/"+str(mi_id),header())
 	assert(_respuesta_buena(),json.data)
-	return json.data[imagen_perfil]
+	var datos = json.data
+	return {"avatar":datos[imagen_perfil], "monedas": datos[num_monedas],
+	"tableros":datos[skins_tablero], "fichas":datos[skins_fichas]}
 
 func cambia_perfil(icono: String):
 	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,{imagen_perfil:icono},HTTPClient.METHOD_PATCH,header())
 	assert(_respuesta_buena(),json.data)
 
+func set_perfil(tablero_actual: String, monedas: int):
+	var lista_tableros : String =  ""
+	for color: String in globales.mis_skins_tablero:
+		if color == tablero_actual and not color.is_subsequence_of(lista_tableros):
+			lista_tableros = lista_tableros + ("*"+color) + ","
+		elif  not color.is_subsequence_of(lista_tableros):
+			lista_tableros = lista_tableros + (color) + ","
+	lista_tableros = lista_tableros.left(-1)
+	print(lista_tableros)
+	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,
+		{skins_tablero:lista_tableros, num_monedas:monedas},HTTPClient.METHOD_PATCH,header())
+	assert(_respuesta_buena(),json.data)
+
 func cambiar_contrasena(contra: String):
 	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,
 		{id_jugador:mi_id},HTTPClient.METHOD_PUT,header())
+#endregion
+#region salir de partida
+func pausar_partida(id: int):
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/pausar",{},HTTPClient.METHOD_POST,header())
+	
+func salir_de_partida(id: int) :
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/salir",{},HTTPClient.METHOD_POST,header())
 #endregion

@@ -29,6 +29,7 @@ static var estado_anterior_cursor: ESTADO_CURSOR
 static var nombre_usuario: String = ""
 static var contrasena: String = ""
 static var avatar: Texture2D = preload("res://imagenes/avatares_posibles/Dani.png")
+static var monedas: int = 0
 
 const LISTA_AVATARES: Dictionary[String,Texture2D] = {
 	"alex": preload("res://imagenes/avatares_posibles/Alex.png"),
@@ -49,17 +50,32 @@ func get_avatar(av: String):
 
 
 const colores: Dictionary[String,Color] = {
-	"Verde": Color(0.059, 0.184, 0.122, 1.0),
-	"Amarillo": Color(0.927, 0.927, 0.0, 1.0),
-	"Azul marino": Color(0.0, 0.0, 0.126, 1.0),
-	"Gris": Color(0.502, 0.502, 0.502, 1.0),
-	"Rojo": Color(0.529, 0.0, 0.0, 1.0),
+	"verde": Color(0.059, 0.184, 0.122, 1.0),
+	"amarillo": Color(0.927, 0.927, 0.0, 1.0),
+	"azul": Color(0.0, 0.0, 0.126, 1.0),
+	"gris": Color(0.502, 0.502, 0.502, 1.0),
+	"rojo": Color(0.529, 0.0, 0.0, 1.0),
 }
 
-
-static var  skin_tablero_equipada: Color = colores["Verde"]
+static var mis_skins_tablero: Array = ["verde"]
+static var  skin_tablero_equipada: String = "verde"
 static var skin_ficha_equipada: Texture2D
 
+func set_color_tablero(color):
+	if color is Color:
+		for c in colores:
+			if colores[c] == color:
+				skin_tablero_equipada = c
+				if c not in mis_skins_tablero:
+					mis_skins_tablero.push_back(c)
+	elif color is String:
+		skin_tablero_equipada = color
+		if color not in mis_skins_tablero:
+			mis_skins_tablero.push_back(color)
+
+		
+func get_color_tablero() -> Color:
+	return colores[skin_tablero_equipada]
 
 func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():
