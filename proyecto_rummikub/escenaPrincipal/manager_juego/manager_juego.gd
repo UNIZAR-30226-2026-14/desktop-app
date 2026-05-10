@@ -16,6 +16,9 @@ extends Node2D
 @export var poder2: Poder
 @export var poder3: Poder
 
+@export var niebla: Niebla
+@export var bola_de_cristal: BolaDeCristal
+
 @export var pantalla_partida_pausada: Control
 @export var boton_volver_partida_pausada: Button
 
@@ -34,6 +37,10 @@ class GrupoGuardado:
 		var res = Grupo_fichas.Grupo_fichas(grupo)
 		res.position = posicion
 		return res
+
+var poderes_disponibles_a_compra: Array[Poder.PODER] = [
+	Poder.PODER.TECHO_CRISTAL, Poder.PODER.ANGEL_GUARDA, Poder.PODER. TOQUE_MIDAS, Poder.PODER.BOLA_CRISTAL,
+	]
 
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
@@ -54,24 +61,40 @@ func _ready() -> void:
 	miTurno.pressed.connect(iniciar_turno)
 
 func intenta_hacer_jugada() -> bool:
-	if(tablero.tablero_valido(abierto and not hay_techo_de_cristal)):
+	if abierto:
+		print("Esta abierto")
+	else:
+		print("No esta abierto")
+	if hay_techo_de_cristal:
+		print("Hay techo de cristal")
+	else:
+		print("No hay techo de cristal")
+	if(tablero.tablero_valido(abierto and (not hay_techo_de_cristal))):
 		tablero.fijar_tablero()
 		guardar_estado()
 		terminar_turno()
 		return true
 	else:
-		print("TABLERO NO VALIDO")
+		if tablero.tablero_valido(true):
+			PopUp.popUp("las fichas tienen\nque sumar 30",Vector2(-74.0, -300.0), escena_principal)
+		else:
+			PopUp.popUp(" las fichas estan mal colocadas ",Vector2(-74.0, -300.0), escena_principal)
+		print("Abierto pasa a true")
+		abierto = true
 		return false
 
 func terminar_turno() -> void:
 	_devolver_fichas()
 	termina_turno.emit()
-	abierto = true
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 	robarCarta.disabled = true
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
 	hay_techo_de_cristal = false
+	if niebla.hay_humo():
+		quitar_bomba_de_humo()
+
+static var a:int = 0
 
 func iniciar_turno() -> void:
 	guardar_estado()
@@ -80,6 +103,11 @@ func iniciar_turno() -> void:
 	
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
+	
+	if a == 1:
+		bomba_de_humo()
+	a+=1
+	
 	empieza_turno.emit()
 	
 
@@ -216,5 +244,24 @@ func guindilla_en_el_culo() -> void:
 	PopUp.popUp("este turno tienes\n la mitad de tiempo!",Vector2(-74.0, -300.0), escena_principal)
 
 func techo_de_cristal() -> void:
-	PopUp.popUp("este turno la jugada\n tiene que sumar 30!",Vector2(-74.0, -300.0), escena_principal)
+	PopUp.popUp("este turno la jugada\ntiene que sumar 30!",Vector2(-74.0, -300.0), escena_principal)
 	hay_techo_de_cristal = true
+
+func bomba_de_humo() -> void:
+	PopUp.popUp("te han lanzado una\nbomba de humo!",Vector2(-74.0, -300.0), escena_principal)
+	niebla.empezar_niebla()
+	await get_tree().create_timer(3.5).timeout
+	tablero.ocultar_numeros()
+
+func quitar_bomba_de_humo() -> void:
+	PopUp.popUp("el humo se disipa\n",Vector2(-74.0, -300.0), escena_principal)
+	niebla.terminar_niebla()
+	await get_tree().create_timer(3.5).timeout
+	tablero.revelar_numeros()
+
+func usar_bola_de_cristal(_adversario: String) -> void:
+	# get_cartas_adversario
+	print("Intento hacer cosa")
+	await bola_de_cristal.mostrar_bola([Ficha.ficha(Ficha.COLOR.ROJO,10,Ficha.ESPECIAL.NO), Ficha.ficha(Ficha.COLOR.NEGRO,3,Ficha.ESPECIAL.DORADO), Ficha.ficha(Ficha.COLOR.AMARILLO,8,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.NEGRO,4,Ficha.ESPECIAL.NO)],[Poder.PODER.NINGUNO,Poder.PODER.ANGEL_GUARDA,Poder.PODER.TOQUE_MIDAS])
+	await  get_tree().create_timer(6.0).timeout
+	bola_de_cristal.esconder_bola()

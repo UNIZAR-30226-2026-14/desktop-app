@@ -14,13 +14,17 @@ func _ready() -> void:
 	nuevoIcono.texture = ConectorRed.avatar
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.add_theme_stylebox_override("panel",nuevoIcono)
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.size.y = ratio * ANCHURA_AVATAR
-
+	
+	$MarcoEditarPerfil/GridContainer2/NombreDeUsuario/EditarNombreUsuario.text = globales.nombre_usuario
 
 func _on_boton_cerrar_pressed() -> void:
 	$MarcoEditarPerfil/MenuSeleccionAvatar.visible = false
 	self.visible = false
 	for avatar: AvatarSeleccionable in $MarcoEditarPerfil/MenuSeleccionAvatar/ContenedorAvataresSeleccionables.get_children():
 		avatar.queue_free()
+
+	globales.nombre_usuario = $MarcoEditarPerfil/GridContainer2/NombreDeUsuario/EditarNombreUsuario.text
+	menuInicio.actualizar_nombre_usuario()
 
 func _on_boton_editar_avatar_pressed() -> void:
 	$MarcoEditarPerfil/MenuSeleccionAvatar.visible = true
@@ -46,3 +50,4 @@ func _on_volver_pressed() -> void:
 	nuevoIcono.texture = ConectorRed.avatar
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.add_theme_stylebox_override("panel",nuevoIcono)
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.size.y = ratio * ANCHURA_AVATAR
+	

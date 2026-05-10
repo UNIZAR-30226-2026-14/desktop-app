@@ -18,6 +18,7 @@ func _ready() -> void:
 	print("DINERO: " + str(get_dinero()))
 	
 	$Fondo/ModoClasico.pressed.connect(_abrir_lobby_clasico)
+	$Fondo/ReanudarPartida.pressed.connect(_abrir_lobby_reanudar)
 
 const ANCHURA_AVATAR_EDITAR: float = 133.5
 
@@ -39,8 +40,14 @@ func actualizar_avatar()->void:
 func set_dinero(nueva_cantidad: int)-> void:
 	dinero.text = str(nueva_cantidad) + "      "
 
+func actualizar_nombre_usuario() -> void:
+	$BarraSuperior/NombreUsuario.text = globales.nombre_usuario
+
 func get_dinero() -> int:
 	return int(dinero.text)
 
 func _abrir_lobby_clasico()->void:
 	$FondoLobbyClasico.visible = true
+
+func _abrir_lobby_reanudar()->void:
+	$FondoLobbyReanudar.mostrar()

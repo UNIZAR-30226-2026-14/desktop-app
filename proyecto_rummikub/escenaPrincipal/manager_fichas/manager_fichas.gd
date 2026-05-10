@@ -132,8 +132,6 @@ func _crear_ficha() -> Ficha:
 	var ficha: Ficha = Ficha.ficha(posibles_fichas[randi()%4],randi()%13 )
 	self.add_child(ficha)
 	conectar_ficha(ficha)
-	# lista_fichas.insert(indice_lista_fichas, ficha)
-	# indice_lista_fichas += 1
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):

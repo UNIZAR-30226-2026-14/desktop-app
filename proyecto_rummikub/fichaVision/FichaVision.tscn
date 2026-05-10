@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dlye4ixk7kw7t"]
+
+[ext_resource type="Script" uid="uid://llpkqq5co8b3" path="res://proyecto_rummikub/fichaVision/ficha_vision.gd" id="1_g76pr"]
+[ext_resource type="Texture2D" uid="uid://2uv4gd2r8i6x" path="res://imagenes/iconos_jokers/J-ROJO.png" id="2_6sorq"]
+[ext_resource type="Texture2D" uid="uid://dgo06j6ibc1is" path="res://imagenes/imagenes_carta/circulo.png" id="2_ec00i"]
+[ext_resource type="Texture2D" uid="uid://dxrgnrrema10y" path="res://imagenes/imagenes_carta/carta.svg" id="3_hfsqi"]
+[ext_resource type="FontFile" uid="uid://cgdt6xx8my0dt" path="res://imagenes/VCR_OSD_MONO_1.001.ttf" id="3_yijiu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ec00i"]
+size = Vector2(35, 49)
+
+[node name="FichaVision" type="Control" unique_id=1879214811]
+custom_minimum_size = Vector2(69, 96)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -50.0
+offset_right = -1118.0
+offset_bottom = -599.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 1)
+script = ExtResource("1_g76pr")
+
+[node name="auraFicha" type="Sprite2D" parent="." unique_id=1019572045]
+modulate = Color(1, 1, 0.70980394, 0.3764706)
+z_index = -2
+position = Vector2(31.722473, 36.012512)
+scale = Vector2(0.09040399, 0.10143903)
+texture = ExtResource("2_ec00i")
+
+[node name="fondoFicha" type="Sprite2D" parent="." unique_id=741853155]
+position = Vector2(32.875, 28.806234)
+scale = Vector2(0.10496957, 0.104547285)
+texture = ExtResource("3_hfsqi")
+
+[node name="caraJoker" type="Sprite2D" parent="." unique_id=1899626798]
+position = Vector2(31.25, 26.5)
+scale = Vector2(0.05666666, 0.042407658)
+texture = ExtResource("2_6sorq")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1471254324]
+position = Vector2(7, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=616859603]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_ec00i")
+
+[node name="Numero" type="RichTextLabel" parent="." unique_id=1103569229]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = -45.0
+offset_right = 30.0
+offset_bottom = 135.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+mouse_behavior_recursive = 1
+theme_override_colors/font_shadow_color = Color(0.8646751, 0.86467516, 0.8646751, 0)
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/normal_font = ExtResource("3_yijiu")
+theme_override_font_sizes/normal_font_size = 25
+bbcode_enabled = true
+fit_content = true
+horizontal_alignment = 1

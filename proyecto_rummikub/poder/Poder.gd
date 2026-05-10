@@ -3,51 +3,51 @@ class_name Poder extends Node2D
 signal cursor_sobre_poder
 signal cursor_no_sobre_poder
 
-enum PODER {NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, LUPA, TOQUE_MIDAS, TRUEQUE,
-		BOMBA_HUMO, RON, REDUCIR_TIEMPO, MENOS, GUANTE_BLANCO, TECHO_CRISTAL}
-
+enum PODER {NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, TOQUE_MIDAS, MAS_CUATRO, TRUEQUE,
+			GUANTE_BLANCO, BOMBA_HUMO, REDUCIR_TIEMPO, TECHO_CRISTAL}
 
 const LISTA_PRECIOS_OBJETOS: Array[int] = [
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
-	100,
+	0,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
+	1,
 ]
 
 const LISTA_DESCRIPCIONES_OBJETOS: Array[String] = [
 	"",
-	"protección ante otro objeto, tras bloquear uno este se gasta",
-	"ver fichas de un color o rango numérico de todos los jugadores",
+	"proteccion ante otro objeto, tras bloquear uno este se gasta",
 	"poder ver las fichas y objetos de un jugador",
 	"convierte de 2 a 4 de tus fichas en fichas doradas (al azar)",
+	"hacer que un oponente robe 4 fichas",
 	"mira 3 fichas de un oponente, elige una de esas tres y una tuya, las intercambias",
+	"permite robarle un objeto a un jugador",
 	"hacer que un jugador no pueda ver las fichas puestas en tablero",
-	"invertir los controles de un jugador en un turno",
-	"reducir a la mitad el tiempo del próximo turno de un jugador",
+	"reducir a la mitad el tiempo del proximo turno de un jugador",
+	"la siguiente jugada de un adversario tenga que ser de 30 o mas",
 ]
+
+#enum PODER {NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, TOQUE_MIDAS, MAS_CUATRO, TRUEQUE,
+#			GUANTE_BLANCO, BOMBA_HUMO, REDUCIR_TIEMPO, TECHO_CRISTAL}
 
 const LISTA_TEXTURAS_PODERES: Array[Texture] = [
 	preload("res://imagenes/imagenes_poderes/mas.png"),
 	preload("res://imagenes/imagenes_poderes/angel-de-la-guarda.png"),
 	preload("res://imagenes/imagenes_poderes/bola-de-cristal.png"),
-	preload("res://imagenes/imagenes_poderes/Lupa.png"),
 	preload("res://imagenes/imagenes_poderes/toque-de-midas.png"),
+	preload("res://imagenes/imagenes_poderes/+4.png"),
 	preload("res://imagenes/imagenes_poderes/intercambio.png"),
 	preload("res://imagenes/imagenes_poderes/bomba-de-humo.png"),
-	preload("res://imagenes/imagenes_poderes/dos-copas-de-mas.png"),
+	preload("res://imagenes/imagenes_poderes/bomba-de-humo.png"),
 	preload("res://imagenes/imagenes_poderes/mitad-de-tiempo.png"),
-# MENOS
-# GUANTE_BLANCO
-# TECHO_CRISTAL
-]
+	preload("res://imagenes/imagenes_poderes/bomba-de-humo.png"),
+	]
+
 
 static var indice = 0
 var mi_indice
@@ -76,7 +76,7 @@ func _ready() -> void:
 	area_poder.mouse_entered.connect(_actualizar_estado_cursor_entra)
 	area_poder.mouse_exited.connect(_actualizar_estado_cursor_sale)
 	manager_fichas.conectar_poder(self)
-	cambiar_poder(Poder.PODER.TOQUE_MIDAS)
+	cambiar_poder(Poder.PODER.BOLA_CRISTAL)
 
 func _actualizar_estado_cursor_entra() -> void:
 	cursor_sobre_poder.emit(self)
@@ -93,8 +93,9 @@ func ejecutar_poder() -> void:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
 			print(adversaro_elegido)
 		PODER.BOLA_CRISTAL:
-			pass
-		PODER.LUPA:
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			manager_juego.usar_bola_de_cristal(adversaro_elegido)
+			cambiar_poder(PODER.NINGUNO)
 			pass
 		PODER.TOQUE_MIDAS:
 			cambiar_poder(PODER.NINGUNO)
@@ -103,11 +104,7 @@ func ejecutar_poder() -> void:
 			pass
 		PODER.BOMBA_HUMO:
 			pass
-		PODER.RON:
-			pass
 		PODER.REDUCIR_TIEMPO:
-			pass
-		PODER.MENOS:
 			pass
 		PODER.GUANTE_BLANCO:
 			pass

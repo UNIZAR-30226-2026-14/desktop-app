@@ -178,7 +178,7 @@ func grupo_correcto(abierto: bool) -> bool:
 		else:
 			var numTotal = esperadoMismo * fichas.size()
 			return numTotal >= 30
-		
+	
 	return false
 
 func contengo_ficha_fijada() -> bool:

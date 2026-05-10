@@ -40,6 +40,7 @@ offset_right = -1049.0
 offset_bottom = -553.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_wmqc5")
 metadata/colorBorde = Color(0, 0.7882353, 0, 1)
 metadata/colorFondo = Color(0.20871013, 0.20871016, 0.20871013, 1)
@@ -54,6 +55,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_24sl5")
 
 [node name="Fondo" type="Panel" parent="Borde" unique_id=405239068]
@@ -64,6 +66,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_kmpii")
 
 [node name="Imagen" type="Panel" parent="Borde/Fondo" unique_id=53702177]
@@ -73,4 +76,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_hev66")

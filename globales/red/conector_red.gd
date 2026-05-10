@@ -36,3 +36,16 @@ func get_info_jugadores_en_partida(conectar: Callable):
 
 func fin_partida():
 	pass
+
+
+static var imagen1: Texture2D = preload("res://imagenes/avatares_posibles/Miguel.png")
+static var imagen2: Texture2D = preload("res://imagenes/avatares_posibles/Dian.png")
+static var partida1: PartidaSeleccionable =  PartidaSeleccionable.partida_seleccionable("11/09/2001",[imagen1,imagen2,imagen1,imagen2])
+static var partida2: PartidaSeleccionable =  PartidaSeleccionable.partida_seleccionable("5/09/2005",[imagen2,imagen1,imagen2,imagen1])
+static var mis_partidas_en_curso: Array[PartidaSeleccionable] = [partida1, partida2, partida1, partida2, partida1] 
+static func get_partidas_en_curso() -> Array[PartidaSeleccionable]:
+	return mis_partidas_en_curso
+
+static var amigos: Array[Amigo] = [Amigo.amigo(preload("res://imagenes/avatares_posibles/Miguel.png"), "Miguel"), Amigo.amigo(preload("res://imagenes/avatares_posibles/Dian.png"), "Dian")]
+static func get_amigos() -> Array[Amigo]:
+	return amigos

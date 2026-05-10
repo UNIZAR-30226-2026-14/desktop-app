@@ -135,3 +135,13 @@ func _insertar_grupo(grupo_insertar: Grupo_fichas, posicion: Vector2) -> void:
 	for ficha: Ficha in grupo_insertar.fichas: 
 		manager_fichas.conectar_ficha(ficha)
 		ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
+
+func ocultar_numeros() -> void:
+	for grupo: Grupo_fichas in grupos:
+		for ficha:Ficha in grupo.fichas:
+			ficha.ocultar_ficha()
+
+func revelar_numeros() -> void:
+	for grupo: Grupo_fichas in grupos:
+		for ficha:Ficha in grupo.fichas:
+			ficha.revelar_ficha()
