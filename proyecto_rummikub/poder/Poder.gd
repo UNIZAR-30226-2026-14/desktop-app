@@ -8,15 +8,15 @@ enum PODER {NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, TOQUE_MIDAS, MAS_CUATRO, TRUEQU
 
 const LISTA_PRECIOS_OBJETOS: Array[int] = [
 	0,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
-	1,
+	10,
+	10,
+	10,
+	10,
+	10,
+	10,
+	10,
+	10,
+	10,
 ]
 
 const LISTA_DESCRIPCIONES_OBJETOS: Array[String] = [
@@ -56,7 +56,7 @@ var mi_indice
 @export var icono_poder: Sprite2D
 
 @export var manager_fichas: Node2D
-@export var manager_juego: Node2D
+@export var manager_juego: ManagerJuego
 
 @export var tienda_objetos: Node
 @export var selector_adversario: Control
@@ -89,24 +89,63 @@ func ejecutar_poder() -> void:
 		PODER.NINGUNO:
 			var resultado: PODER = await(tienda_objetos.abrir_tienda(self))
 			cambiar_poder(resultado)
+			
 		PODER.ANGEL_GUARDA:
-			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			print(adversaro_elegido)
+			pass
+			
 		PODER.BOLA_CRISTAL:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
 			manager_juego.usar_bola_de_cristal(adversaro_elegido)
 			cambiar_poder(PODER.NINGUNO)
-			pass
+			
 		PODER.TOQUE_MIDAS:
 			cambiar_poder(PODER.NINGUNO)
 			manager_juego.toque_de_midas()
+			
 		PODER.TRUEQUE:
-			pass
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			var fichas_adversario: Array[Ficha] = manager_juego.usar_trueque1(adversaro_elegido)
+			
+			#manager_juego.usar_trueque2(adversaro_elegido)
+			
+			
 		PODER.BOMBA_HUMO:
-			pass
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			manager_juego.lanzar_maldicion(adversaro_elegido, PODER.BOMBA_HUMO)
+			
 		PODER.REDUCIR_TIEMPO:
-			pass
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			manager_juego.lanzar_maldicion(adversaro_elegido, PODER.REDUCIR_TIEMPO)
+			
 		PODER.GUANTE_BLANCO:
-			pass
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			var poder_robado: PODER = manager_juego.usar_guante_blanco(adversaro_elegido)
+			cambiar_poder(poder_robado)
+			
 		PODER.TECHO_CRISTAL:
-			pass
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			manager_juego.lanzar_maldicion(adversaro_elegido, PODER.TECHO_CRISTAL)
+
+static func poder_a_string(poder_in: PODER) -> String:
+	match(poder_in):
+		PODER.NINGUNO:
+			return "ninguno"
+		PODER.ANGEL_GUARDA:
+			return "angel de la guarda"
+		PODER.BOLA_CRISTAL:
+			return "bola de cristal"
+		PODER.TOQUE_MIDAS:
+			return "toque de midas"
+		PODER.MAS_CUATRO:
+			return "mas cuatro"
+		PODER.TRUEQUE:
+			return "trueque"
+		PODER.GUANTE_BLANCO:
+			return "guante blanco"
+		PODER.BOMBA_HUMO:
+			return "bomba de humo"
+		PODER.REDUCIR_TIEMPO:
+			return "reducir el tiempo"
+		PODER.TECHO_CRISTAL:
+			return "techo de cristal"
+	return "error"

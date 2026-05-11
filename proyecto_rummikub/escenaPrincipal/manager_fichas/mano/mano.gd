@@ -37,13 +37,16 @@ func _ready() -> void:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
 	#temporal para probar cosas
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12, Ficha.ESPECIAL.ARCOIRIS))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 12, Ficha.ESPECIAL.ARCOIRIS))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 12, Ficha.ESPECIAL.DORADO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 1, Ficha.ESPECIAL.DORADO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 1, Ficha.ESPECIAL.DORADO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 1, Ficha.ESPECIAL.DORADO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.DORADO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 2, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 3, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 4, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 5, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
 	actualizar_posicion_mano()
 
 
@@ -177,10 +180,6 @@ func ordenar_por_color() -> void:
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	var grupos_fichas: Array[Grupo_fichas] = [Grupo_fichas.Grupo_fichas([Ficha.ficha(Ficha.COLOR.ROJO,7),Ficha.ficha(Ficha.COLOR.ROJO,8),Ficha.ficha(Ficha.COLOR.ROJO,9)])]
-
-	tablero.insertar_grupos_fichas(grupos_fichas)
-
 	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 

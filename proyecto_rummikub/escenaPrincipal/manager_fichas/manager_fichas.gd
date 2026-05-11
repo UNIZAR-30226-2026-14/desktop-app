@@ -138,7 +138,7 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 	if(ficha.en_blanco):
 		print("entraron en ficha blanca")
 		sobre_ficha = ficha
-
+	
 	if (not clicando):
 		sobre_ficha = ficha
 		resaltar(ficha)
@@ -170,7 +170,7 @@ func desresaltar_grupo(grupo: Grupo_fichas):
 			desresaltar(ficha)
 
 func click_izquierdo(ficha: Ficha) -> void:
-
+	
 	if(ficha.estado == globales.ESTADO_FICHA.MANO):
 		vengo_de_tablero = false
 		mano.quitar_ficha(sobre_ficha)

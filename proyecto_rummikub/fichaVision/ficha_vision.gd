@@ -29,12 +29,15 @@ static func fichaVision(color_in: Ficha.COLOR, numero_in: int, especial_in: Fich
 	ficha_creada.color = color_in
 	ficha_creada.numero = numero_in
 	ficha_creada.especial = especial_in
-	ficha_creada.get_child(3).get_child(0).shape.size = tamano_fichas
 	ficha_creada.resaltar_aura()
 	return ficha_creada
 
 
 func cambiar_sprite(color_in: Ficha.COLOR, numero_in: int, especial_in: Ficha.ESPECIAL):
+	self.color = color_in
+	self.numero = numero_in
+	self.especial = especial_in
+	
 	en_blanco = false
 	$Numero.text = str(numero_in) + "\n"
 	$auraFicha.visible = false

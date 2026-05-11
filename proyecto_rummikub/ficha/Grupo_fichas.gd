@@ -145,7 +145,7 @@ func grupo_correcto(abierto: bool) -> bool:
 	var colorEscalera: Ficha.COLOR
 	var esperadoEscalera: int = -1
 	
-	var esMismoNumero: bool = fichas.size() <= Ficha.COLOR.size() - 1 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
+	var esMismoNumero: bool = fichas.size() <= 4 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
 	var setColores: Array[Ficha.COLOR] = []
 	var esperadoMismo: int = -1
 	for ficha in fichas:
@@ -168,13 +168,13 @@ func grupo_correcto(abierto: bool) -> bool:
 		
 	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
 	if esEscalera:
-		if ! abierto: return true
+		if abierto: return true
 		else:
 			var baseEscalera = esperadoEscalera - fichas.size()
 			var numTotal = range(baseEscalera, esperadoEscalera).reduce(func(accum,number): return accum + number, 0)
 			return numTotal >= 30
 	if esMismoNumero:
-		if ! abierto: return true
+		if abierto: return true
 		else:
 			var numTotal = esperadoMismo * fichas.size()
 			return numTotal >= 30

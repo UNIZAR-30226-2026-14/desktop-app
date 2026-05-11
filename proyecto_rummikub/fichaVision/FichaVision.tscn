@@ -6,9 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://dxrgnrrema10y" path="res://imagenes/imagenes_carta/carta.svg" id="3_hfsqi"]
 [ext_resource type="FontFile" uid="uid://cgdt6xx8my0dt" path="res://imagenes/VCR_OSD_MONO_1.001.ttf" id="3_yijiu"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ec00i"]
-size = Vector2(35, 49)
-
 [node name="FichaVision" type="Control" unique_id=1879214811]
 custom_minimum_size = Vector2(69, 96)
 layout_mode = 3
@@ -40,13 +37,6 @@ texture = ExtResource("3_hfsqi")
 position = Vector2(31.25, 26.5)
 scale = Vector2(0.05666666, 0.042407658)
 texture = ExtResource("2_6sorq")
-
-[node name="Area2D" type="Area2D" parent="." unique_id=1471254324]
-position = Vector2(7, 0)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=616859603]
-scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_ec00i")
 
 [node name="Numero" type="RichTextLabel" parent="." unique_id=1103569229]
 modulate = Color(0, 0, 0, 1)

@@ -21,6 +21,14 @@ corner_radius_bottom_right = 100
 corner_radius_bottom_left = 100
 corner_detail = 20
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g3t5p"]
+bg_color = Color(0.7270048, 0.16859105, 0.1453445, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x17lk"]
 bg_color = Color(0.19342202, 0.78123057, 0.45415097, 1)
 corner_radius_top_left = 100
@@ -81,8 +89,12 @@ offset_bottom = 12.5
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_colors/icon_normal_color = Color(18.892002, 18.892002, 18.892002, 1)
+theme_override_colors/icon_pressed_color = Color(18.892002, 18.892002, 18.892002, 1)
+theme_override_colors/icon_hover_color = Color(18.892002, 18.892002, 18.892002, 1)
 theme_override_constants/icon_max_width = 17
 theme_override_styles/normal = SubResource("StyleBoxFlat_0ru6y")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_0ru6y")
+theme_override_styles/hover = SubResource("StyleBoxFlat_g3t5p")
 icon = ExtResource("2_x17lk")
 icon_alignment = 1
 

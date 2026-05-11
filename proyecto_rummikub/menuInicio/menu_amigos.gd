@@ -36,6 +36,7 @@ func _on_boton_amigos_toggled(toggled_on: bool) -> void:
 		$BotonAmigos.modulate = "338bc8"
 		for amigo in amigos:
 			amigo.visible = true
+			amigo.esconder_boton_retar()
 			globales.apropiar_hijo($ScrollContainer/contenedorAmigos,amigo )
 	else:
 		$BotonAmigos.modulate = "dfdfdf"

@@ -1,4 +1,4 @@
-extends Node2D
+class_name ManagerJuego extends Node2D
 
 @export var robarCarta: Button
 @export var pasarTurno: Button
@@ -12,6 +12,7 @@ extends Node2D
 @export var manager_fichas: Node2D
 @export var panel_contador_monedas: PanelContadorMonedas
 
+@export var tienda: TiendaFueraPartida
 @export var poder1: Poder
 @export var poder2: Poder
 @export var poder3: Poder
@@ -45,42 +46,43 @@ var poderes_disponibles_a_compra: Array[Poder.PODER] = [
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
 
+enum EVENTO{DESCUENTO, SIN_COLOR, NO_EVENTO, ROBAR_OTRA_FICHA}
+
 # la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
-var abierto: bool = false
+var abierto: bool = true
 var hay_techo_de_cristal: bool = false
+var evento_ocurriendo: EVENTO = EVENTO.NO_EVENTO
+var color_prohibido: Ficha.COLOR = Ficha.COLOR.BLANCO
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	boton_volver_partida_pausada.pressed.connect(_volver_menu_inicio)
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
-	abierto = false
+	abierto = true
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(intenta_hacer_jugada)
 	devolverFichas.pressed.connect(_boton_devolver_fichas)
 	miTurno.pressed.connect(iniciar_turno)
 
 func intenta_hacer_jugada() -> bool:
-	if abierto:
-		print("Esta abierto")
-	else:
-		print("No esta abierto")
-	if hay_techo_de_cristal:
-		print("Hay techo de cristal")
-	else:
-		print("No hay techo de cristal")
-	if(tablero.tablero_valido(abierto and (not hay_techo_de_cristal))):
+	if tablero.tablero_valido(abierto and (not hay_techo_de_cristal)):
+		print("primera cosa true")
+	if not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido)):
+		print("segunda cosa true")
+	
+	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and (not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
 		tablero.fijar_tablero()
 		guardar_estado()
 		terminar_turno()
 		return true
 	else:
 		if tablero.tablero_valido(true):
-			PopUp.popUp("las fichas tienen\nque sumar 30",Vector2(-74.0, -300.0), escena_principal)
+			PopUp.popUp("las fichas tienen \n que sumar 30 ",Vector2(-74.0, -300.0), escena_principal)
+		elif evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido):
+			PopUp.popUp(" este turno no se puede usar \n el color "+ Ficha.color_a_string(color_prohibido),Vector2(-74.0, -300.0), escena_principal)
 		else:
 			PopUp.popUp(" las fichas estan mal colocadas ",Vector2(-74.0, -300.0), escena_principal)
-		print("Abierto pasa a true")
-		abierto = true
 		return false
 
 func terminar_turno() -> void:
@@ -93,6 +95,7 @@ func terminar_turno() -> void:
 	hay_techo_de_cristal = false
 	if niebla.hay_humo():
 		quitar_bomba_de_humo()
+	reiniciar_eventos()
 
 static var a:int = 0
 
@@ -103,13 +106,32 @@ func iniciar_turno() -> void:
 	
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
-	
+	#get_evento
 	if a == 1:
-		bomba_de_humo()
-	a+=1
-	
+		lanzar_evento(EVENTO.DESCUENTO)
+	a += 1
 	empieza_turno.emit()
-	
+
+func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR.BLANCO) ->void:
+	evento_ocurriendo = evento
+	match (evento):
+		EVENTO.NO_EVENTO:
+			pass
+		EVENTO.DESCUENTO:
+			PopUp.popUp(" este turno los objetos \n estan de descuento! ",Vector2(-74.0, -300.0), escena_principal)
+			tienda.aplicar_descuento()
+		EVENTO.SIN_COLOR:
+			PopUp.popUp(" este turno no se puede usar \n el color " + Ficha.color_a_string(color_no_permitido) + "!",Vector2(-74.0, -300.0), escena_principal, true)
+			color_prohibido = color_no_permitido
+		EVENTO.ROBAR_OTRA_FICHA:
+			# hacer cosas 
+			PopUp.popUp(" te toca robar ficha \n mala suerte " + Ficha.color_a_string(color_no_permitido) + "!",Vector2(-74.0, -300.0), escena_principal, true)
+			evento_ocurriendo = EVENTO.NO_EVENTO
+
+func reiniciar_eventos() -> void:
+	evento_ocurriendo=EVENTO.NO_EVENTO
+	color_prohibido = Ficha.COLOR.BLANCO
+	tienda.quitar_descuento()
 
 func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
@@ -211,6 +233,8 @@ func pausarPartida()->void:
 func _volver_menu_inicio()->void:
 	get_tree().change_scene_to_file.bind("res://proyecto_rummikub/menuInicio/menuInicio.tscn").call_deferred()
 
+
+#region Aplicar a uno mismo
 func toque_de_midas() -> void:
 	var fichas_totales = mano.fichas_en_mano.size()
 	var fichas_a_elegir: int = min(fichas_totales-mano.contar_blancas(), 4)
@@ -226,32 +250,38 @@ func toque_de_midas() -> void:
 func angel_guarda_check() -> bool:
 	if poder1.get_poder() == Poder.PODER.ANGEL_GUARDA:
 		poder1.cambiar_poder(Poder.PODER.NINGUNO)
-		PopUp.popUp("tu angel de la guarda\n te ha protegido!",Vector2(-74.0, -300.0), escena_principal)
+		PopUp.popUp(" tu angel de la guarda \n te ha protegido! ",Vector2(-74.0, -300.0), escena_principal)
 		return true
 	elif poder2.get_poder() == Poder.PODER.ANGEL_GUARDA:
 		poder2.cambiar_poder(Poder.PODER.NINGUNO)
-		PopUp.popUp("tu angel de la guarda\n te ha protegido!",Vector2(-74.0, -300.0), escena_principal)
+		PopUp.popUp(" tu angel de la guarda \n te ha protegido! ",Vector2(-74.0, -300.0), escena_principal)
 		return true
 	elif poder3.get_poder() == Poder.PODER.ANGEL_GUARDA:
 		poder3.cambiar_poder(Poder.PODER.NINGUNO)
-		PopUp.popUp("tu angel de la guarda\n te ha protegido!",Vector2(-74.0, -300.0), escena_principal)
+		PopUp.popUp(" tu angel de la guarda \n te ha protegido! ",Vector2(-74.0, -300.0), escena_principal)
 		return true
 	else: 
 		return false
 
 func guindilla_en_el_culo() -> void:
 	$ContadorTiempoTurno.reducir_a_mitad_tiempo()
-	PopUp.popUp("este turno tienes\n la mitad de tiempo!",Vector2(-74.0, -300.0), escena_principal)
+	PopUp.popUp(" este turno tienes \n la mitad de tiempo! ",Vector2(-74.0, -300.0), escena_principal)
 
 func techo_de_cristal() -> void:
-	PopUp.popUp("este turno la jugada\ntiene que sumar 30!",Vector2(-74.0, -300.0), escena_principal)
+	PopUp.popUp(" este turno la jugada \n tiene que sumar 30! ",Vector2(-74.0, -300.0), escena_principal)
 	hay_techo_de_cristal = true
 
 func bomba_de_humo() -> void:
-	PopUp.popUp("te han lanzado una\nbomba de humo!",Vector2(-74.0, -300.0), escena_principal)
+	PopUp.popUp(" te han lanzado una \n bomba de humo! ",Vector2(-74.0, -300.0), escena_principal)
 	niebla.empezar_niebla()
 	await get_tree().create_timer(3.5).timeout
 	tablero.ocultar_numeros()
+
+func mas_cuatro() -> void:
+	PopUp.popUp(" otro jugador te ha hecho \n robar 4 cartas! ",Vector2(-74.0, -300.0), escena_principal)
+	# hacer cosas
+#endregion
+
 
 func quitar_bomba_de_humo() -> void:
 	PopUp.popUp("el humo se disipa\n",Vector2(-74.0, -300.0), escena_principal)
@@ -259,9 +289,38 @@ func quitar_bomba_de_humo() -> void:
 	await get_tree().create_timer(3.5).timeout
 	tablero.revelar_numeros()
 
+
+#region Aplicar a los demas
 func usar_bola_de_cristal(_adversario: String) -> void:
 	# get_cartas_adversario
-	print("Intento hacer cosa")
 	await bola_de_cristal.mostrar_bola([Ficha.ficha(Ficha.COLOR.ROJO,10,Ficha.ESPECIAL.NO), Ficha.ficha(Ficha.COLOR.NEGRO,3,Ficha.ESPECIAL.DORADO), Ficha.ficha(Ficha.COLOR.AMARILLO,8,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.NEGRO,4,Ficha.ESPECIAL.NO)],[Poder.PODER.NINGUNO,Poder.PODER.ANGEL_GUARDA,Poder.PODER.TOQUE_MIDAS])
 	await  get_tree().create_timer(6.0).timeout
 	bola_de_cristal.esconder_bola()
+
+## Usada para techo de crstal, bomba de humo y reducir tiempo
+func lanzar_maldicion(_adversario: String, _maldicion: Poder.PODER) -> void:
+	#hacer cosas
+	pass
+
+func usar_guante_blanco(_adversario: String) -> Poder.PODER:
+	print(_adversario)
+	var poder_robado: Poder.PODER = Poder.PODER.ANGEL_GUARDA
+	# cosas que devuelven el poder robado
+	if poder_robado == Poder.PODER.NINGUNO:
+		PopUp.popUp(" el jugador al que has intentado robar \n no tiene ningun poder D: ",Vector2(-74.0, -300.0), escena_principal)
+	else:
+		PopUp.popUp(" has conseguido robar \n un " + Poder.poder_a_string(poder_robado) + "! " ,Vector2(-74.0, -300.0), escena_principal)
+	return poder_robado
+
+# esta funcion devuelve un array con 3 fichas de las cuales el jugador eligira una
+# sera entonces cuando se llame a usar_trueque2
+func usar_trueque1(_adversaro: String) -> Array[Ficha]:
+	# get_fichas de adversario
+	# pongo unas fichas de ejemplo:
+	return [Ficha.ficha(Ficha.COLOR.NEGRO,2), Ficha.ficha(Ficha.COLOR.ROJO,2,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.AZUL,2,Ficha.ESPECIAL.DORADO)]
+
+# esta funcion intercambia una ficha propia con una ficha del rival
+func usar_trueque2(_adversario: String, _ficha_propia: Ficha, _ficha_rival: Ficha) -> void:
+	pass
+
+#endregion

@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://5vgflyue4xto" path="res://proyecto_rummikub/poder/selectorAdversario/selectorAdversario.tscn" id="18_3k6q8"]
 [ext_resource type="Shader" uid="uid://dq6ctxdq4ap7k" path="res://shaders/niebla.gdshader" id="19_yonda"]
 [ext_resource type="Script" uid="uid://83oj5ai3x75x" path="res://proyecto_rummikub/escenaPrincipal/niebla.gd" id="20_frcik"]
+[ext_resource type="PackedScene" uid="uid://bmec450um0usm" path="res://proyecto_rummikub/poder/selectorFicha/selectorFicha.tscn" id="23_d6euy"]
 [ext_resource type="Texture2D" uid="uid://cioex7qh805iy" path="res://imagenes/imagenes_efectos/bola_de_cristal.png" id="23_tw2xd"]
 [ext_resource type="Script" uid="uid://dky3lcerwn4a" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
 
@@ -152,7 +153,7 @@ script = ExtResource("1_k1ots")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 editor_draw_limits = true
 
-[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "poder1", "poder2", "poder3", "niebla", "bola_de_cristal", "pantalla_partida_pausada", "boton_volver_partida_pausada")]
+[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "tienda", "poder1", "poder2", "poder3", "niebla", "bola_de_cristal", "pantalla_partida_pausada", "boton_volver_partida_pausada")]
 self_modulate = Color(1, 1, 1, 0)
 position = Vector2(-859.99994, 65)
 scale = Vector2(0.038, 0.038)
@@ -166,6 +167,7 @@ tablero = NodePath("../managerFichas/tablero")
 mano = NodePath("../managerFichas/mano")
 manager_fichas = NodePath("../managerFichas")
 panel_contador_monedas = NodePath("../panelContadorMonedas")
+tienda = NodePath("../TiendaObjetosPartida")
 poder1 = NodePath("../Poder")
 poder2 = NodePath("../Poder2")
 poder3 = NodePath("../Poder3")
@@ -492,6 +494,12 @@ manager_fichas = NodePath("../../../managerFichas")
 manager_juego = NodePath("../../../managerJuego")
 tienda_objetos = NodePath("../../../TiendaObjetosPartida")
 selector_adversario = NodePath("../../../SelectorAdversario")
+
+[node name="SelectorFichaRobar" parent="." unique_id=939810293 instance=ExtResource("23_d6euy")]
+offset_left = -140.0
+offset_top = -158.0
+offset_right = 145.0
+offset_bottom = -6.0
 
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]
