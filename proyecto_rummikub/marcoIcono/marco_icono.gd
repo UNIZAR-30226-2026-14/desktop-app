@@ -31,6 +31,7 @@ func _ready() -> void:
 	panel_aux = $Borde.get_theme_stylebox("panel").duplicate()
 	panel_aux.border_color = color_borde
 	$Borde.add_theme_stylebox_override("panel",panel_aux)
+	
 
 func cambiarParametros(color_borde_in, color_fondo_in, icono_in: Texture2D, tamano_minimo_in, anchura_in) -> void:
 

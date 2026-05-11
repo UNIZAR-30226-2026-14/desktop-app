@@ -19,6 +19,7 @@ func _ready() -> void:
 	$BarraSuperior/NombreUsuario.text = globales.nombre_usuario
 	$Fondo/ModoClasico.pressed.connect(_abrir_lobby_clasico)
 	$Fondo/ModoArcade.pressed.connect(_abrir_lobby_arcade)
+	$Fondo/ReanudarPartida.pressed.connect(_abrir_lobby_reanudar)
 
 const ANCHURA_AVATAR_EDITAR: float = 133.5
 
@@ -40,6 +41,9 @@ func actualizar_avatar()->void:
 func set_dinero()-> void:
 	dinero.text = str(globales.monedas) + "      "
 
+func actualizar_nombre_usuario() -> void:
+	$BarraSuperior/NombreUsuario.text = globales.nombre_usuario
+
 func get_dinero() -> int:
 	return int(dinero.text)
 
@@ -48,3 +52,6 @@ func _abrir_lobby_clasico()->void:
 
 func _abrir_lobby_arcade()->void:
 	$FondoLobby.mostrar(true)
+
+func _abrir_lobby_reanudar()->void:
+	$FondoLobbyReanudar.mostrar()

@@ -7,11 +7,15 @@ class_name Amigo
 
 static var escena_amigo: PackedScene = preload("res://proyecto_rummikub/menuInicio/amigo/amigo.tscn")
 
+var mi_icono: Texture2D
+var mi_nombre: String
 
 const ANCHURA: float = 54.0
 static func amigo (icono: Texture2D, nombre: String) -> Amigo:
-	var nuevo_amigo: Amigo = escena_amigo.instantiate()
-
+	var nuevo_amigo: Amigo = escena_amigo.instantiate()	
+	nuevo_amigo.mi_icono = icono
+	nuevo_amigo.mi_nombre = nombre
+	
 	var nuevoIcono: StyleBoxTexture = nuevo_amigo.avatar_amigo.get_theme_stylebox("panel").duplicate()
 	var ratio: float = icono.get_size().y /  icono.get_size().x 
 	nuevoIcono.texture = icono

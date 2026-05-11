@@ -19,6 +19,10 @@
 [ext_resource type="PackedScene" uid="uid://75ogdrmks05m" path="res://proyecto_rummikub/pantallaFinalPartida/pantallaFinalPartida.tscn" id="17_a1kqi"]
 [ext_resource type="PackedScene" uid="uid://5vgflyue4xto" path="res://proyecto_rummikub/poder/selectorAdversario/selectorAdversario.tscn" id="18_3k6q8"]
 [ext_resource type="Script" uid="uid://doo60kfoc4g6h" path="res://proyecto_rummikub/escenaPrincipal/boton_pausar.gd" id="19_yonda"]
+[ext_resource type="Shader" uid="uid://dq6ctxdq4ap7k" path="res://shaders/niebla.gdshader" id="19_yonda"]
+[ext_resource type="Script" uid="uid://83oj5ai3x75x" path="res://proyecto_rummikub/escenaPrincipal/niebla.gd" id="20_frcik"]
+[ext_resource type="Texture2D" uid="uid://cioex7qh805iy" path="res://imagenes/imagenes_efectos/bola_de_cristal.png" id="23_tw2xd"]
+[ext_resource type="Script" uid="uid://dky3lcerwn4a" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw2xd"]
 bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
@@ -108,13 +112,48 @@ expand_margin_left = 3.0
 expand_margin_top = 3.0
 expand_margin_right = 3.0
 
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_frcik"]
+width = 150
+height = 150
+generate_mipmaps = false
+seamless = true
+seamless_blend_skirt = 0.014
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_4y4ov"]
+frequency = 0.001
+fractal_type = 2
+fractal_octaves = 9
+fractal_gain = 0.6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tmsr4"]
+width = 150
+height = 150
+noise = SubResource("FastNoiseLite_4y4ov")
+seamless = true
+seamless_blend_skirt = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tw2xd"]
+resource_local_to_scene = true
+shader = ExtResource("19_yonda")
+shader_parameter/pos = Vector2(0, 0)
+shader_parameter/textureResolution = 1280.0
+shader_parameter/moveDir = Vector2(0.5, 0.1)
+shader_parameter/noise = SubResource("NoiseTexture2D_frcik")
+shader_parameter/noise2 = SubResource("NoiseTexture2D_tmsr4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d6euy"]
+texture = ExtResource("23_tw2xd")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lyop8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
 [node name="escenaPrincipal" type="Node2D" unique_id=255758278]
 script = ExtResource("1_k1ots")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
 editor_draw_limits = true
 
-[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "poder1", "poder2", "poder3", "pantalla_partida_pausada", "boton_volver_partida_pausada")]
+[node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "poder1", "poder2", "poder3", "niebla", "bola_de_cristal", "pantalla_partida_pausada", "boton_volver_partida_pausada")]
 self_modulate = Color(1, 1, 1, 0)
 position = Vector2(-859.99994, 65)
 scale = Vector2(0.038, 0.038)
@@ -131,6 +170,8 @@ panel_contador_monedas = NodePath("../panelContadorMonedas")
 poder1 = NodePath("../Poder")
 poder2 = NodePath("../Poder2")
 poder3 = NodePath("../Poder3")
+niebla = NodePath("../Niebla")
+bola_de_cristal = NodePath("../BolaDeCristal")
 pantalla_partida_pausada = NodePath("../PantallaPartidaPausada")
 boton_volver_partida_pausada = NodePath("../PantallaPartidaPausada/Volver")
 
@@ -226,6 +267,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_g1hmo")
+metadata/_edit_use_anchors_ = true
 
 [node name="ordenarColor" type="Button" parent="managerFichas/mano" unique_id=995823319]
 offset_left = 495.0001
@@ -287,6 +329,7 @@ offset_left = -562.0
 offset_top = -310.0
 offset_right = -412.0
 offset_bottom = -257.0
+metadata/_edit_use_anchors_ = true
 
 [node name="Poder" parent="." unique_id=1732648488 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
 position = Vector2(-535, 278)
@@ -309,13 +352,14 @@ manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 selector_adversario = NodePath("../SelectorAdversario")
 
-[node name="TiendaObjetosPartida" parent="." unique_id=1093875184 node_paths=PackedStringArray("contador_dinero") instance=ExtResource("6_4470i")]
+[node name="TiendaObjetosPartida" parent="." unique_id=1093875184 node_paths=PackedStringArray("contador_dinero", "manager_juego") instance=ExtResource("6_4470i")]
 visible = false
 offset_left = -287.0
 offset_top = -236.0
 offset_right = -25.0
 offset_bottom = -11.737793
 contador_dinero = NodePath("../panelContadorMonedas")
+manager_juego = NodePath("../managerJuego")
 
 [node name="PantallaFinalPartida" parent="." unique_id=1647612049 instance=ExtResource("17_a1kqi")]
 visible = false
@@ -376,6 +420,89 @@ grow_horizontal = 0
 theme_override_colors/font_color = Color(1, 0.6716436, 0.7448382, 1)
 text = "Pausar partida"
 script = ExtResource("19_yonda")
+[node name="Niebla" type="ColorRect" parent="." unique_id=1272716556]
+visible = false
+modulate = Color(1, 1, 1, 0.4117647)
+material = SubResource("ShaderMaterial_tw2xd")
+offset_left = -783.0
+offset_top = -502.0
+offset_right = 791.0
+offset_bottom = 535.0
+mouse_filter = 2
+script = ExtResource("20_frcik")
+
+[node name="BolaDeCristal" type="Panel" parent="." unique_id=970408259]
+visible = false
+anchors_preset = -1
+anchor_left = -0.22425993
+anchor_right = 0.7757401
+anchor_bottom = 1.0000001
+offset_left = -342.0
+offset_top = -224.0
+offset_right = 341.0559
+offset_bottom = 241.125
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_d6euy")
+script = ExtResource("24_d6euy")
+
+[node name="AreaBolaDeCristal" type="Panel" parent="BolaDeCristal" unique_id=1491340880]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 96.0
+offset_top = 69.0
+offset_right = 96.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lyop8")
+
+[node name="ContenedorFichas" type="GridContainer" parent="BolaDeCristal/AreaBolaDeCristal" unique_id=2050686566]
+z_index = 5
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -289.52795
+offset_top = -109.5625
+offset_right = 290.05896
+offset_bottom = 81.30832
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = -3
+columns = 10
+
+[node name="Poder" parent="BolaDeCristal/AreaBolaDeCristal" unique_id=846182270 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
+z_index = 2
+position = Vector2(253.5, 368)
+scale = Vector2(0.8, 0.8)
+manager_fichas = NodePath("../../../managerFichas")
+manager_juego = NodePath("../../../managerJuego")
+tienda_objetos = NodePath("../../../TiendaObjetosPartida")
+selector_adversario = NodePath("../../../SelectorAdversario")
+
+[node name="Poder2" parent="BolaDeCristal/AreaBolaDeCristal" unique_id=1428775872 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
+z_index = 2
+position = Vector2(341.49988, 368)
+scale = Vector2(0.8, 0.8)
+manager_fichas = NodePath("../../../managerFichas")
+manager_juego = NodePath("../../../managerJuego")
+tienda_objetos = NodePath("../../../TiendaObjetosPartida")
+selector_adversario = NodePath("../../../SelectorAdversario")
+
+[node name="Poder3" parent="BolaDeCristal/AreaBolaDeCristal" unique_id=2030625766 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
+z_index = 2
+position = Vector2(430.00003, 368)
+scale = Vector2(0.8, 0.8)
+manager_fichas = NodePath("../../../managerFichas")
+manager_juego = NodePath("../../../managerJuego")
+tienda_objetos = NodePath("../../../TiendaObjetosPartida")
+selector_adversario = NodePath("../../../SelectorAdversario")
 
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]

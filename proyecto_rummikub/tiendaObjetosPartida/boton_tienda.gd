@@ -3,6 +3,7 @@ class_name BotonTienda extends Button
 signal boton_tienda_pulsado
 
 var poder: Poder.PODER
+var indice: int
 
 var estilo_sin_fondo: StyleBoxFlat = preload("res://proyecto_rummikub/tiendaObjetosPartida/boton_sin_fondo.tres")
 var estilo_hover: StyleBoxFlat = preload("res://proyecto_rummikub/tiendaObjetosPartida/boton_hover_redondito.tres")
@@ -10,8 +11,9 @@ var estilo_resaltado: StyleBoxFlat = preload("res://proyecto_rummikub/tiendaObje
 var estilo_resaltado_hover: StyleBoxFlat = preload("res://proyecto_rummikub/tiendaObjetosPartida/boton_pulsado_hover.tres")
 
 
-func _init(poder_in: Poder.PODER, icono: Texture2D) -> void:
+func _init(poder_in: Poder.PODER, icono: Texture2D, indice_in: int) -> void:
 	poder = poder_in
+	indice = indice_in
 	self.pressed.connect(_boton_pulsado)
 	self.icon = icono
 	self.add_theme_stylebox_override("normal", estilo_sin_fondo)
@@ -19,7 +21,7 @@ func _init(poder_in: Poder.PODER, icono: Texture2D) -> void:
 	self.add_theme_stylebox_override("hover", estilo_hover)
 
 func _boton_pulsado() -> void:
-	boton_tienda_pulsado.emit(poder)
+	boton_tienda_pulsado.emit(poder, indice)
 	self.add_theme_stylebox_override("normal", estilo_resaltado)
 	self.add_theme_stylebox_override("hover", estilo_resaltado_hover)
 

@@ -27,17 +27,26 @@ func get_amigos():
 	return amigos
 
 func _sacar_amigos() -> void:
-	$BotonPendientes.text = "Pendientes(" + str(pendientes.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
-	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
-	$BotonEnviadas.text = "Enviadas(" + str(enviadas.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
+	$BotonPendientes.text = "   Pendientes(" + str(pendientes.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯"
+	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯"
+	$BotonEnviadas.text = "Enviadas(" + str(enviadas.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯"
+	$BotonInvitaciones.text = "Invitaciones(" + str(invitaciones.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯" 
 	self.visible = true
 	$BotonAmigos.button_pressed = true
 
 func _cerrar_amigos() -> void:
 	self.visible = false
 
+var amigos: Array[Amigo] = [Amigo.amigo(preload("res://imagenes/avatares_posibles/Miguel.png"), "Miguel"), Amigo.amigo(preload("res://imagenes/avatares_posibles/Dian.png"), "Dian")]
+var enviadas: Array[SolicitudEnviada] = [SolicitudEnviada.solicitud("Miguel"), SolicitudEnviada.solicitud("Dian")]
+var pendientes: Array[SolicitudPendiente] = [SolicitudPendiente.solicitud("Miguel"), SolicitudPendiente.solicitud("Dian")]
+var invitaciones: Array[SolicitudPendiente] = [SolicitudPendiente.solicitud("Dian"), SolicitudPendiente.solicitud("Miguel")]
+
+var amigos_usando: Array[Amigo] = []
+var enviadas_usando: Array[SolicitudEnviada] =[]
+
 func _on_boton_amigos_toggled(toggled_on: bool) -> void:
-	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
+	$BotonAmigos.text = "Amigos(" + str(amigos.size()) + ")\n⎯⎯⎯⎯⎯"
 	if toggled_on:
 		$BotonAmigos.modulate = "338bc8"
 		for amigo in amigos:
@@ -51,7 +60,7 @@ func _on_boton_amigos_toggled(toggled_on: bool) -> void:
 				amigo.visible = false
 
 func _on_boton_pendientes_toggled(toggled_on: bool) -> void:
-	$BotonPendientes.text = "Pendientes(" + str(pendientes.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
+	$BotonPendientes.text = "   Pendientes(" + str(pendientes.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯"
 	if toggled_on:
 		$BotonPendientes.modulate = "338bc8"
 		for pendiente in pendientes:
@@ -65,7 +74,7 @@ func _on_boton_pendientes_toggled(toggled_on: bool) -> void:
 				pendiente.visible = false
 
 func _on_boton_enviadas_toggled(toggled_on: bool) -> void:
-	$BotonEnviadas.text = "Enviadas(" + str(enviadas.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯⎯"
+	$BotonEnviadas.text = "Enviadas(" + str(enviadas.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯"
 	if toggled_on:
 		$BotonEnviadas.modulate = "338bc8"
 		for enviada in enviadas:
@@ -78,6 +87,17 @@ func _on_boton_enviadas_toggled(toggled_on: bool) -> void:
 			if(enviada != null ):
 				enviada.visible = false
 
+func _on_boton_invitaciones_toggled(toggled_on: bool) -> void:
+	$BotonInvitaciones.text = "Invitaciones(" + str(invitaciones.size()) + ")\n⎯⎯⎯⎯⎯⎯⎯" 
+	if toggled_on:
+		$BotonInvitaciones.modulate = "338bc8"
+		for invitacion in invitaciones:
+			invitacion.visible = true
+			globales.apropiar_hijo($ScrollContainer/contenedorAmigos,invitacion)
+	else:
+		$BotonInvitaciones.modulate = "dfdfdf"
+		for invitacion in invitaciones:
+			invitacion.visible = false
 
 func _on_boton_anadir_amigo_toggled(toggled_on: bool) -> void:
 	if toggled_on:
