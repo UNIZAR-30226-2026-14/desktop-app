@@ -10,7 +10,3 @@ func _ready() -> void:
 	
 	# por probar:
 	
-	# partida privada
-	
-	await ConectorRed.cambiar_contrasena("patata")
-	
