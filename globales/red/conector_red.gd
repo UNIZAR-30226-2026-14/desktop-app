@@ -61,23 +61,35 @@ func get_amigos(_amigos: Array[Amigo],_solicitud_env:Array[SolicitudEnviada],
 	_solicitud_env.assign(aux_env.map(func(amigo):
 		return SolicitudEnviada.solicitud(amigo["nombre"])) )
 	_solicitud_pen.assign(aux_reciv.map(func(amigo):
-		return SolicitudPendiente.solicitud(amigo["nombre"])) )
+		return SolicitudPendiente.solicitud(amigo["nombre"], amigo["id"])) )
+
+func enviar_solicitud(amigo: int):
+	$red.enviar_solicitud(amigo)
+	
+func responder_solicitud(amigo:int, acepta_solicitud: bool):
+	if acepta_solicitud:
+		$red.aceptar_solicitud(amigo)
+	else:
+		$red.denegar_solicitud(amigo)
 #endregion
 #region DURANTE PARTIDA
 var mi_turno: int
 ##recibe_cartas toma las cartas del tablero como parametro
-func espera_a_turno(recibe_cartas: Callable, fin_partida: Callable) -> void:
+func espera_a_turno(recibe_cartas: Callable, fin_partida: Callable,partida_pausada: Callable) -> void:
 	while true:
 		var estado_partida = await $red.get_turno(id_partida)
 		#print("fiTABLERO: ", estado_partida["mesa"], " TURNO: ",estado_partida["turno"])
 		if estado_partida["estado"] == "FINISHED":
+			print("partida finalizada")
 			partida_en_curso = false
 			fin_partida.call(estado_partida["ganadorId"],estado_partida["puntuacion"])
 			return
-		if estado_partida["estado"] == "PAUSED":
-			push_warning("CONECTAR CON MENU DE PARTIDA PAUSADA")
-		await recibe_cartas.call(estado_partida["mesa"])
-		if estado_partida["turno"] == mi_turno:
+		elif estado_partida["estado"] == "PAUSED":
+			print("partida pausada")
+			partida_pausada.call()
+			return
+		else: await recibe_cartas.call(estado_partida["mesa"])
+		if estado_partida["turno"] == mi_turno and estado_partida["estado"]=="RUNNING":
 			return
 
 func paso_turno():
@@ -116,18 +128,22 @@ func mis_partidas():
 	var me_retan
 	var a_medias
 	$red
-func crear_partida_privada(status_busqueda:Label, iniciar: Button):
-	var partida = await $red.crear_partida_publico(true)
-	await $red.esperar_a_comienzo_partida(partida, status_busqueda, iniciar)
 
-func unirse_a_partida_con_lobby(partida:int,status_busqueda:Label, iniciar: Button)->Error:
-	var err = await $red.unirse_a_partida(partida)
-	if not err:
-		await $red.esperar_a_comienzo_partida(partida, status_busqueda, iniciar)
-		partida_en_curso = true
-	return err
-func buscar_partida(status_busqueda:Label, iniciar: Button):
-	id_partida = await $red.get_partidas(status_busqueda)
+func unirse_a_partida_con_lobby(partida:int):
+	var res = await $red.unirse_a_partida(partida)
+	$red.creado_partida = false
+	if not res is Error:
+		id_partida = partida
+	return res
+func crear_partida_privada(es_arcade: bool):
+	id_partida = await $red.crear_partida_publico(es_arcade)
+	await $red.unirse_a_partida(id_partida)
+	return id_partida
+func esperar_comienzo_privada(status_busqueda:Label, iniciar: Button):
+	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
+
+func buscar_partida(status_busqueda:Label, iniciar: Button, arcade: bool):
+	id_partida = await $red.get_partidas(status_busqueda,arcade)
 	await $red.unirse_a_partida(id_partida)
 	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
 	partida_en_curso = true
@@ -135,7 +151,7 @@ func buscar_partida(status_busqueda:Label, iniciar: Button):
 func forzar_inicio_partida(): 
 	$red.forzar_inicio_partida_set_true()
 
-## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un String con el nombre del adversario,
+## cada diccionario tiene dos claves una con el valor: "nombre" asociada a un I con el nombre del adversario,
 ## y otra con el valor "icono" asociada a un Texture2D con el icono del adversario
 func get_adversarios() -> Array[Dictionary]:
 	return await $red.get_adversarios(id_partida)
@@ -167,8 +183,9 @@ func set_skins():
 	await $red.set_perfil(globales.skin_tablero_equipada, globales.monedas)
 
 #endregion
-func cambiar_contrasena(contrasena: String):
-	if (await $red.cambiar_contrasena(contrasena)):
-		password = contrasena
-		await $red.iniciar_sesion(username,password)
+func cambiar_contrasena(contra_nueva: String, contra_vieja:String):
+	if (await $red.cambiar_contrasena(contra_nueva,contra_vieja)):
+		password = contra_nueva
+		return true
+	else: return false
 	

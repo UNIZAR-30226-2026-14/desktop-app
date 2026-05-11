@@ -40,13 +40,8 @@ class GrupoGuardado:
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
 # la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
-<<<<<<< HEAD
-var abierto: bool = true
-
-=======
 var abierto: bool = false
 var hay_techo_de_cristal: bool = false
->>>>>>> offline
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	boton_volver_partida_pausada.pressed.connect(_volver_menu_inicio)
@@ -68,9 +63,7 @@ func _ready() -> void:
 	#$ContadorTiempoTurno.proceso_contador()
 	terminar_turno()
 
-<<<<<<< HEAD
 #region gestion turnos
-=======
 func intenta_hacer_jugada() -> bool:
 	if(tablero.tablero_valido(abierto and not hay_techo_de_cristal)):
 		tablero.fijar_tablero()
@@ -80,7 +73,6 @@ func intenta_hacer_jugada() -> bool:
 	else:
 		print("TABLERO NO VALIDO")
 		return false
->>>>>>> offline
 
 func terminar_turno() -> void:
 	_devolver_fichas()
@@ -89,13 +81,10 @@ func terminar_turno() -> void:
 	robarCarta.disabled = true
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
-<<<<<<< HEAD
-	termina_turno.emit()
-	await ConectorRed.espera_a_turno(llega_turno, terminar_partida)
-	if not partida_terminada: iniciar_turno()
-=======
 	hay_techo_de_cristal = false
->>>>>>> offline
+	termina_turno.emit()
+	await ConectorRed.espera_a_turno(llega_turno, terminar_partida,func():$"../PantallaPartidaPausada".visible = true)
+	if not partida_terminada: iniciar_turno()
 
 func iniciar_turno() -> void:
 	guardar_estado()
@@ -106,7 +95,6 @@ func iniciar_turno() -> void:
 	empieza_turno.emit()
 	
 
-<<<<<<< HEAD
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
 	var viejo_tablero: Array = tablero.grupos
@@ -140,22 +128,6 @@ func llega_turno(nuevo_tablero: Array):
 		nuevos.append_array(nuevo_tablero.slice(i_nuevo))
 	#elimina los que hay que quitar
 	eliminados.map(func(grupo:Grupo_fichas): tablero.quitar_grupo_fichas(grupo); grupo.queue_free())
-=======
-func guardar_estado() -> void:
-	print("GUARDANDO FICHAS")
-	fichas_en_mano_antes = []
-	var ficha_nueva: Ficha
-	for ficha: Ficha in mano.fichas_en_mano:
-		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero, ficha.especial)
-		globales.apropiar_hijo(self, ficha_nueva)
-		fichas_en_mano_antes.append(ficha_nueva)
-	var fichas_no_blancas: int = 0
-	for ficha in fichas_en_mano_antes:
-		if !ficha.en_blanco:
-			fichas_no_blancas += 1
-	print("Guardo "+ str(fichas_no_blancas))
->>>>>>> offline
-	
 	nuevos = nuevos.map(
 		func(grupo:Array): 
 		var array_fichas: Array[Ficha] = []
@@ -165,8 +137,6 @@ func guardar_estado() -> void:
 			)
 		return Grupo_fichas.Grupo_fichas(array_fichas)
 		)
-
-<<<<<<< HEAD
 	var aux:Array[Grupo_fichas]
 	aux.assign(nuevos)
 	#inserta fichas nuevas
@@ -174,6 +144,7 @@ func guardar_estado() -> void:
 	guardar_estado()
 
 func terminar_partida(id_ganador, puntuacion):
+	print(puntuacion)
 	for jugador in adversarios:
 		if jugador["id"] == id_ganador:
 			$"../PantallaFinalPartida".sacar_pantalla_victoria(jugador["icono"],jugador["nombre"],puntuacion)
@@ -184,8 +155,7 @@ func terminar_partida(id_ganador, puntuacion):
 #endregion
 
 #region estados
-=======
->>>>>>> offline
+
 func no_poniendo_fichas() -> void:
 
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
@@ -208,15 +178,16 @@ func guardar_estado() -> void:
 	print("GUARDANDO FICHAS")
 	fichas_en_mano_antes = []
 	var ficha_nueva: Ficha
-	for ficha in mano.fichas_en_mano:
-		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero)
+	for ficha: Ficha in mano.fichas_en_mano:
+		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero, ficha.especial)
 		globales.apropiar_hijo(self, ficha_nueva)
 		fichas_en_mano_antes.append(ficha_nueva)
-		
-	grupos_en_tablero_antes = []
-	for grupo in tablero.grupos:
-		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
-	tablero.fijar_tablero()
+	var fichas_no_blancas: int = 0
+	for ficha in fichas_en_mano_antes:
+		if !ficha.en_blanco:
+			fichas_no_blancas += 1
+	print("Guardo "+ str(fichas_no_blancas))
+
 
 func boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS

@@ -5,14 +5,17 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 var terminar:bool = false
+var es_arcade = false
 
 func _ready() -> void:
 	actualizar_puntos_suspensivos()
 	actualizar_circulo_carga()
-	await ConectorRed.buscar_partida($StatusBusqueda,$StatusBusqueda/IniciarPartida)
+	await ConectorRed.buscar_partida($StatusBusqueda,$StatusBusqueda/IniciarPartida,es_arcade)
 	print("PARTIDA ENCONTRADA")
 	terminar = true
-	get_tree().change_scene_to_file("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn")
+	var escena_juego = preload("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn").instantiate()
+	escena_juego.es_arcade = es_arcade
+	get_tree().change_scene_to_node(escena_juego)
 
 
 func actualizar_puntos_suspensivos() -> void:

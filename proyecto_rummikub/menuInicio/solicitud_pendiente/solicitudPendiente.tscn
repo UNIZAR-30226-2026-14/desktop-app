@@ -110,3 +110,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_x17lk")
 theme_override_styles/hover = SubResource("StyleBoxFlat_m4esa")
 icon = ExtResource("2_pppu4")
 icon_alignment = 1
+
+[connection signal="pressed" from="Panel/Rechazar" to="." method="_on_rechazar_pressed"]
+[connection signal="pressed" from="Panel/Aceptar" to="." method="_on_aceptar_pressed"]

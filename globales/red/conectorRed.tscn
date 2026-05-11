@@ -10,3 +10,4 @@ script = ExtResource("1_vs5kn")
 script = ExtResource("2_l2gjn")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="red" unique_id=1703444548]
+use_threads = true

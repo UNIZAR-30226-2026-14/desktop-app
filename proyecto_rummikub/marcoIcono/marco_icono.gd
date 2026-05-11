@@ -4,7 +4,7 @@ var tamano: Vector2
 var icono: Texture2D 
 var anchura: int 
 var color_borde: Color
-var color_fondo: Color
+@export var color_fondo: Color
 
 func _ready() -> void:
 	tamano = get_meta("tamano_minimo")
@@ -72,4 +72,5 @@ func cambiar_icono(icono_in)->void:
 		$Borde/Fondo/Imagen.visible = false
 	else:
 		cambiarParametros(null,null,icono_in,null,null)
+		$Borde/Fondo/Imagen.visible = true
 	

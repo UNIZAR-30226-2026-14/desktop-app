@@ -24,6 +24,8 @@ static var id_jugador = "idJugador"
 static var num_fichas_mano = "fichasActuales"
 static var fichas_mano = "manoActual"
 
+const DORADO_RED = "D"
+const ARCOIRIS_RED = ""
 const ROJO_RED="R"
 const NEGRO_RED = "K"
 const AZUL_RED = "B"
@@ -62,7 +64,6 @@ func amigo_todos():
 			HTTPClient.METHOD_POST,header())
 			print(json.data)
 			if not _respuesta_buena(): push_error("Error al añadir amigo")
-
 #endregion
 #region auxiliares
 func header()->PackedStringArray:
@@ -72,7 +73,6 @@ func ficha_to_string(ficha)->String:
 	var res: String = ""
 	if ficha.color == Ficha.COLOR.COMODIN:
 		return JOKER_RED + "*"
-	
 	match ficha.color:
 		Ficha.COLOR.ROJO:
 			res = ROJO_RED 
@@ -105,6 +105,15 @@ func string_to_ficha(s:String) -> Dictionary:
 	s=s.to_upper()
 	var res = {}
 	print(s)
+	if s[0]== DORADO_RED:
+		res["especial"] = Ficha.ESPECIAL.DORADO
+		s = s.substr(1)
+	elif s[0] == ARCOIRIS_RED:
+		res["especial"] = Ficha.ESPECIAL.ARCOIRIS
+		s = s.substr(1)
+	else:
+		res["especial"] = Ficha.ESPECIAL.NO
+	
 	if s[0] == JOKER_RED:
 		return {"color":Ficha.COLOR.COMODIN, "numero":10}
 	match s[0]:
@@ -193,6 +202,8 @@ const estado_aceptado = "ACEPTADO"
 const estado_pendiente = "PENDIENTE"
 const amigo_nom = "nombre"
 const amigo_icono = "imagenPerfil"
+const es_arcade = "modoArcade"
+const es_privada = "privada"
 
 func categoriza_solicitudes(_aceptadas,_enviadas,_recibidas):
 	var todos_amigos = json.data
@@ -238,6 +249,20 @@ func get_amigos(_aceptadas,_enviadas,_recibidas):
 		_aceptadas.assign(aux_aceptadas)
 		_enviadas.assign(aux_enviadas)
 		_recibidas.assign(aux_recibidas)
+
+func enviar_solicitud(amigo: int):
+	var cuerpo = {amis1:mi_id,amis2:amigo,estado_amis:estado_pendiente}
+	await _awaiting_request(base_url+amigos,cuerpo,HTTPClient.METHOD_POST,header())
+	assert(_respuesta_buena())
+	
+func aceptar_solicitud(amigo:int):
+	await _awaiting_request(base_url+amigos+"/"+str(amigo)+"/"+str(mi_id)+"/estado",
+	{estado_amis:estado_aceptado}
+	,HTTPClient.METHOD_PATCH,header())
+	assert(_respuesta_buena(),json.data)
+
+func denegar_solicitud(_amigo:int):
+	pass
 
 #endregion
 #region inicio sesion
@@ -288,10 +313,12 @@ func cerrar_sesion():
 #endregion
 var ultimo_turno = -1
 #region iniciar partida
-
-func unirse_a_partida(id: int)-> Error:
+func unirse_a_partida(id: int):
 	print("Busco partida: ", id)
 	await _awaiting_request_get(base_url+partidas+"/"+str(id))
+	if not _respuesta_buena():
+		print("partida no existe")
+		return Error.ERR_DOES_NOT_EXIST
 	var partida: Dictionary = json.data
 	
 	if (partida.get(id_partida) == id) \
@@ -305,7 +332,7 @@ func unirse_a_partida(id: int)-> Error:
 			print(participacion)
 			return Error.FAILED
 		ultimo_turno = -1
-		return Error.OK
+		return partida[es_arcade]
 	
 	# casos de error
 	elif partida[estado_partida] != ESTADO_PARTIDA_SIN_EMPEZAR:
@@ -314,7 +341,6 @@ func unirse_a_partida(id: int)-> Error:
 	elif partida.find_key(id_partida) != id_partida or partida[id_partida] == id:
 		push_error("En unirse a partida, Partida no existe")
 		return Error.ERR_CANT_CONNECT
-	
 	return Error.ERR_BUG
 
 func forzar_inicio_partida_set_true():
@@ -326,9 +352,9 @@ func check_iniciar_partida(res):
 	var texto = "Oponentes en partida: "
 	if res is Array: texto += str(res.size() - 1)
 	else : texto += "0"
-	status_label.text = texto
+	if (status_label != null):
+		status_label.text = texto
 	return forzar_inicio_partida or (res is Array and res.size() == maximos_jugadores)
-
 func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 			 max_jugadores: int=3,)->void:
 	maximos_jugadores = max_jugadores
@@ -338,9 +364,11 @@ func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 		iniciar.pressed.connect(forzar_inicio_partida_set_true)
 		await _espera_a_resultado(check_iniciar_partida,\
 			base_url+participiaciones_por_partida+str(id))
-		status_label.text = "Iniciando partida"
+		if status_label != null:
+			status_label.text = "Iniciando partida"
 		await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
-		status_label.text = "Partida iniciada"
+		if status_label != null:
+			status_label.text = "Partida iniciada"
 		print(json.data)
 		creado_partida = false
 		forzar_inicio_partida = false
@@ -352,21 +380,23 @@ func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 	ultima_info_partida = json.data
 
 ##Busca partida y devuelve su id, que termine no asegura que la partida haya empezado
-func get_partidas(status_busqueda:Label) -> int:
+func get_partidas(status_busqueda:Label, arcade: bool) -> int:
 	await _awaiting_request_get(base_url+partidas)
 	var body = json.data
 	creado_partida = false
 	if body is Array: # varias partidas
 		for partida in body:
 			print(partida)
-			if partida[estado_partida] == "ESPERANDO":
+			if partida[estado_partida] == ESTADO_PARTIDA_SIN_EMPEZAR and partida[es_arcade] == arcade \
+			and not partida[es_privada]:
 				print("encontrada la partida ", partida[id_partida])
 				status_busqueda.text = "Partida encontrada"
 				ultima_info_partida = partida
 				return ultima_info_partida[id_partida]
 	elif body is Dictionary:# una partida
 		print(body)
-		if body[estado_partida] == "ESPERANDO":
+		if body[estado_partida] == ESTADO_PARTIDA_SIN_EMPEZAR and body[es_arcade] == arcade \
+			and not body[es_privada]:
 			print("encontrada partida ", body[id_partida])
 			ultima_info_partida = body
 			status_busqueda.text = "Partida encontrada"
@@ -377,32 +407,28 @@ func get_partidas(status_busqueda:Label) -> int:
 	else:
 		assert(false, "body con estructura o tipo inesperado en get_partidas: " + str(body))
 	
-	ultima_info_partida = await _crear_partida()
+	ultima_info_partida = await _crear_partida(arcade)
 	status_busqueda.text = "Partida creada"
 	return ultima_info_partida[id_partida]
 
-func _crear_partida() -> Dictionary:
+func _crear_partida(arcade:bool) -> Dictionary:
 	creado_partida = true
 	print("crear partida ")
-	var partida = {fecha:Time.get_date_string_from_system()}
+	var partida = {fecha:Time.get_date_string_from_system(), es_arcade:arcade,es_privada:false}
 	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST)
 	if not _respuesta_buena():
 		printerr("Error creando partida, recibido:", json.data)
 		assert(false, "Error creando partida")
 	return json.data
 
-func crear_partida_publico(es_privada):
-	var tipo_partida = "publica"
-	if es_privada:
-		tipo_partida = "privada"
+func crear_partida_publico(arcade: bool):
 	creado_partida = true
 	print("crear partida ")
-	var partida = {fecha:Time.get_date_string_from_system()}
+	var partida = {fecha:Time.get_date_string_from_system(), es_arcade:arcade,es_privada:true}
 	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST)
 	assert(_respuesta_buena(), "Error creando partida, recibido: " + str(json.data) )
 	ultima_info_partida = json.data
 	return ultima_info_partida[id_partida]
-
 #endregion
 #region parar y continuar partida
 ## Separado entre he_iniciado y me_he_unido
@@ -414,7 +440,8 @@ func partidas_iniciadas()->Dictionary:
 	return {}
 
 func parar_partida(id:int):
-	await _awaiting_request(base_url+partidas+"/"+str(id),{},HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"pausar",{},HTTPClient.METHOD_POST)
+	assert(_respuesta_buena(),json.data)
 #endregion
 #region partida
 const partic_mano = "manoActual"
@@ -470,7 +497,7 @@ func mano(id: int, crea_ficha: Callable)->Array[Ficha]:
 		var carta_arr: Array[Ficha]
 		carta_arr.assign(cartas.map( func(s:String)->Ficha: 
 			var dict = string_to_ficha(s)
-			return crea_ficha.call(dict["color"],dict["numero"]) ))
+			return crea_ficha.call(dict["color"],dict["numero"],dict["especial"]) ))
 		return carta_arr
 	else:
 		return []
@@ -481,8 +508,10 @@ func get_turno(id: int):
 	await _espera_a_resultado(
 		func(data)->bool:
 			ultima_info_partida = data
-			if data[estado_partida] == ESTADO_PARTIDA_TERMINADA or\
+			if data[estado_partida] == ESTADO_PARTIDA_TERMINADA or \
 					data[estado_partida] == ESTADO_PARTIDA_PAUSADA:
+				print("partida no continua")
+				print(data)
 				return true
 			if data[turno] != ultimo_turno: 
 				ultimo_turno = data[turno]
@@ -493,16 +522,12 @@ func get_turno(id: int):
 				return false,
 		base_url+partidas+"/"+str(id), 0.3)
 	var datos = json.data
-	var mi_puntuacion: Array = datos["puntuacionFinal"].split(",")
-	mi_puntuacion = mi_puntuacion.filter(func(s:String):
-		@warning_ignore("shadowed_variable")
-		var id_jugador: String = s.get_slice(",",0).left(-1).right(-1)
-		print("puntuacion de jugador: ",id_jugador)
-		return id_jugador == str(mi_id))
-	if mi_puntuacion.is_empty(): mi_puntuacion = ["a"]
+	var mi_puntuacion = null
+	if datos[estado_partida] == ESTADO_PARTIDA_TERMINADA:
+		mi_puntuacion = datos["puntuacionFinal"]["remaining"][str(mi_id)]
 	var res={"turno":ultimo_turno, "mesa":string_to_grupos(datos[mesa]),
 				"estado":datos["estado"],"ganadorId":datos["ganadorId"],
-				"puntuacion":mi_puntuacion[0].get_slice(",",1)}
+				"puntuacion":mi_puntuacion}
 	return res
 
 func subir_jugada(id:int, tablero: Array[Grupo_fichas]):
@@ -583,9 +608,13 @@ func set_perfil(tablero_actual: String, monedas: int):
 		{skins_tablero:lista_tableros, num_monedas:monedas},HTTPClient.METHOD_PATCH,header())
 	assert(_respuesta_buena(),json.data)
 
-func cambiar_contrasena(contra: String):
-	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,
-		{id_jugador:mi_id},HTTPClient.METHOD_PUT,header())
+func cambiar_contrasena(contra_nueva: String, contra_vieja: String)->bool:
+	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+"/contrasena",
+		{"contrasenaActual":contra_vieja,"contrasenaNueva":contra_nueva},HTTPClient.METHOD_PATCH,header())
+	if not _respuesta_buena():
+		printerr(json.data)
+	return _respuesta_buena()
+	
 #endregion
 #region salir de partida
 func pausar_partida(id: int):

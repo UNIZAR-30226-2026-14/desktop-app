@@ -127,16 +127,14 @@ func _process(_delta: float) -> void:
 		grupo_arrastrado.position += posicion_raton - posicion_clic
 		posicion_clic = posicion_raton
 
-func crear_ficha(color:Ficha.COLOR = Ficha.COLOR.BLANCO, num: int = -10) -> Ficha:
+func crear_ficha(color:Ficha.COLOR = Ficha.COLOR.BLANCO, num: int = -10, especial: Ficha.ESPECIAL = Ficha.ESPECIAL.NO ) -> Ficha:
 	var ficha
-	if num == -10 or color == Ficha.COLOR.BLANCO: # sin parametros
+	if num == -10 and color == Ficha.COLOR.BLANCO: # sin parametros
 		var posibles_fichas = [Ficha.COLOR.ROJO,Ficha.COLOR.AMARILLO,Ficha.COLOR.NEGRO,Ficha.COLOR.AZUL]
 		ficha = Ficha.ficha(posibles_fichas[randi()%4],randi()%13 )
-	else: ficha = Ficha.ficha(color, num) # con parametros
+	else: ficha = Ficha.ficha(color, num, especial) # con parametros
 	self.add_child(ficha)
 	conectar_ficha(ficha)
-	# lista_fichas.insert(indice_lista_fichas, ficha)
-	# indice_lista_fichas += 1
 	return ficha
 
 func _entro_cursor_en_ficha(ficha: Ficha):

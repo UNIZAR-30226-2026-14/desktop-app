@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://b2ytm7374u1u2" path="res://proyecto_rummikub/contador_monedas/panel_contador_monedas.tscn" id="14_naapq"]
 [ext_resource type="PackedScene" uid="uid://75ogdrmks05m" path="res://proyecto_rummikub/pantallaFinalPartida/pantallaFinalPartida.tscn" id="17_a1kqi"]
 [ext_resource type="PackedScene" uid="uid://5vgflyue4xto" path="res://proyecto_rummikub/poder/selectorAdversario/selectorAdversario.tscn" id="18_3k6q8"]
+[ext_resource type="Script" uid="uid://doo60kfoc4g6h" path="res://proyecto_rummikub/escenaPrincipal/boton_pausar.gd" id="19_yonda"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw2xd"]
 bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
@@ -247,12 +248,11 @@ theme_override_styles/normal_mirrored = ExtResource("8_4j4ur")
 icon = ExtResource("4_qada0")
 metadata/_edit_use_anchors_ = true
 
-[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano", "manager_juego")]
+[node name="tablero" type="Node2D" parent="managerFichas" unique_id=2145572479 node_paths=PackedStringArray("manager_fichas", "colision_mano")]
 z_index = -5
 script = ExtResource("5_nj8sc")
 manager_fichas = NodePath("..")
 colision_mano = NodePath("../mano/AreaMano/CollisionShapeMano")
-manager_juego = NodePath("../../managerJuego")
 
 [node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=143859430]
 script = ExtResource("8_7fgi8")
@@ -325,6 +325,7 @@ offset_right = 441.0
 offset_bottom = 146.0
 
 [node name="SelectorAdversario" parent="." unique_id=1618597266 node_paths=PackedStringArray("manager_juego") instance=ExtResource("18_3k6q8")]
+visible = false
 offset_left = 50.0
 offset_top = -76.0
 offset_right = 909.0
@@ -333,7 +334,6 @@ scale = Vector2(0.5, 0.5)
 manager_juego = NodePath("../managerJuego")
 
 [node name="PantallaPartidaPausada" type="RichTextLabel" parent="." unique_id=1755617516]
-visible = false
 offset_left = -134.0
 offset_top = -250.0
 offset_right = 134.0
@@ -364,5 +364,19 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_frcik")
 theme_override_styles/hover = SubResource("StyleBoxFlat_4y4ov")
 text = "VOLVER"
 
+[node name="Boton pausar" type="Button" parent="." unique_id=463520297]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 452.0
+offset_top = -322.0
+offset_right = 574.0
+offset_bottom = -275.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.6716436, 0.7448382, 1)
+text = "Pausar partida"
+script = ExtResource("19_yonda")
+
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]
+[connection signal="pressed" from="Boton pausar" to="Boton pausar" method="_on_pressed"]

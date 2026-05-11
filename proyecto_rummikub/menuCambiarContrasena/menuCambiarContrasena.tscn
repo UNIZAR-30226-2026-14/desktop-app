@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://2asypl3p0wny" path="res://proyecto_rummikub/menuCambiarContrasena/menu_cambiar_contrasena.gd" id="1_40v1t"]
 [ext_resource type="Texture2D" uid="uid://dlmnc4p2byb3m" path="res://imagenes/imagenes_iniciar_sesion/insertarContraseñaIcono.png" id="2_y841q"]
+[ext_resource type="Texture2D" uid="uid://5cum5gsue3dt" path="res://imagenes/imagenes_iniciar_sesion/inicioInsertarNombreUsuario.png" id="3_y841q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_odqt2"]
 bg_color = Color(0.09803922, 0.20392157, 0.10980392, 1)
@@ -9,7 +10,7 @@ shadow_color = Color(0.09019608, 0.13333334, 0.09411765, 1)
 shadow_size = 2
 shadow_offset = Vector2(0, 2)
 
-[node name="Control" type="Control" unique_id=2007836517 node_paths=PackedStringArray("confirmar", "registrarse", "textoAntiguaContrasena", "textoNuevaContrasena", "textoConfirmarContrasena")]
+[node name="Control" type="Control" unique_id=2007836517 node_paths=PackedStringArray("confirmar", "registrarse", "textoNomUsuario", "textoAntiguaContrasena", "textoNuevaContrasena", "textoConfirmarContrasena")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +20,7 @@ grow_vertical = 2
 script = ExtResource("1_40v1t")
 confirmar = NodePath("ColorRect/botonConfirmar")
 registrarse = NodePath("ColorRect/botonRegistrarse")
+textoNomUsuario = NodePath("ColorRect/textoNombreUsuario")
 textoAntiguaContrasena = NodePath("ColorRect/textoAntiguaContrasena")
 textoNuevaContrasena = NodePath("ColorRect/textoNuevaContrasena")
 textoConfirmarContrasena = NodePath("ColorRect/textoConfirmarContrasena")
@@ -31,6 +33,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.3647059, 0.1254902, 1)
+
+[node name="textoNombreUsuario" type="LineEdit" parent="ColorRect" unique_id=434577992]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -158.5
+offset_right = 170.5
+offset_bottom = -115.5
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Nombre de usuario"
+max_length = 30
+
+[node name="InsertarContrasenaIcono2" type="Sprite2D" parent="ColorRect/textoNombreUsuario" unique_id=1020964128]
+position = Vector2(319, 21.5)
+scale = Vector2(0.042949233, 0.042734362)
+texture = ExtResource("3_y841q")
 
 [node name="textoAntiguaContrasena" type="LineEdit" parent="ColorRect" unique_id=1520467428]
 layout_mode = 1
@@ -47,6 +70,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "Antigua contraseña"
 max_length = 30
+secret = true
 
 [node name="InsertarContrasenaIcono2" type="Sprite2D" parent="ColorRect/textoAntiguaContrasena" unique_id=195858092]
 position = Vector2(316.5, 21)
