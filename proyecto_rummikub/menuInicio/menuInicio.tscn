@@ -25,7 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://bvs76ue2w8evs" path="res://proyecto_rummikub/marcoIcono/marcoIcono.tscn" id="24_6ubox"]
 [ext_resource type="Script" uid="uid://da07fashj5efn" path="res://proyecto_rummikub/menuInicio/panel_creacion_partida_privada.gd" id="24_iak3s"]
 [ext_resource type="Script" uid="uid://djv3s0t0ehc44" path="res://proyecto_rummikub/menuInicio/fondo_lobby_clasico.gd" id="24_tfde3"]
-[ext_resource type="Script" uid="uid://dsh35lqbxhcgk" path="res://proyecto_rummikub/menuInicio/fondo_lobby_reanudar.gd" id="25_6ubox"]
+[ext_resource type="Script" path="res://proyecto_rummikub/menuInicio/fondo_lobby_reanudar.gd" id="25_6ubox"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iak3s"]
 bg_color = Color(0.17625213, 0.40654674, 0.19712326, 1)
@@ -195,185 +195,6 @@ corner_detail = 20
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tg18a"]
 texture = ExtResource("11_v2sjx")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3d1jw"]
-bg_color = Color(0.16862746, 0.24313726, 0.31764707, 1)
-shadow_color = Color(0, 0, 0, 0.47843137)
-shadow_size = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m1nat"]
-bg_color = Color(0.90350896, 0.42919874, 0.4782496, 0)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.8, 0.8, 0.8, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k43s"]
-bg_color = Color(0.16862746, 0.24313726, 0.31764707, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jf412"]
-bg_color = Color(0.07510301, 0.08178822, 0.08847328, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tfde3"]
-bg_color = Color(0.08988928, 0.09732214, 0.10475492, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shr80"]
-bg_color = Color(0.09803922, 0.105882354, 0.11372549, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ubox"]
-bg_color = Color(0.0674905, 0.073789455, 0.08008809, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-expand_margin_left = 6.0
-expand_margin_right = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_637k7"]
-bg_color = Color(0.10980392, 0.13725491, 0.2, 1)
-border_width_left = 17
-border_color = Color(0.10980392, 0.13725491, 0.2, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
-corner_detail = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38lkr"]
-bg_color = Color(0.023529412, 0.09019608, 0.03137255, 0.7490196)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v2sjx"]
-bg_color = Color(0.028774202, 0.12371529, 0.03774348, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.15023196, 0.45078117, 0.12962726, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-shadow_color = Color(0.14509805, 0.4392157, 0.1254902, 0.42745098)
-shadow_size = 10
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bmu16"]
-texture = ExtResource("11_v2sjx")
-modulate_color = Color(1, 1, 1, 0.972549)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rn7sa"]
-bg_color = Color(0.18076777, 0.49839938, 0.1497854, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3s8i0"]
-bg_color = Color(0.27150407, 0.76532984, 0.22353157, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 100
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-corner_radius_bottom_left = 100
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bmu16"]
-bg_color = Color(0.13241783, 0.27849627, 0.17217416, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.28910655, 0.46714914, 0.29474825, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f7uhe"]
-bg_color = Color(0.023529412, 0.078431375, 0.02745098, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.05699636, 0.14113337, 0.06441328, 1)
-corner_radius_top_left = 1000
-corner_radius_top_right = 1000
-corner_radius_bottom_right = 1000
-corner_radius_bottom_left = 1000
-corner_detail = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jn6ro"]
-bg_color = Color(0.0879988, 0.19431254, 0.095333986, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.05699636, 0.14113337, 0.06441328, 1)
-corner_radius_top_left = 1000
-corner_radius_top_right = 1000
-corner_radius_bottom_right = 1000
-corner_radius_bottom_left = 1000
-corner_detail = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_neb5b"]
-bg_color = Color(0.042542547, 0.1158533, 0.049007207, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.05699636, 0.14113337, 0.06441328, 1)
-corner_radius_top_left = 1000
-corner_radius_top_right = 1000
-corner_radius_bottom_right = 1000
-corner_radius_bottom_left = 1000
-corner_detail = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kogys"]
-bg_color = Color(0.12156863, 0.19215687, 0.12156863, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.12156863, 0.19215687, 0.12156863, 1)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-corner_detail = 20
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3s8i0"]
-texture = ExtResource("9_u2d15")
-modulate_color = Color(0.52906674, 0.5290667, 0.5290667, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rn7sa"]
-texture = ExtResource("9_u2d15")
-modulate_color = Color(0.8992584, 0.8992584, 0.8992584, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hy4th"]
 bg_color = Color(1, 1, 1, 1)
@@ -599,6 +420,8 @@ expand_margin_left = 5.0
 expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
+shadow_color = Color(0, 0, 0, 0.47843137)
+shadow_size = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3d1jw"]
 bg_color = Color(0.16862746, 0.24313726, 0.31764707, 1)
@@ -758,11 +581,18 @@ corner_radius_bottom_right = 1000
 corner_radius_bottom_left = 1000
 corner_detail = 20
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kjww1"]
-bg_color = Color(0, 0, 0, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wvssi"]
-bg_color = Color(0, 0, 0, 0.59607846)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kogys"]
+bg_color = Color(0.12156863, 0.19215687, 0.12156863, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.12156863, 0.19215687, 0.12156863, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
 
 [node name="MenuInicio" type="Control" unique_id=1337258946 node_paths=PackedStringArray("dinero", "botonAmigos", "botonCerrarPestanaAmigos")]
 layout_mode = 3
@@ -1337,7 +1167,6 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wvssi")
 
 [node name="FondoLobby" type="Panel" parent="." unique_id=361203403 node_paths=PackedStringArray("icono0", "icono1", "icono2", "icono3")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1543,6 +1372,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 
 [node name="PanelCreacionPartidaPrivada" type="Panel" parent="FondoLobby" unique_id=964690319]
+visible = false
 custom_minimum_size = Vector2(583, 552)
 layout_mode = 1
 anchors_preset = 8
@@ -2360,7 +2190,6 @@ theme_override_styles/normal = ExtResource("14_pnstj")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 
-
 [node name="FondoLobbyReanudar" type="Panel" parent="." unique_id=650459654 node_paths=PackedStringArray("icono0", "icono1", "icono2", "icono3")]
 visible = false
 layout_mode = 1
@@ -2550,15 +2379,12 @@ vertical_scroll_mode = 3
 [node name="contenedorPartidas" type="VBoxContainer" parent="FondoLobbyReanudar/PanelReanudarPartida/PanelSeleccionPartida/ScrollContainer" unique_id=671982454]
 layout_mode = 2
 
-[connection signal="mouse_entered" from="Fondo/ModoArcade" to="." method="_on_modo_clasico_mouse_entered"]
-[connection signal="mouse_exited" from="Fondo/ModoArcade" to="." method="_on_modo_clasico_mouse_exited"]
-[connection signal="pressed" from="Fondo/ModoArcade" to="Fondo/ModoArcade" method="_on_pressed"]
 [connection signal="mouse_entered" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_entered"]
 [connection signal="mouse_exited" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_exited"]
 [connection signal="pressed" from="Fondo/ModoClasico" to="Fondo/ModoClasico" method="_on_pressed"]
-[connection signal="mouse_entered" from="Fondo/ModoClasico2" to="." method="_on_modo_clasico_mouse_entered"]
-[connection signal="mouse_exited" from="Fondo/ModoClasico2" to="." method="_on_modo_clasico_mouse_exited"]
-[connection signal="pressed" from="Fondo/ModoClasico2" to="Fondo/ModoClasico2" method="_on_pressed"]
+[connection signal="mouse_entered" from="Fondo/ModoArcade" to="." method="_on_modo_clasico_mouse_entered"]
+[connection signal="mouse_exited" from="Fondo/ModoArcade" to="." method="_on_modo_clasico_mouse_exited"]
+[connection signal="pressed" from="Fondo/ModoArcade" to="Fondo/ModoArcade" method="_on_pressed"]
 [connection signal="pressed" from="Fondo/ReanudarPartida" to="Fondo/ReanudarPartida" method="_on_pressed"]
 [connection signal="pressed" from="BarraSuperior/BotonIconoAvatarUsuario" to="." method="_on_icono_avatar_usuario_pressed"]
 [connection signal="pressed" from="FondoLobby/PanelLobby/BotonUnriseConCodigo/BotonEntrarPartidaConCodigo" to="FondoLobby/PanelLobby/BotonUnriseConCodigo" method="_on_boton_entrar_partida_con_codigo_pressed"]

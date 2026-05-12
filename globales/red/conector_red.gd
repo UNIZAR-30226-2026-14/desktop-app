@@ -51,9 +51,12 @@ func registrar_usuario(usr:String, passwd:String)->Error:
 #endregion
 #region AMIGOS
 func get_amigos(_amigos: Array[Amigo],_solicitud_env:Array[SolicitudEnviada],
-				_solicitud_pen:Array[SolicitudPendiente]):
+				_solicitud_pen:Array[SolicitudPendiente], _retos:Array[RetoPendiente],
+				mux: Mutex):
 	var aux_amigos = []; var aux_env = []; var aux_reciv = []
 	await $red.get_amigos(aux_amigos, aux_env, aux_reciv)
+	mux.lock()
+	
 	_amigos.assign(aux_amigos.map(func(amigo):
 		print(amigo["icono"])
 		return Amigo.amigo(globales.get_avatar(amigo["icono"]), 
@@ -62,7 +65,17 @@ func get_amigos(_amigos: Array[Amigo],_solicitud_env:Array[SolicitudEnviada],
 		return SolicitudEnviada.solicitud(amigo["nombre"])) )
 	_solicitud_pen.assign(aux_reciv.map(func(amigo):
 		return SolicitudPendiente.solicitud(amigo["nombre"], amigo["id"])) )
+	mux.unlock()
+	var aux = (await $red.get_retos()).map(func (reto):
+		return RetoPendiente.solicitud(reto.emisor_nom,reto.emisor_id,reto.id_partida))
+	mux.lock()
+	_retos.assign(aux)
+	mux.unlock()
 
+@warning_ignore("shadowed_variable")
+func rechazar_reto(id_partida:int, id_emisor:int):
+	$red.rechazar_reto(id_partida,id_emisor)
+	
 func enviar_solicitud(amigo: int):
 	$red.enviar_solicitud(amigo)
 	
@@ -129,11 +142,8 @@ static var imagen2: Texture2D = preload("res://imagenes/avatares_posibles/Dian.p
 static var partida1: PartidaSeleccionable =  PartidaSeleccionable.partida_seleccionable("11/09/2001",[imagen1,imagen2,imagen1,imagen2])
 static var partida2: PartidaSeleccionable =  PartidaSeleccionable.partida_seleccionable("5/09/2005",[imagen2,imagen1,imagen2,imagen1])
 static var mis_partidas_en_curso: Array[PartidaSeleccionable] = [partida1, partida2, partida1, partida2, partida1] 
-static func get_partidas_en_curso() -> Array[PartidaSeleccionable]:
-	var me_retan
-	var a_medias
-	$red
-
+func get_partidas_en_curso() -> Array[PartidaSeleccionable]:
+	return []
 func unirse_a_partida_con_lobby(partida:int):
 	var res = await $red.unirse_a_partida(partida)
 	$red.creado_partida = false

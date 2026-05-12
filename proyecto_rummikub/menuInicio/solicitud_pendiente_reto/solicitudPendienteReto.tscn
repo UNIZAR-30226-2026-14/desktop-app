@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://cqni3gh51alvx"]
+[gd_scene format=3 uid="uid://bq74b4d3ee5b6"]
 
-[ext_resource type="Script" uid="uid://fidqoelwgei3" path="res://proyecto_rummikub/menuInicio/solicitud_pendiente/solicitud_pendiente.gd" id="1_0sicp"]
-[ext_resource type="StyleBox" uid="uid://ys2xw3s1jkfu" path="res://proyecto_rummikub/menuInicio/solicitud_pendiente/stle_box_check.tres" id="2_nwtx7"]
-[ext_resource type="Texture2D" uid="uid://b7dnd5f3w24h2" path="res://imagenes/imagenes_escena_principal/check.png" id="2_pppu4"]
-[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="2_x17lk"]
+[ext_resource type="Script" uid="uid://cejia1g8if4qg" path="res://proyecto_rummikub/menuInicio/solicitud_pendiente_reto/solicitud_pendiente_reto.gd" id="1_6op88"]
+[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="2_yrn14"]
+[ext_resource type="StyleBox" uid="uid://cnp617aycpjqb" path="res://proyecto_rummikub/menuInicio/solicitud_pendiente_reto/stle_box_check.tres" id="3_0384n"]
+[ext_resource type="Texture2D" uid="uid://b7dnd5f3w24h2" path="res://imagenes/imagenes_escena_principal/check.png" id="4_4g1jf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwtx7"]
 bg_color = Color(0.19215687, 0.26666668, 0.32941177, 1)
@@ -45,7 +45,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_0sicp")
+script = ExtResource("1_6op88")
 NombreSolicitante = NodePath("Panel/NombreSolicitante")
 
 [node name="Panel" type="Panel" parent="." unique_id=46696917]
@@ -83,7 +83,7 @@ grow_vertical = 2
 theme_override_colors/icon_normal_color = Color(18.892002, 18.892002, 18.892002, 1)
 theme_override_constants/icon_max_width = 17
 theme_override_styles/normal = SubResource("StyleBoxFlat_0ru6y")
-icon = ExtResource("2_x17lk")
+icon = ExtResource("2_yrn14")
 icon_alignment = 1
 
 [node name="Aceptar" type="Button" parent="Panel" unique_id=759806593]
@@ -105,35 +105,10 @@ theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
 theme_override_colors/icon_pressed_color = Color(18.892, 18.892, 18.892, 1)
 theme_override_colors/icon_hover_color = Color(16.849344, 16.849342, 16.849344, 1)
 theme_override_constants/icon_max_width = 15
-theme_override_styles/normal = ExtResource("2_nwtx7")
+theme_override_styles/normal = ExtResource("3_0384n")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_x17lk")
 theme_override_styles/hover = SubResource("StyleBoxFlat_m4esa")
-icon = ExtResource("2_pppu4")
-icon_alignment = 1
-
-[node name="Aceptar" type="Button" parent="Panel/Aceptar" unique_id=439035908]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -74.0
-offset_top = -11.5
-offset_right = -51.0
-offset_bottom = 11.5
-grow_horizontal = 0
-grow_vertical = 2
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_colors/icon_normal_color = Color(18.892157, 18.892157, 18.892157, 1)
-theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
-theme_override_colors/icon_pressed_color = Color(18.892, 18.892, 18.892, 1)
-theme_override_colors/icon_hover_color = Color(16.849344, 16.849342, 16.849344, 1)
-theme_override_constants/icon_max_width = 15
-theme_override_styles/normal = ExtResource("2_nwtx7")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_x17lk")
-theme_override_styles/hover = SubResource("StyleBoxFlat_m4esa")
-icon = ExtResource("2_pppu4")
+icon = ExtResource("4_4g1jf")
 icon_alignment = 1
 
 [connection signal="pressed" from="Panel/Rechazar" to="." method="_on_rechazar_pressed"]

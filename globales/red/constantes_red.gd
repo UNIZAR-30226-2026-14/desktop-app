@@ -208,7 +208,6 @@ const es_privada = "privada"
 func categoriza_solicitudes(_aceptadas,_enviadas,_recibidas):
 	var todos_amigos = json.data
 	var solic_pendientes_env: Array = todos_amigos.filter(func(amistad):
-		print(amistad[amis1] == mi_id, amistad[estado_amis] == estado_pendiente)
 		return amistad[amis1] == mi_id\
 		and amistad[estado_amis] == estado_pendiente )
 	var solic_pendientes_reciv: Array = todos_amigos.filter(func(amistad):
@@ -317,6 +316,7 @@ func unirse_a_partida(id: int):
 	print("Busco partida: ", id)
 	await _awaiting_request_get(base_url+partidas+"/"+str(id))
 	if not _respuesta_buena():
+		printerr(json.data)
 		print("partida no existe")
 		return Error.ERR_DOES_NOT_EXIST
 	var partida: Dictionary = json.data
@@ -333,7 +333,6 @@ func unirse_a_partida(id: int):
 			return Error.FAILED
 		ultimo_turno = -1
 		return partida[es_arcade]
-	
 	# casos de error
 	elif partida[estado_partida] != ESTADO_PARTIDA_SIN_EMPEZAR:
 		push_error("En unirse a partida, partida ya empezada")
@@ -622,4 +621,27 @@ func pausar_partida(id: int):
 	
 func salir_de_partida(id: int) :
 	await _awaiting_request(base_url+partidas+"/"+str(id)+"/salir",{},HTTPClient.METHOD_POST,header())
+#endregion
+#region retos
+const invitaciones = "/api/invitaciones"
+const invitaciones_por_invitado = "/api/invitaciones/invitado/"
+@warning_ignore("shadowed_variable")
+func rechazar_reto(id_partida:int, id_emisor:int):
+	await _awaiting_request(
+		base_url+invitaciones+"/"+str(id_emisor)+"/"+str(mi_id)+"/"+str(id_partida),
+		{},HTTPClient.METHOD_DELETE,header()
+	)
+	printerr(json.data)
+
+func get_retos():
+	await _awaiting_request_get(base_url+invitaciones_por_invitado+str(mi_id))
+	assert(_respuesta_buena(),json.data)
+	var dato
+	if json.data is Dictionary:
+		dato = [json.data]
+	elif json.data is Array:
+		dato = json.data
+	return dato.map(func(solicitud):
+		return{"id_partida": solicitud["idPartida"],
+		"emisor_nom":solicitud["nombreEmisor"],"emisor_id":solicitud["idEmisor"]})
 #endregion
