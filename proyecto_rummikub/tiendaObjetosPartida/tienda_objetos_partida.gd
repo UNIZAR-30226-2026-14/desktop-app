@@ -1,4 +1,4 @@
-extends Control
+class_name TiendaFueraPartida extends Control
 # NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, LUPA, TOQUE_MIDAS, TRUEQUE, 
 # BOMBA_HUMO, RON, REDUCIR_TIEMPO, MENOS, GUANTE_BLANCO, TECHO_CRISTAL
 
@@ -13,7 +13,7 @@ enum OBJETO {BOTON_IZQUIERDA, BOTON_DERECHA, BOTON_CERRAR, BOTON_COMPRAR}
 var objeto_pulsado: OBJETO
 var posicion_puntero: int = 1
 var anterior_pulsado: int = -1
-
+var descuento: bool = false
 var lista_poderes: Array[BotonTienda] = []
 
 # Called when the node enters the scene tree for the first time.
@@ -75,4 +75,15 @@ func _poder_pulsado(poder_pulsado: Poder.PODER, indice: int) -> void:
 		lista_poderes[anterior_pulsado].despulsar()
 	anterior_pulsado = indice
 	$Panel/descripcion_objeto.text = Poder.LISTA_DESCRIPCIONES_OBJETOS[poder_pulsado]
-	$Panel/botonComprar.text = str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado])
+	if descuento:
+		@warning_ignore("integer_division")
+		$Panel/botonComprar.text = " " + str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado] / 2)
+	else:
+		$Panel/botonComprar.text = " " + str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado])
+		
+
+func aplicar_descuento() -> void:
+	descuento = true
+
+func quitar_descuento() -> void:
+	descuento = false

@@ -48,6 +48,7 @@ func _on_boton_amigos_toggled(toggled_on: bool) -> void:
 		accesoListas.lock()
 		for amigo in amigos:
 			if(amigo != null ):
+				amigo.esconder_boton_retar()
 				amigo.visible = true
 				globales.apropiar_hijo($ScrollContainer/contenedorAmigos,amigo)
 		accesoListas.unlock()

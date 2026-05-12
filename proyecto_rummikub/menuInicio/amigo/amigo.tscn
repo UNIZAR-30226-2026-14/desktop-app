@@ -34,7 +34,7 @@ corner_radius_bottom_left = 100
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0tbnp"]
 texture = ExtResource("4_cibtu")
 
-[node name="Amigo" type="Control" unique_id=838092582 node_paths=PackedStringArray("icono_conectado", "nombre_amigo", "avatar_amigo")]
+[node name="Amigo" type="Control" unique_id=838092582 node_paths=PackedStringArray("icono_conectado", "nombre_amigo", "avatar_amigo", "boton_retar")]
 custom_minimum_size = Vector2(261, 75)
 layout_mode = 3
 anchor_left = -0.00086805556
@@ -47,6 +47,7 @@ script = ExtResource("1_l70br")
 icono_conectado = NodePath("botonRetar/iconoConectado")
 nombre_amigo = NodePath("nombreAmigo")
 avatar_amigo = NodePath("marcoIcono/icono")
+boton_retar = NodePath("botonRetar")
 metadata/_edit_use_anchors_ = true
 
 [node name="botonRetar" type="Button" parent="." unique_id=503488691]

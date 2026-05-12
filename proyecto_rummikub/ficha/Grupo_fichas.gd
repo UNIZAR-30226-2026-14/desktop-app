@@ -164,10 +164,12 @@ func grupo_correcto(abierto: bool) -> bool:
 	var color_escalera: Ficha.COLOR
 	var esperado_escalera: int = -1
 	
-	var es_mismo_numero: bool = fichas.size() <= Ficha.COLOR.size() - 1 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
 	var set_colores: Array[Ficha.COLOR] = []
 	var esperado_mismo: int = -1
 	
+	var esMismoNumero: bool = fichas.size() <= 4 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
+	var setColores: Array[Ficha.COLOR] = []
+	var esperadoMismo: int = -1
 	for ficha in fichas:
 		if !abierto and ficha.estado != globales.ESTADO_FICHA.TABLERO_NO_FIJADA: return false #ha usado cartas de la mesa para abrir
 		if esperado_escalera == -1: #no se ha encontrado nungún no comodín
@@ -179,22 +181,22 @@ func grupo_correcto(abierto: bool) -> bool:
 			continue
 		else:
 			if es_escalera:
-				es_escalera = (ficha.numero == esperado_escalera and ficha.color == color_escalera) or ficha.color == Ficha.COLOR.COMODIN
+				es_escalera = (ficha.numero == es_escalera and ficha.color == color_escalera) or ficha.color == Ficha.COLOR.COMODIN
 				esperado_escalera += 1
-			if es_mismo_numero:
-				es_mismo_numero = (ficha.numero == esperado_mismo and set_colores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
-				set_colores.append(ficha.color)
-			if !es_escalera and !es_mismo_numero: return false
-	if esperado_mismo == -1: return true # todo comodines
+			if esMismoNumero:
+				esMismoNumero = (ficha.numero == esperadoMismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
+				setColores.append(ficha.color)
+			if !es_escalera and !esMismoNumero: return false
+		
+	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
 	if es_escalera:
 		if abierto: return true
 		else:
 			var baseEscalera = esperado_escalera - fichas.size()
 			var numTotal = range(baseEscalera, esperado_escalera).reduce(func(accum,number): return accum + number, 0)
 			return numTotal >= 30
-	if es_mismo_numero:
-		if abierto: 
-			return true
+	if esMismoNumero:
+		if abierto: return true
 		else:
 			var numTotal = esperado_mismo * fichas.size()
 			return numTotal >= 30

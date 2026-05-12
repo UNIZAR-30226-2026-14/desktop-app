@@ -4,6 +4,7 @@ class_name Amigo
 @export var icono_conectado: Panel
 @export var nombre_amigo: RichTextLabel
 @export var avatar_amigo: Panel
+@export var boton_retar: Button
 
 static var escena_amigo: PackedScene = preload("res://proyecto_rummikub/menuInicio/amigo/amigo.tscn")
 
@@ -30,3 +31,9 @@ static func amigo (icono: Texture2D, nombre: String) -> Amigo:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
+
+func esconder_boton_retar()->void:
+	boton_retar.visible = false
+
+func sacar_boton_retar()->void:
+	boton_retar.visible = true

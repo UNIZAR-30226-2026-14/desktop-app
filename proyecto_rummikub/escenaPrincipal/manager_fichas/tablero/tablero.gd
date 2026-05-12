@@ -146,3 +146,10 @@ func revelar_numeros() -> void:
 	for grupo: Grupo_fichas in grupos:
 		for ficha:Ficha in grupo.fichas:
 			ficha.revelar_ficha()
+
+func detectar_color_sin_fijar(color: Ficha.COLOR) -> bool:
+	for grupo: Grupo_fichas in grupos:
+		for ficha: Ficha in grupo.fichas:
+			if (ficha.color == color) and (ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA):
+				return true
+	return false

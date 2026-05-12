@@ -167,7 +167,7 @@ func ordenar_por_color() -> void:
 	actualizar_posicion_mano()
 
 func ordenar_por_numero() -> void:
-	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco))
+	fichas_en_mano.sort_custom(func(a, b): return ((b.en_blanco) || (a.numero < b.numero) || ( (a.numero == b.numero) && (a.color < b.color) )) && (not a.en_blanco) )
 	actualizar_posicion_mano()
 
 func actualizar_estado_cursor_limbo() -> void:

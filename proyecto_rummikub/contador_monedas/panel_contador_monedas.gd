@@ -16,4 +16,4 @@ func set_dinero(cantidad: String) -> void:
 	$contadorMonedas.text = cantidad
 
 func _ready() -> void:
-	set_dinero("0")
+	set_dinero("10000")

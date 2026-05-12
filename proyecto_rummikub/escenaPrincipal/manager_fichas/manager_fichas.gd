@@ -141,7 +141,7 @@ func _entro_cursor_en_ficha(ficha: Ficha):
 	if(ficha.en_blanco):
 		#print("entraron en ficha blanca")
 		sobre_ficha = ficha
-
+	
 	if (not clicando):
 		sobre_ficha = ficha
 		resaltar(ficha)

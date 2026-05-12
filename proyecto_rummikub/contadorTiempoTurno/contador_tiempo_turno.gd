@@ -4,7 +4,7 @@ extends Node2D
 
 enum MODO {MI_TURNO, ESPERANDO_TURNO}
 
-const TIEMPO_TURNO: int = 60
+const TIEMPO_TURNO: int = 600
 var tiempo: int
 var mitad_de_tiempo: bool = false
 

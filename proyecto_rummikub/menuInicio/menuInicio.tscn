@@ -1542,6 +1542,7 @@ scroll_active = false
 autowrap_mode = 0
 
 [node name="MenuAmigos" type="Panel" parent="." unique_id=388604241 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 11

@@ -186,3 +186,19 @@ func revelar_ficha() -> void:
 		$caraJoker.visible = true
 	else:
 		$Numero.visible = true
+
+static func color_a_string(color_in: COLOR) -> String:
+	match(color_in):
+		COLOR.BLANCO:
+			return "blanco"
+		COLOR.COMODIN:
+			return "comodin"
+		COLOR.ROJO:
+			return "rojo"
+		COLOR.NEGRO:
+			return "negro"
+		COLOR.AZUL:
+			return "azul"
+		COLOR.AMARILLO:
+			return "amarillo"
+	return "ERROR"
