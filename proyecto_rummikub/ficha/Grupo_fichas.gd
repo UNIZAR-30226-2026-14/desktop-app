@@ -181,7 +181,7 @@ func grupo_correcto(abierto: bool) -> bool:
 			continue
 		else:
 			if es_escalera:
-				es_escalera = (ficha.numero == es_escalera and ficha.color == color_escalera) or ficha.color == Ficha.COLOR.COMODIN
+				es_escalera = (ficha.numero == esperado_escalera and ficha.color == color_escalera) or ficha.color == Ficha.COLOR.COMODIN
 				esperado_escalera += 1
 			if esMismoNumero:
 				esMismoNumero = (ficha.numero == esperadoMismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
