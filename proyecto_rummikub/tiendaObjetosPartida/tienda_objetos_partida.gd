@@ -81,7 +81,6 @@ func _poder_pulsado(poder_pulsado: Poder.PODER, indice: int) -> void:
 		$Panel/botonComprar.text = " " + str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado] / 2)
 	else:
 		$Panel/botonComprar.text = " " + str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado])
-		
 
 func aplicar_descuento() -> void:
 	descuento = true

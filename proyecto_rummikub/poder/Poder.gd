@@ -42,10 +42,10 @@ const LISTA_TEXTURAS_PODERES: Array[Texture] = [
 	preload("res://imagenes/imagenes_poderes/toque-de-midas.png"),
 	preload("res://imagenes/imagenes_poderes/+4.png"),
 	preload("res://imagenes/imagenes_poderes/intercambio.png"),
-	preload("res://imagenes/imagenes_poderes/bomba-de-humo.png"),
+	preload("res://imagenes/imagenes_poderes/guante_blanco.png"),
 	preload("res://imagenes/imagenes_poderes/bomba-de-humo.png"),
 	preload("res://imagenes/imagenes_poderes/mitad-de-tiempo.png"),
-	preload("res://imagenes/imagenes_poderes/bomba-de-humo.png"),
+	preload("res://imagenes/imagenes_poderes/techo_de_cristal.png"),
 	]
 
 static var indice = 0

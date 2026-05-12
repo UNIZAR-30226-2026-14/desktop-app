@@ -40,7 +40,7 @@ class GrupoGuardado:
 		return res
 
 var poderes_disponibles_a_compra: Array[Poder.PODER] = [
-	Poder.PODER.TECHO_CRISTAL, Poder.PODER.ANGEL_GUARDA, Poder.PODER. TOQUE_MIDAS, Poder.PODER.BOLA_CRISTAL,
+	Poder.PODER.GUANTE_BLANCO, Poder.PODER.TECHO_CRISTAL, Poder.PODER.BOMBA_HUMO, Poder.PODER.BOLA_CRISTAL,
 	]
 
 var fichas_en_mano_antes: Array[Ficha]
@@ -282,13 +282,11 @@ func mas_cuatro() -> void:
 	# hacer cosas
 #endregion
 
-
 func quitar_bomba_de_humo() -> void:
 	PopUp.popUp("el humo se disipa\n",Vector2(-74.0, -300.0), escena_principal)
 	niebla.terminar_niebla()
 	await get_tree().create_timer(3.5).timeout
 	tablero.revelar_numeros()
-
 
 #region Aplicar a los demas
 func usar_bola_de_cristal(_adversario: String) -> void:
