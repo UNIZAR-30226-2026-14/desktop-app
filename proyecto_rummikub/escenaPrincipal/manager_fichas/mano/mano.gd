@@ -37,9 +37,17 @@ func _ready() -> void:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
 	#temporal para probar cosas
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 10, Ficha.ESPECIAL.NO))
 	actualizar_posicion_mano()
 
 

@@ -22,6 +22,7 @@ func _ready() -> void:
 	$GridContainer/FichaVision3/Button2.toggled.connect(_boton2)
 	$botonConfirmar.pressed.connect(_boton_confirmar)
 	$BotonCerrar.pressed.connect(_boton_cerrar)
+	manager_juego.termina_turno.connect(_boton_cerrar)
 	self.visible = false
 
 

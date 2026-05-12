@@ -40,7 +40,7 @@ class GrupoGuardado:
 		return res
 
 var poderes_disponibles_a_compra: Array[Poder.PODER] = [
-	Poder.PODER.GUANTE_BLANCO, Poder.PODER.TECHO_CRISTAL, Poder.PODER.BOMBA_HUMO, Poder.PODER.BOLA_CRISTAL,
+	Poder.PODER.TRUEQUE, Poder.PODER.TECHO_CRISTAL, Poder.PODER.BOMBA_HUMO, Poder.PODER.BOLA_CRISTAL,
 	]
 
 var fichas_en_mano_antes: Array[Ficha]
@@ -108,7 +108,7 @@ func iniciar_turno() -> void:
 	pasarTurno.disabled = true
 	#get_evento
 	if a == 1:
-		lanzar_evento(EVENTO.DESCUENTO)
+		trueque2_mi()
 	a += 1
 	empieza_turno.emit()
 
@@ -233,9 +233,8 @@ func pausarPartida()->void:
 func _volver_menu_inicio()->void:
 	get_tree().change_scene_to_file.bind("res://proyecto_rummikub/menuInicio/menuInicio.tscn").call_deferred()
 
-
 #region Aplicar a uno mismo
-func toque_de_midas() -> void:
+func toque_de_midas_mi() -> void:
 	var fichas_totales = mano.fichas_en_mano.size()
 	var fichas_a_elegir: int = min(fichas_totales-mano.contar_blancas(), 4)
 	var cartas_elegidas: Array[int] = []
@@ -263,23 +262,78 @@ func angel_guarda_check() -> bool:
 	else: 
 		return false
 
-func guindilla_en_el_culo() -> void:
+func guindilla_en_el_culo_mi() -> void:
 	$ContadorTiempoTurno.reducir_a_mitad_tiempo()
 	PopUp.popUp(" este turno tienes \n la mitad de tiempo! ",Vector2(-74.0, -300.0), escena_principal)
 
-func techo_de_cristal() -> void:
+func techo_de_cristal_mi() -> void:
 	PopUp.popUp(" este turno la jugada \n tiene que sumar 30! ",Vector2(-74.0, -300.0), escena_principal)
 	hay_techo_de_cristal = true
 
-func bomba_de_humo() -> void:
+func bomba_de_humo_mi() -> void:
 	PopUp.popUp(" te han lanzado una \n bomba de humo! ",Vector2(-74.0, -300.0), escena_principal)
 	niebla.empezar_niebla()
 	await get_tree().create_timer(3.5).timeout
 	tablero.ocultar_numeros()
 
-func mas_cuatro() -> void:
+func mas_cuatro_mi() -> void:
 	PopUp.popUp(" otro jugador te ha hecho \n robar 4 cartas! ",Vector2(-74.0, -300.0), escena_principal)
 	# hacer cosas
+
+func bola_de_cristal_mi()->void:
+	var fichas: Array[Ficha] = get_fichas_mano_no_blancas()
+	var poderes: Array[Poder.PODER] = [poder1.get_poder(),poder2.get_poder(),poder3.get_poder()]
+	# enviar a rival
+
+func trueque1_mi()->void:
+	var mis_fichas: Array[Ficha] = get_fichas_mano_no_blancas()
+	var fichas_a_tomar: int = min(mis_fichas.size(),3)
+	var indice1 = -1
+	var indice2 = -1
+	var indice3 = -1
+	
+	match(fichas_a_tomar):
+		1:
+			indice1 = randi_range(0, mis_fichas.size()-1)
+		2:
+			while((indice1 == indice2) or (indice1 == -1 or indice2 == -1)):
+				indice1 = randi_range(0, mis_fichas.size()-1)
+				indice2 = randi_range(0, mis_fichas.size()-1)
+		3:
+			while(indice1 == indice2 or indice2 == indice3 or indice3 == indice1 or (indice1 == -1 or indice2 == -1 or indice3 == -1)):
+				indice1 = randi_range(0, mis_fichas.size()-1)
+				indice2 = randi_range(0, mis_fichas.size()-1)
+				indice3 = randi_range(0, mis_fichas.size()-1)
+	
+	var fichas_devolver: Array[Ficha] = []
+	
+	fichas_devolver.append(get_fichas_mano_no_blancas()[indice1])
+	if indice2 != -1:
+		fichas_devolver.append(get_fichas_mano_no_blancas()[indice2])
+	if indice3 != -1:
+		fichas_devolver.append(get_fichas_mano_no_blancas()[indice3])
+	# enviar fichas_devolver
+
+func trueque2_mi()->void:
+	# get ficha suya que me quedo (siguiente linea de placeholder)
+	var ficha_suya: Ficha = Ficha.ficha(Ficha.COLOR.ROJO, 10, Ficha.ESPECIAL.ARCOIRIS)
+	# get ficha mia que se va (siguiente linea de placeholder)
+	var ficha_nuestra_se_va: Ficha = get_fichas_mano()[0]
+	
+	manager_fichas.conectar_ficha(ficha_suya)
+	mano.insertar_ficha(ficha_suya, ficha_nuestra_se_va)
+
+func guante_blanco_mi()->void:
+	# get poder que se va
+	var poder_robado: Poder.PODER = Poder.PODER.ANGEL_GUARDA
+	PopUp.popUp(" te han robado \n un " + Poder.poder_a_string(poder_robado) + "! " ,Vector2(-74.0, -300.0), escena_principal)
+	if poder1.get_poder() == poder_robado:
+		poder1.cambiar_poder(Poder.PODER.NINGUNO)
+	elif poder2.get_poder() == poder_robado:
+		poder2.cambiar_poder(Poder.PODER.NINGUNO)
+	elif poder3.get_poder() == poder_robado:
+		poder3.cambiar_poder(Poder.PODER.NINGUNO)
+
 #endregion
 
 func quitar_bomba_de_humo() -> void:
@@ -290,15 +344,26 @@ func quitar_bomba_de_humo() -> void:
 
 #region Aplicar a los demas
 func usar_bola_de_cristal(_adversario: String) -> void:
-	# get_cartas_adversario
-	await bola_de_cristal.mostrar_bola([Ficha.ficha(Ficha.COLOR.ROJO,10,Ficha.ESPECIAL.NO), Ficha.ficha(Ficha.COLOR.NEGRO,3,Ficha.ESPECIAL.DORADO), Ficha.ficha(Ficha.COLOR.AMARILLO,8,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.NEGRO,4,Ficha.ESPECIAL.NO)],[Poder.PODER.NINGUNO,Poder.PODER.ANGEL_GUARDA,Poder.PODER.TOQUE_MIDAS])
-	await  get_tree().create_timer(6.0).timeout
+	# get_cartas_adversario (siguientes dos lineas de placeholder)
+	var cartas_adversario: Array[Ficha] = [Ficha.ficha(Ficha.COLOR.ROJO,10,Ficha.ESPECIAL.NO), Ficha.ficha(Ficha.COLOR.NEGRO,3,Ficha.ESPECIAL.DORADO), Ficha.ficha(Ficha.COLOR.AMARILLO,8,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.NEGRO,4,Ficha.ESPECIAL.NO)]
+	var poderes_adversario: Array[Poder.PODER] = [Poder.PODER.NINGUNO,Poder.PODER.ANGEL_GUARDA,Poder.PODER.TOQUE_MIDAS] 
+	
+	await bola_de_cristal.mostrar_bola(cartas_adversario, poderes_adversario)
+	await  get_tree().create_timer(7.0).timeout
 	bola_de_cristal.esconder_bola()
 
-## Usada para techo de crstal, bomba de humo y reducir tiempo
-func lanzar_maldicion(_adversario: String, _maldicion: Poder.PODER) -> void:
-	#hacer cosas
-	pass
+## Usada para techo de cristal, bomba de humo, reducir tiempo y mas 4
+func lanzar_maldicion(adversario: String, maldicion: Poder.PODER) -> void:
+	match(maldicion):
+		# enviar mensaje a los demas
+		Poder.PODER.TECHO_CRISTAL:
+			pass
+		Poder.PODER.BOMBA_HUMO:
+			pass
+		Poder.PODER.REDUCIR_TIEMPO:
+			pass
+		Poder.PODER.MAS_CUATRO:
+			pass
 
 func usar_guante_blanco(_adversario: String) -> Poder.PODER:
 	print(_adversario)
@@ -330,6 +395,13 @@ func usar_trueque2(_adversario: String, _ficha_propia: Ficha, _ficha_rival: Fich
 
 func get_fichas_mano() -> Array[Ficha]:
 	return mano.fichas_en_mano
+
+func get_fichas_mano_no_blancas() -> Array[Ficha]:
+	var fichas: Array[Ficha] = []
+	for ficha: Ficha in get_fichas_mano():
+		if not ficha.en_blanco:
+			fichas.append(ficha)
+	return fichas
 
 func hacer_mano_visible()->void:
 	mano.visible=true

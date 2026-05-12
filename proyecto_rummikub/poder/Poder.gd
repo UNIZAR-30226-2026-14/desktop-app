@@ -76,7 +76,7 @@ func _ready() -> void:
 	area_poder.mouse_entered.connect(_actualizar_estado_cursor_entra)
 	area_poder.mouse_exited.connect(_actualizar_estado_cursor_sale)
 	manager_fichas.conectar_poder(self)
-	cambiar_poder(Poder.PODER.NINGUNO)
+	cambiar_poder(Poder.PODER.MAS_CUATRO)
 
 func _actualizar_estado_cursor_entra() -> void:
 	cursor_sobre_poder.emit(self)
@@ -98,7 +98,7 @@ func ejecutar_poder() -> void:
 			
 		PODER.BOLA_CRISTAL:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			if adversaro_elegido != null:
+			if adversaro_elegido != "":
 				manager_juego.usar_bola_de_cristal(adversaro_elegido)
 				cambiar_poder(PODER.NINGUNO)
 			
@@ -108,7 +108,7 @@ func ejecutar_poder() -> void:
 			
 		PODER.TRUEQUE:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			if adversaro_elegido != null:
+			if adversaro_elegido != "":
 				var fichas_adversario: Array[Ficha] = manager_juego.usar_trueque1(adversaro_elegido)
 				var intercambio: Array[Ficha] = await selector_ficha.sacar_selector(fichas_adversario)
 				if (intercambio[0]!=null) and (intercambio[1] != null):
@@ -117,26 +117,31 @@ func ejecutar_poder() -> void:
 			
 		PODER.BOMBA_HUMO:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			if adversaro_elegido != null:
+			if adversaro_elegido != "":
 				manager_juego.lanzar_maldicion(adversaro_elegido, PODER.BOMBA_HUMO)
 				cambiar_poder(PODER.NINGUNO)
 			
 		PODER.REDUCIR_TIEMPO:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			if adversaro_elegido != null:
+			if adversaro_elegido != "":
 				manager_juego.lanzar_maldicion(adversaro_elegido, PODER.REDUCIR_TIEMPO)
 				cambiar_poder(PODER.NINGUNO)
 			
 		PODER.GUANTE_BLANCO:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			if adversaro_elegido != null:
+			if adversaro_elegido != "":
 				var poder_robado: PODER = manager_juego.usar_guante_blanco(adversaro_elegido)
 				cambiar_poder(poder_robado)
-		
+			
 		PODER.TECHO_CRISTAL:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
-			if adversaro_elegido != null:
+			if adversaro_elegido != "":
 				manager_juego.lanzar_maldicion(adversaro_elegido, PODER.TECHO_CRISTAL)
+				cambiar_poder(PODER.NINGUNO)
+		PODER.MAS_CUATRO:
+			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
+			if adversaro_elegido != "":
+				manager_juego.lanzar_maldicion(adversaro_elegido, PODER.MAS_CUATRO)
 				cambiar_poder(PODER.NINGUNO)
 
 static func poder_a_string(poder_in: PODER) -> String:

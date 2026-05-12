@@ -6,7 +6,7 @@ signal termina_turno
 
 enum MODO {MI_TURNO, ESPERANDO_TURNO}
 
-const TIEMPO_TURNO: int = 10
+const TIEMPO_TURNO: int = 60
 var tiempo: int
 var mitad_de_tiempo: bool = false
 
