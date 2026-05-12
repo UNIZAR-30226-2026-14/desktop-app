@@ -1,7 +1,7 @@
 extends Node
 
 #region constantes
-static var base_url: String = "https://localhost:8443"
+static var base_url: String = "https://rummiplus.onrender.com"
 static var jugadores: String = "/api/jugadores"
 static var perfil: String = "/perfil"
 static var partidas: String = "/api/partidas"
