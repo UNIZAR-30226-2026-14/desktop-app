@@ -13,8 +13,12 @@ var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 var grupos: Array[Grupo_fichas] = []
 
 func tablero_valido(abierto: bool) -> bool:
+	var suma: int = 0
 	for grupo in grupos:
+		suma += grupo.suma_grupo()
 		if !grupo.grupo_correcto(abierto): return false
+	if not abierto and suma < 30:
+		return false
 	return true
 
 func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:

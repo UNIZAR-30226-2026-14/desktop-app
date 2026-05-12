@@ -168,16 +168,10 @@ func grupo_correcto(abierto: bool) -> bool:
 		
 	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
 	if esEscalera:
-		if abierto: return true
-		else:
-			var baseEscalera = esperadoEscalera - fichas.size()
-			var numTotal = range(baseEscalera, esperadoEscalera).reduce(func(accum,number): return accum + number, 0)
-			return numTotal >= 30
+		return true
 	if esMismoNumero:
-		if abierto: return true
-		else:
-			var numTotal = esperadoMismo * fichas.size()
-			return numTotal >= 30
+		return true
+
 	
 	return false
 
@@ -215,3 +209,9 @@ func chocando_con_grupo() -> bool:
 		if area != $izquierda:
 			return true
 	return false
+
+func suma_grupo()->int:
+	var resultado: int = 0
+	for ficha: Ficha in fichas:
+		resultado += ficha.numero
+	return resultado

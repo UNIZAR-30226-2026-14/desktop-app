@@ -49,7 +49,7 @@ var grupos_en_tablero_antes: Array[GrupoGuardado]
 enum EVENTO{DESCUENTO, SIN_COLOR, NO_EVENTO, ROBAR_OTRA_FICHA}
 
 # la primera jugada tiene que sumar 30, esta variable cuenta si la primera jugada a ocurrido ya o no
-var abierto: bool = true
+var abierto: bool = false
 var hay_techo_de_cristal: bool = false
 var evento_ocurriendo: EVENTO = EVENTO.NO_EVENTO
 var color_prohibido: Ficha.COLOR = Ficha.COLOR.BLANCO
@@ -59,7 +59,6 @@ func _ready() -> void:
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
-	abierto = true
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(intenta_hacer_jugada)
 	devolverFichas.pressed.connect(_boton_devolver_fichas)
