@@ -1,46 +1,103 @@
 [gd_scene format=3 uid="uid://bmec450um0usm"]
 
 [ext_resource type="PackedScene" uid="uid://dlye4ixk7kw7t" path="res://proyecto_rummikub/fichaVision/FichaVision.tscn" id="1_a33on"]
-[ext_resource type="StyleBox" uid="uid://dj26cnjhiycra" path="res://style_box_panel_editar_perfil.tres" id="1_itnu1"]
 [ext_resource type="Script" uid="uid://bdiq8scp4vku2" path="res://proyecto_rummikub/poder/selectorFicha/selector_ficha.gd" id="2_4b6vk"]
+[ext_resource type="StyleBox" uid="uid://c6ehpxy8gnjm6" path="res://proyecto_rummikub/menuInicio/style_box_boton_cerrar.tres" id="3_yix1w"]
+[ext_resource type="Texture2D" uid="uid://c4l4dcynv6106" path="res://imagenes/imagenes_inicio/icono_cruz.png" id="4_sgoab"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_silre"]
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32156864, 0.6509804, 0.3882353, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+corner_detail = 20
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a33on"]
 draw_center = false
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_itnu1"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmkrm"]
 draw_center = false
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.8, 0.8, 0.3254902, 1)
+border_color = Color(0.8352941, 0.8, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_a33on"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4b6vk"]
+bg_color = Color(0.19076231, 0.19076234, 0.19076222, 1)
+border_color = Color(0.19215687, 0.19215687, 0.19215687, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 corner_detail = 20
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_a33on"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yix1w"]
+bg_color = Color(0.14044729, 0.1404475, 0.14044744, 1)
+border_color = Color(0.11489672, 0.11489683, 0.1148968, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+corner_detail = 20
 
-[node name="Panel" type="Panel" unique_id=939810293]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g1hmo"]
+resource_name = "panel"
+bg_color = Color(0.3254902, 0.22352941, 0.015686275, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f50hq"]
+texture = ExtResource("4_sgoab")
+modulate_color = Color(0.52906674, 0.5290667, 0.5290667, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mqvfo"]
+texture = ExtResource("4_sgoab")
+modulate_color = Color(0.8992584, 0.8992584, 0.8992584, 1)
+
+[node name="Panel" type="Panel" unique_id=939810293 node_paths=PackedStringArray("ficha0", "ficha1", "ficha2")]
 custom_minimum_size = Vector2(285, 152)
-offset_right = 285.0
-offset_bottom = 152.0
-theme_override_styles/panel = ExtResource("1_itnu1")
+offset_left = -142.0
+offset_top = 5.0
+offset_right = 143.0
+offset_bottom = 159.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_silre")
 script = ExtResource("2_4b6vk")
+ficha0 = NodePath("GridContainer/FichaVision")
+ficha1 = NodePath("GridContainer/FichaVision2")
+ficha2 = NodePath("GridContainer/FichaVision3")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1234646200]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -99.5
-offset_top = 4.0
-offset_right = 99.5
-offset_bottom = 44.0
+offset_left = -104.0
+offset_top = 8.0
+offset_right = 104.0
+offset_bottom = 48.0
 grow_horizontal = 2
 theme_override_font_sizes/normal_font_size = 13
-text = "elige una ficha para robar"
+text = "elige una ficha para intercambiar"
 fit_content = true
 autowrap_mode = 0
 horizontal_alignment = 1
@@ -54,9 +111,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -83.49999
-offset_top = -15.999996
+offset_top = -19.99998
 offset_right = 131.5
-offset_bottom = 80.0
+offset_bottom = 76.00003
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
@@ -72,61 +129,130 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.750011
-offset_top = -58.0
-offset_right = 23.749996
-offset_bottom = 19.499985
+offset_left = -25.750011
+offset_top = -51.750023
+offset_right = 19.249985
+offset_bottom = 13.2499695
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_a33on")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_itnu1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tmkrm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_a33on")
 toggle_mode = true
 action_mode = 0
 button_group = SubResource("ButtonGroup_a33on")
 
-[node name="FichaVision2" parent="GridContainer" unique_id=1330305233 instance=ExtResource("1_a33on")]
+[node name="FichaVision2" parent="GridContainer" unique_id=165760205 instance=ExtResource("1_a33on")]
 layout_mode = 2
 
-[node name="Button1" type="Button" parent="GridContainer/FichaVision2" unique_id=2135782683]
+[node name="Button1" type="Button" parent="GridContainer/FichaVision2" unique_id=348838717]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.750011
-offset_top = -58.0
-offset_right = 23.749996
-offset_bottom = 19.499985
+offset_left = -25.750011
+offset_top = -51.750023
+offset_right = 19.249985
+offset_bottom = 13.2499695
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_a33on")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_itnu1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tmkrm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_a33on")
 toggle_mode = true
 action_mode = 0
 button_group = SubResource("ButtonGroup_a33on")
 
-[node name="FichaVision3" parent="GridContainer" unique_id=1550636025 instance=ExtResource("1_a33on")]
+[node name="FichaVision3" parent="GridContainer" unique_id=766508146 instance=ExtResource("1_a33on")]
 layout_mode = 2
 
-[node name="Button2" type="Button" parent="GridContainer/FichaVision3" unique_id=960739275]
+[node name="Button2" type="Button" parent="GridContainer/FichaVision3" unique_id=1189229375]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -30.750011
-offset_top = -58.0
-offset_right = 23.749996
-offset_bottom = 19.499985
+offset_left = -25.750011
+offset_top = -51.750023
+offset_right = 19.249985
+offset_bottom = 13.2499695
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_a33on")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_itnu1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tmkrm")
 theme_override_styles/hover = SubResource("StyleBoxFlat_a33on")
 toggle_mode = true
 action_mode = 0
 button_group = SubResource("ButtonGroup_a33on")
+
+[node name="botonConfirmar" type="Button" parent="." unique_id=1220093380]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.5
+offset_top = -38.0
+offset_right = 32.5
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_4b6vk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4b6vk")
+theme_override_styles/hover = SubResource("StyleBoxFlat_yix1w")
+text = "ROBAR"
+
+[node name="Panel" type="Panel" parent="." unique_id=2138553513]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.48245615
+anchor_top = 2.2220001
+anchor_right = 0.48245615
+anchor_bottom = 2.2220001
+offset_left = -219.5
+offset_top = -83.18802
+offset_right = 227.5
+offset_bottom = 65.81198
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g1hmo")
+metadata/_edit_use_anchors_ = true
+
+[node name="ContenedorFichas" type="GridContainer" parent="Panel" unique_id=1797855591]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -198.5
+offset_top = -38.374985
+offset_right = 295.24994
+offset_bottom = 88.656235
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+theme_override_constants/h_separation = -13
+theme_override_constants/v_separation = -28
+
+[node name="FichaVision" parent="Panel/ContenedorFichas" unique_id=713555897 instance=ExtResource("1_a33on")]
+layout_mode = 2
+
+[node name="BotonCerrar" type="Button" parent="." unique_id=20333292]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -33.0
+offset_top = 8.0
+offset_right = -7.0
+offset_bottom = 32.0
+grow_horizontal = 0
+theme_override_styles/normal = ExtResource("3_yix1w")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_f50hq")
+theme_override_styles/hover = SubResource("StyleBoxTexture_mqvfo")

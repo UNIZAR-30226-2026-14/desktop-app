@@ -69,6 +69,9 @@ func cambiar_sprite(color_in: Ficha.COLOR, numero_in: int, especial_in: Ficha.ES
 		
 		Ficha.COLOR.BLANCO:
 			en_blanco = true
+			$auraFicha.visible = false
+			$caraJoker.visible = false
+			$fondoFicha.visible = false
 			$Numero.text = ""
 		
 		Ficha.COLOR.COMODIN:
@@ -114,6 +117,7 @@ func _ready() -> void:
 
 func resaltar_aura():
 	$auraFicha.visible = true
+
 
 func desresaltar_aura():
 	$auraFicha.visible = false

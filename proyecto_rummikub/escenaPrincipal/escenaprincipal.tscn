@@ -61,7 +61,7 @@ size = Vector2(447, 134)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g1hmo"]
 resource_name = "panel"
-bg_color = Color(0.3254902, 0.21960784, 0, 1)
+bg_color = Color(0.3254902, 0.22352941, 0.015686275, 1)
 corner_radius_top_left = 50
 corner_radius_top_right = 50
 corner_radius_bottom_right = 50
@@ -333,28 +333,34 @@ offset_right = -412.0
 offset_bottom = -257.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Poder" parent="." unique_id=1732648488 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
+[node name="Poder" parent="." unique_id=1732648488 node_paths=PackedStringArray("escena_principal", "manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario", "selector_ficha") instance=ExtResource("14_4j4ur")]
 position = Vector2(-535, 278)
+escena_principal = NodePath("..")
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 selector_adversario = NodePath("../SelectorAdversario")
+selector_ficha = NodePath("../SelectorFichaRobar")
 
-[node name="Poder2" parent="." unique_id=2033793081 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
+[node name="Poder2" parent="." unique_id=2033793081 node_paths=PackedStringArray("escena_principal", "manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario", "selector_ficha") instance=ExtResource("14_4j4ur")]
 position = Vector2(-459, 278)
+escena_principal = NodePath("..")
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 selector_adversario = NodePath("../SelectorAdversario")
+selector_ficha = NodePath("../SelectorFichaRobar")
 
-[node name="Poder3" parent="." unique_id=471364883 node_paths=PackedStringArray("manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario") instance=ExtResource("14_4j4ur")]
+[node name="Poder3" parent="." unique_id=471364883 node_paths=PackedStringArray("escena_principal", "manager_fichas", "manager_juego", "tienda_objetos", "selector_adversario", "selector_ficha") instance=ExtResource("14_4j4ur")]
 position = Vector2(-384, 278)
+escena_principal = NodePath("..")
 manager_fichas = NodePath("../managerFichas")
 manager_juego = NodePath("../managerJuego")
 tienda_objetos = NodePath("../TiendaObjetosPartida")
 selector_adversario = NodePath("../SelectorAdversario")
+selector_ficha = NodePath("../SelectorFichaRobar")
 
-[node name="TiendaObjetosPartida" parent="." unique_id=1093875184 node_paths=PackedStringArray("contador_dinero", "manager_juego") instance=ExtResource("6_4470i")]
+[node name="TiendaObjetosPartida" parent="." unique_id=1093875184 node_paths=PackedStringArray("contador_dinero", "manager_juego", "contador_tiempo") instance=ExtResource("6_4470i")]
 visible = false
 offset_left = -287.0
 offset_top = -236.0
@@ -362,6 +368,7 @@ offset_right = -25.0
 offset_bottom = -11.737793
 contador_dinero = NodePath("../panelContadorMonedas")
 manager_juego = NodePath("../managerJuego")
+contador_tiempo = NodePath("../managerJuego/ContadorTiempoTurno")
 
 [node name="PantallaFinalPartida" parent="." unique_id=1647612049 instance=ExtResource("17_a1kqi")]
 visible = false
@@ -495,11 +502,15 @@ manager_juego = NodePath("../../../managerJuego")
 tienda_objetos = NodePath("../../../TiendaObjetosPartida")
 selector_adversario = NodePath("../../../SelectorAdversario")
 
-[node name="SelectorFichaRobar" parent="." unique_id=939810293 instance=ExtResource("23_d6euy")]
-offset_left = -140.0
-offset_top = -158.0
-offset_right = 145.0
-offset_bottom = -6.0
+[node name="SelectorFichaRobar" parent="." unique_id=939810293 node_paths=PackedStringArray("manager_juego") instance=ExtResource("23_d6euy")]
+visible = false
+z_index = 1
+z_as_relative = false
+offset_left = -141.0
+offset_top = -88.0
+offset_right = 144.0
+offset_bottom = 64.0
+manager_juego = NodePath("../managerJuego")
 
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]

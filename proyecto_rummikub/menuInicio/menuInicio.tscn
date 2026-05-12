@@ -607,18 +607,15 @@ bg_color = Color(0, 0, 0, 0.59607846)
 
 [node name="MenuInicio" type="Control" unique_id=1337258946 node_paths=PackedStringArray("dinero", "botonAmigos", "botonCerrarPestanaAmigos")]
 layout_mode = 3
-anchor_top = 0.68200004
-anchor_right = 0.067
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -441.93604
-offset_right = 1074.816
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_87g63")
 dinero = NodePath("TiendaYDinero/Dinero")
 botonAmigos = NodePath("BarraSuperior/PanelIconoBotonAmigos/BotonSacarAmigos")
 botonCerrarPestanaAmigos = NodePath("MenuAmigos/BotonCerrarPestanaAmigos")
-metadata/_edit_use_anchors_ = true
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1176407704]
 z_index = -2
@@ -1194,7 +1191,6 @@ text = "Invitaciones (1)
 metadata/_edit_use_anchors_ = true
 
 [node name="MenuAnadirAmigo" type="Panel" parent="MenuAmigos" unique_id=152851405]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.0070175445
@@ -2363,6 +2359,21 @@ vertical_scroll_mode = 3
 
 [node name="contenedorPartidas" type="VBoxContainer" parent="FondoLobbyReanudar/PanelReanudarPartida/PanelSeleccionPartida/ScrollContainer" unique_id=671982454]
 layout_mode = 2
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=72947177]
+anchor_mode = 0
+limit_left = 0
+limit_top = 0
+limit_right = 1153
+limit_bottom = 648
+limit_smoothed = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.0
+drag_top_margin = 0.0
+drag_right_margin = 0.0
+drag_bottom_margin = 0.0
+editor_draw_limits = true
 
 [connection signal="mouse_entered" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_entered"]
 [connection signal="mouse_exited" from="Fondo/ModoClasico" to="." method="_on_modo_clasico_mouse_exited"]

@@ -34,8 +34,8 @@ scale = Vector2(0.10496957, 0.104547285)
 texture = ExtResource("3_hfsqi")
 
 [node name="caraJoker" type="Sprite2D" parent="." unique_id=1899626798]
-position = Vector2(31.25, 26.5)
-scale = Vector2(0.05666666, 0.042407658)
+position = Vector2(31.25, 28.5)
+scale = Vector2(0.05666666, 0.053351574)
 texture = ExtResource("2_6sorq")
 
 [node name="Numero" type="RichTextLabel" parent="." unique_id=1103569229]

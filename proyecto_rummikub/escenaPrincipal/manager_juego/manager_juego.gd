@@ -13,7 +13,7 @@ class_name ManagerJuego extends Node2D
 @export var panel_contador_monedas: PanelContadorMonedas
 
 @export var tienda: TiendaFueraPartida
-@export var poder1: Poder
+@export var poder1: Poder 
 @export var poder2: Poder
 @export var poder3: Poder
 
@@ -314,13 +314,27 @@ func usar_guante_blanco(_adversario: String) -> Poder.PODER:
 
 # esta funcion devuelve un array con 3 fichas de las cuales el jugador eligira una
 # sera entonces cuando se llame a usar_trueque2
+# si el adversario tiene menos de 3 fichas rellenar con nulls
 func usar_trueque1(_adversaro: String) -> Array[Ficha]:
 	# get_fichas de adversario
 	# pongo unas fichas de ejemplo:
-	return [Ficha.ficha(Ficha.COLOR.NEGRO,2), Ficha.ficha(Ficha.COLOR.ROJO,2,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.AZUL,2,Ficha.ESPECIAL.DORADO)]
+	mano.visible=false
+	return [Ficha.ficha(Ficha.COLOR.NEGRO,2), Ficha.ficha(Ficha.COLOR.ROJO,3,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.AZUL,4,Ficha.ESPECIAL.DORADO)]
 
 # esta funcion intercambia una ficha propia con una ficha del rival
 func usar_trueque2(_adversario: String, _ficha_propia: Ficha, _ficha_rival: Ficha) -> void:
+	manager_fichas.conectar_ficha(_ficha_rival)
+	mano.insertar_ficha(_ficha_rival, _ficha_propia)
+	# set_ficha al adversario
 	pass
 
 #endregion
+
+func get_fichas_mano() -> Array[Ficha]:
+	return mano.fichas_en_mano
+
+func hacer_mano_visible()->void:
+	mano.visible=true
+
+func get_poderes_comprar() -> Array[Poder.PODER]:
+	return poderes_disponibles_a_compra

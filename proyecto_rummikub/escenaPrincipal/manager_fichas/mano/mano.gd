@@ -37,15 +37,8 @@ func _ready() -> void:
 		anadir_ficha(Ficha.ficha(Ficha.COLOR.BLANCO, 0))
 	
 	#temporal para probar cosas
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 1, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 1, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 1, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 2, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 3, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 4, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 5, Ficha.ESPECIAL.NO))
-	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 1, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.COMODIN, 1, Ficha.ESPECIAL.NO))
 	actualizar_posicion_mano()
 

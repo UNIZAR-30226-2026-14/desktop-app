@@ -1,10 +1,12 @@
-extends Node2D
+class_name ContadorTiempo extends Node2D
 
 @export var manager_juego: Node2D
 
+signal termina_turno
+
 enum MODO {MI_TURNO, ESPERANDO_TURNO}
 
-const TIEMPO_TURNO: int = 600
+const TIEMPO_TURNO: int = 10
 var tiempo: int
 var mitad_de_tiempo: bool = false
 
@@ -22,6 +24,7 @@ func _proceso_contador() -> void:
 			MODO.MI_TURNO:
 				$relojArena.rotation = 0
 				if tiempo == 0:
+					termina_turno.emit()
 					manager_juego.terminar_turno()
 				await get_tree().create_timer(1.0).timeout
 				tiempo -= 1
@@ -32,7 +35,6 @@ func _proceso_contador() -> void:
 				if $relojArena.rotation == 360:
 					$relojArena.rotation = 0
 				$relojArena.rotation += 0.05
-
 
 func _empieza_turno() -> void:
 	$relojArena.rotation = 0

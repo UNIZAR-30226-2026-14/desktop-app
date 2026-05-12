@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://dpow7hvnxtn70"]
+
+[ext_resource type="Script" uid="uid://dwsqcmldf2eqg" path="res://proyecto_rummikub/poder/selectorFicha/boton_selector/boton_selector.gd" id="1_82djp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_82djp"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tmkrm"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8352941, 0.8, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_82djp"]
+resource_local_to_scene = false
+
+[node name="Control" type="Control" unique_id=1359366041 node_paths=PackedStringArray("boton")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_82djp")
+boton = NodePath("Button")
+
+[node name="Button" type="Button" parent="." unique_id=815740256]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_82djp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tmkrm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_82djp")
+toggle_mode = true
+action_mode = 0
+button_group = SubResource("ButtonGroup_82djp")

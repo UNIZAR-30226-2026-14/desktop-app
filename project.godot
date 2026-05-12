@@ -23,7 +23,7 @@ ConectorRed="*uid://cvw1u0y51ule6"
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="ignore"
 
 [editor]
 
