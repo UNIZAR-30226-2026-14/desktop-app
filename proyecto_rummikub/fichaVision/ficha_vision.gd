@@ -42,6 +42,7 @@ func cambiar_sprite(color_in: Ficha.COLOR, numero_in: int, especial_in: Ficha.ES
 	$Numero.text = str(numero_in) + "\n"
 	$auraFicha.visible = false
 	$caraJoker.visible = false
+	$fondoFicha.modulate = globales.get_color_ficha()
 	match color_in:
 		Ficha.COLOR.ROJO:
 			$Numero.text += "♡"

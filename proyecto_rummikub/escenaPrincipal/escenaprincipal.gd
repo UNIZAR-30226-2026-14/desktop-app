@@ -5,6 +5,7 @@ func _ready() -> void:
 	$Fondo.modulate = globales.skin_tablero_equipada
 	$Fondo.visible = true
 	$PantallaPartidaPausada.visible = false
+	
 
 func completarJugada() -> void:
 	pass

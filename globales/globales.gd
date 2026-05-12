@@ -56,3 +56,6 @@ const LISTA_AVATARES: Array[Texture2D] = [
 	preload("res://imagenes/avatares_posibles/Gonzalo.png"),
 	preload("res://imagenes/avatares_posibles/Miguel.png"),
 ]
+
+func get_color_ficha() -> Color:
+	return Color(0.408, 0.408, 0.408, 1.0)

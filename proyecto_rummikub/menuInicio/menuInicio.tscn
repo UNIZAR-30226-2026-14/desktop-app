@@ -1052,6 +1052,7 @@ metadata/_edit_use_anchors_ = true
 script = ExtResource("3_87g63")
 
 [node name="MenuAmigos" type="Panel" parent="." unique_id=388604241 node_paths=PackedStringArray("botonAmigos", "botonCerrarPestanaAmigos")]
+visible = false
 z_index = 1
 layout_mode = 1
 anchors_preset = 11
