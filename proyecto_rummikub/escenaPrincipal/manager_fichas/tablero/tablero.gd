@@ -2,7 +2,7 @@ extends Node2D
 
 @export var manager_fichas: Node2D
 @export var colision_mano: CollisionShape2D
-@export var manager_juego: Node2D
+@export var manager_juego: ManagerJuego
 #Responsabilidad: Guardar estado (grupos de fichas puestos en mesa) al principio de turno
 #					Durante el turno, lleva cuenta de qué fichas nuevas se colocan (para permitir al
 #					manager devolverlas a la mano y de los grupos de fichas actualizados.
@@ -89,6 +89,8 @@ func insertar_tablero(misGrupos: Array[Grupo_fichas]):
 		anadir_grupo_fichas(grupo)
 
 func insertar_grupos_fichas(grupos_insertar: Array[Grupo_fichas]) -> void:
+	if grupos_insertar.size() > 0:
+		manager_juego.abierto = true
 	var canvas_transform = get_viewport().get_canvas_transform()
 	var esquina_superior_izquierda: Vector2 = -canvas_transform.origin 
 	var esquina_superior_derecha:   Vector2 = Vector2(-esquina_superior_izquierda.x, esquina_superior_izquierda.y)

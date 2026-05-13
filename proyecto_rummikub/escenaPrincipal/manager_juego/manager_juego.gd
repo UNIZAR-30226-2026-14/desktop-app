@@ -65,15 +65,12 @@ func _ready() -> void:
 	miTurno.pressed.connect(iniciar_turno)
 
 func intenta_hacer_jugada() -> bool:
-	if tablero.tablero_valido(abierto and (not hay_techo_de_cristal)):
-		print("primera cosa true")
-	if not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido)):
-		print("segunda cosa true")
 	
 	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and (not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
 		tablero.fijar_tablero()
 		guardar_estado()
 		terminar_turno()
+		abierto = true
 		return true
 	else:
 		if tablero.tablero_valido(true):
@@ -105,10 +102,9 @@ func iniciar_turno() -> void:
 	
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
-	#get_evento
-	if a == 1:
-		trueque2_mi()
-	a += 1
+	
+	#aplicar evento o poder de rival
+	
 	empieza_turno.emit()
 
 func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR.BLANCO) ->void:
