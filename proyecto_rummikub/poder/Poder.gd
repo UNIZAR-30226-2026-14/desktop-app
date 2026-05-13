@@ -76,7 +76,7 @@ func _ready() -> void:
 	area_poder.mouse_entered.connect(_actualizar_estado_cursor_entra)
 	area_poder.mouse_exited.connect(_actualizar_estado_cursor_sale)
 	manager_fichas.conectar_poder(self)
-	cambiar_poder(Poder.PODER.TRUEQUE)
+	cambiar_poder(Poder.PODER.NINGUNO)
 
 func _actualizar_estado_cursor_entra() -> void:
 	cursor_sobre_poder.emit(self)

@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://bmec450um0usm" path="res://proyecto_rummikub/poder/selectorFicha/selectorFicha.tscn" id="23_d6euy"]
 [ext_resource type="Texture2D" uid="uid://cioex7qh805iy" path="res://imagenes/imagenes_efectos/bola_de_cristal.png" id="23_tw2xd"]
 [ext_resource type="Script" uid="uid://dky3lcerwn4a" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
+[ext_resource type="PackedScene" uid="uid://dtc8dx8rb8nrm" path="res://proyecto_rummikub/escenaPrincipal/iconoRival/iconoRival.tscn" id="24_xqkyq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw2xd"]
 bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
@@ -511,6 +512,24 @@ offset_top = -88.0
 offset_right = 144.0
 offset_bottom = 64.0
 manager_juego = NodePath("../managerJuego")
+
+[node name="IconoRival3" parent="." unique_id=405217994 instance=ExtResource("24_xqkyq")]
+offset_left = -568.0
+offset_top = -48.0
+offset_right = -568.0
+offset_bottom = -48.0
+
+[node name="IconoRival2" parent="." unique_id=1382255193 instance=ExtResource("24_xqkyq")]
+offset_left = -567.5
+offset_top = -96.0
+offset_right = -567.5
+offset_bottom = -96.0
+
+[node name="IconoRival" parent="." unique_id=803270402 instance=ExtResource("24_xqkyq")]
+offset_left = -567.5
+offset_top = -146.0
+offset_right = -567.5
+offset_bottom = -146.0
 
 [connection signal="mouse_entered" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_entered"]
 [connection signal="mouse_exited" from="panelContadorMonedas" to="managerFichas" method="_on_panel_contador_monedas_mouse_exited"]

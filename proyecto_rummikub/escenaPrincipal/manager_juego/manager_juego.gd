@@ -93,7 +93,6 @@ func terminar_turno() -> void:
 		quitar_bomba_de_humo()
 	reiniciar_eventos()
 
-static var a:int = 0
 
 func iniciar_turno() -> void:
 	guardar_estado()
