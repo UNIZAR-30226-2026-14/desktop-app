@@ -25,13 +25,14 @@ func proceso_contador() -> void:
 				$relojArena.rotation = 0
 				if tiempo == 0:
 					termina_turno.emit()
-					manager_juego.terminar_turno()
+					manager_juego.robar_carta()
 				await get_tree().create_timer(1.0).timeout
 				tiempo -= 1
 				$contadorTiempo.text = str(tiempo)
 			MODO.ESPERANDO_TURNO:
 				$contadorTiempo.text = ""
-				await get_tree().physics_frame
+				if is_inside_tree():
+					await get_tree().physics_frame
 				if $relojArena.rotation == 360:
 					$relojArena.rotation = 0
 				$relojArena.rotation += 0.05

@@ -169,7 +169,7 @@ func grupo_correcto(abierto: bool) -> bool:
 	
 	var esMismoNumero: bool = fichas.size() <= 4 # -1 porque el comodin no es un color distinto, sino q puede ser cualquier color
 	var setColores: Array[Ficha.COLOR] = []
-	var esperadoMismo: int = -1
+	
 	for ficha in fichas:
 		if !abierto and ficha.estado != globales.ESTADO_FICHA.TABLERO_NO_FIJADA: return false #ha usado cartas de la mesa para abrir
 		if esperado_escalera == -1: #no se ha encontrado nungún no comodín
@@ -184,10 +184,10 @@ func grupo_correcto(abierto: bool) -> bool:
 				es_escalera = (ficha.numero == esperado_escalera and ficha.color == color_escalera) or ficha.color == Ficha.COLOR.COMODIN
 				esperado_escalera += 1
 			if esMismoNumero:
-				esMismoNumero = (ficha.numero == esperadoMismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
+				esMismoNumero = (ficha.numero == esperado_mismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
 				setColores.append(ficha.color)
 			if !es_escalera and !esMismoNumero: return false
-	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
+	if esperado_mismo == -1 and esperado_mismo == -1: return true # todo comodines
 	if es_escalera:
 		return true
 	if esMismoNumero:
@@ -232,7 +232,10 @@ func chocando_con_grupo() -> bool:
 func suma_grupo()->int:
 	var resultado: int = 0
 	for ficha: Ficha in fichas:
-		resultado += ficha.numero
+		if ficha.color == Ficha.COLOR.COMODIN:
+			resultado += 13
+		else:
+			resultado += ficha.numero
 	return resultado
 
 func fijado() -> bool:

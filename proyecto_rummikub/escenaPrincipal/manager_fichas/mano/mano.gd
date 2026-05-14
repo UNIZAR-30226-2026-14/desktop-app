@@ -243,8 +243,9 @@ func insertar_mano(nueva_mano :Array[Ficha]) -> void:
 			self.remove_child(ficha)
 	
 	for ficha in nueva_mano:
-		devolver_ficha(ficha)
-		manager_fichas.conectar_ficha(ficha)
+		if(not ficha.en_blanco):
+			devolver_ficha(ficha)
+			manager_fichas.conectar_ficha(ficha)
 
 func vacia()-> bool:
 	return fichas_en_mano.all(func(ficha)->bool:

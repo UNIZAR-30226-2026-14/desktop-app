@@ -1,5 +1,5 @@
 class_name ManagerJuego extends Node2D
-
+#region vars
 @export var robarCarta: Button
 @export var pasarTurno: Button
 @export var devolverFichas: Button
@@ -28,7 +28,7 @@ var partida_terminada = false
 signal empieza_turno
 signal termina_turno
 
-class GrupoGuardado:
+class GrupoGuardado extends Node:
 	var grupo: Array[Ficha]
 	var posicion: Vector2
 	
@@ -38,6 +38,7 @@ class GrupoGuardado:
 	
 	func creaGrupo()-> Grupo_fichas:
 		var res = Grupo_fichas.Grupo_fichas(grupo)
+		assert(grupo.all(func(fich):return fich != null))
 		res.position = posicion
 		return res
 
@@ -55,6 +56,7 @@ var abierto: bool = false
 var hay_techo_de_cristal: bool = false
 var evento_ocurriendo: EVENTO = EVENTO.NO_EVENTO
 var color_prohibido: Ficha.COLOR = Ficha.COLOR.BLANCO
+#endregion
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	boton_volver_partida_pausada.pressed.connect(_volver_menu_inicio)
@@ -64,23 +66,26 @@ func _ready() -> void:
 	adversarios = await ConectorRed.get_adversarios()
 	#botones
 	robarCarta.pressed.connect(robar_carta)
-	pasarTurno.pressed.connect(hacer_jugada)
+	pasarTurno.pressed.connect(intenta_hacer_jugada)
 	devolverFichas.pressed.connect(boton_devolver_fichas)
 	@warning_ignore("shadowed_variable")
 	var mano_inicial:Array[Ficha] = await ConectorRed.inicializar_partida(manager_fichas.crear_ficha)
 	mano.insertar_mano(mano_inicial)
-	#miTurno.pressed.connect(iniciar_turno)
 	guardar_estado()
-	#$ContadorTiempoTurno.proceso_contador()
+	$ContadorTiempoTurno.proceso_contador()
 	terminar_turno()
 
 #region gestion turnos
 func intenta_hacer_jugada() -> bool:
-	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and (not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
-		tablero.fijar_tablero()
-		guardar_estado()
-		terminar_turno()
-		abierto = true
+	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and \
+			(not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
+		
+		if(await ConectorRed.hacer_jugada(tablero.grupos)):
+			abierto = true
+			guardar_estado()
+			terminar_turno()
+		else:
+			print("TABLERO NO VALIDO al subirlo")
 		return true
 	else:
 		if tablero.combinando_fijadas_y_no_fijadas() and (not abierto):
@@ -97,36 +102,27 @@ func intenta_hacer_jugada() -> bool:
 
 func terminar_turno() -> void:
 	_devolver_fichas()
+	guardar_estado()
+	termina_turno.emit()
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 	robarCarta.disabled = true
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
 	hay_techo_de_cristal = false
-	termina_turno.emit()
 	if niebla.hay_humo():
 		quitar_bomba_de_humo()
 	reiniciar_eventos()
 	await ConectorRed.espera_a_turno(llega_turno, terminar_partida,func():$"../PantallaPartidaPausada".visible = true)
 	if not partida_terminada: iniciar_turno()
 
-static var a: int = 0
 
 func iniciar_turno() -> void:
 	guardar_estado()
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
 	robarCarta.disabled = false
 	devolverFichas.disabled = true
-	pasarTurno.disabled = true
-	
-	var fichas: Array[Ficha] = [Ficha.ficha(Ficha.COLOR.NEGRO,10), Ficha.ficha(Ficha.COLOR.NEGRO,11), Ficha.ficha(Ficha.COLOR.NEGRO,12) ]
-	var grupo: Array[Grupo_fichas] = [Grupo_fichas.Grupo_fichas(fichas)]
-	tablero.insertar_grupos_fichas(grupo)
-	
+	pasarTurno.disabled = true	
 	#aplicar evento o poder de rival
-	if a == 1:
-		techo_de_cristal_mi()
-	
-	a += 1
 	empieza_turno.emit()
 
 func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR.BLANCO) ->void:
@@ -153,12 +149,6 @@ func reiniciar_eventos() -> void:
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
 	var viejo_tablero: Array = tablero.grupos
-	print("nuevo:")
-	print(nuevo_tablero)
-	print("viejo")
-	viejo_tablero.map(func(grupo:Grupo_fichas): 
-		print(grupo.fichas.reduce(func(accum, ficha:Ficha):
-			return accum + str(ficha.color) + str(ficha.numero)+",","")))	
 	var nuevos = [] ; var eliminados = []
 	nuevo_tablero.sort_custom(
 		func(grupo_a,grupo_b)-> bool: 
@@ -206,7 +196,6 @@ func terminar_partida(id_ganador, puntuacion):
 			return
 	$"../PantallaFinalPartida".sacar_pantalla_victoria(globales.avatar,ConectorRed.username,puntuacion)
 	partida_terminada = true
-
 #endregion
 
 #region estados
@@ -230,8 +219,9 @@ func poniendo_fichas() -> void:
 
 #region volver estado anterior
 func guardar_estado() -> void:
-	print("GUARDANDO FICHAS")
 	fichas_en_mano_antes = []
+	tablero.fijar_tablero()
+	print("GUARDANDO FICHAS")
 	var ficha_nueva: Ficha
 	for ficha: Ficha in mano.fichas_en_mano:
 		ficha_nueva = Ficha.ficha(ficha.color,ficha.numero, ficha.especial)
@@ -242,14 +232,15 @@ func guardar_estado() -> void:
 		if !ficha.en_blanco:
 			fichas_no_blancas += 1
 	print("Guardo "+ str(fichas_no_blancas))
-
+	for grupo in tablero.grupos:
+		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
+	
 
 func boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
 	robarCarta.disabled = false
-	
 	_devolver_fichas()
 
 func _devolver_fichas() -> void:
@@ -264,22 +255,11 @@ func _devolver_fichas() -> void:
 #endregion
 
 #region avanza partida
-func hacer_jugada():
-	var valido:bool = tablero.tablero_valido(abierto)
-	if valido: 
-		valido = await ConectorRed.hacer_jugada(tablero.grupos)
-		if(valido):
-			abierto = true
-			guardar_estado()
-			terminar_turno()
-		else:
-			print("TABLERO NO VALIDO al subirlo")
-	else:
-		print("TABLERO NO VALIDO local")
-
 func robar_carta() -> void:
 	var fich: Ficha
+	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 	robarCarta.disabled = true
+	$ContadorTiempoTurno._termina_turno()
 	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
 	mano.devolver_ficha(fich)
 	fich.z_index = 0

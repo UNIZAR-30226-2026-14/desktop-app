@@ -154,6 +154,7 @@ func crear_partida_privada(es_arcade: bool):
 	id_partida = await $red.crear_partida_publico(es_arcade)
 	await $red.unirse_a_partida(id_partida)
 	return id_partida
+	
 func esperar_comienzo_privada(status_busqueda:Label, iniciar: Button):
 	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
 

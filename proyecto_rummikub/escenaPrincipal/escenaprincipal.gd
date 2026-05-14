@@ -7,10 +7,10 @@ func _ready() -> void:
 	$Fondo.visible = true
 	$PantallaPartidaPausada.visible = false
 	# dian tienes que llenar estas listas tienen valores placeholder:
-	var iconos_rivales: Array[Texture2D] = [preload("res://imagenes/avatares_posibles/Dian.png"), preload("res://imagenes/avatares_posibles/Miguel.png"), preload("res://imagenes/avatares_posibles/Dani.png")] 
-	var nombres_rivales: Array[String] = ["Dian", "Miguel", "Daniel"]
+	#var iconos_rivales: Array[Texture2D] = [preload("res://imagenes/avatares_posibles/Dian.png"), preload("res://imagenes/avatares_posibles/Miguel.png"), preload("res://imagenes/avatares_posibles/Dani.png")] 
+	#var nombres_rivales: Array[String] = ["Dian", "Miguel", "Daniel"]
 	
-	inicializar_rivales(iconos_rivales, nombres_rivales)
+	#inicializar_rivales(iconos_rivales, nombres_rivales)
 	
 	if not es_arcade:
 		activar_modo_clasico()
@@ -27,3 +27,4 @@ func activar_modo_clasico() -> void:
 	$Poder.visible  = false
 	$Poder2.visible = false
 	$Poder3.visible = false
+	$panelContadorMonedas.visible = false

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dmruc2iiqflai"]
 
 [ext_resource type="Script" uid="uid://db0nhy3a6a6xd" path="res://proyecto_rummikub/menuInicio/menu_inicio.gd" id="1_87g63"]
-[ext_resource type="Script" uid="uid://bbt313hn2cygs" path="res://proyecto_rummikub/menuInicio/gestor_pestana_amigos.gd" id="3_87g63"]
 [ext_resource type="Texture2D" uid="uid://ncfj1rlmqw72" path="res://imagenes/imagenes_iniciar_sesion/reanudar_partida.png" id="4_6ubox"]
 [ext_resource type="Texture2D" uid="uid://wolbkk2c8vtj" path="res://imagenes/imagenes_inicio/normal.svg" id="4_m1nat"]
 [ext_resource type="Texture2D" uid="uid://j1nd7xsbajo1" path="res://imagenes/imagenes_inicio/turbolocochon.svg" id="5_1k43s"]

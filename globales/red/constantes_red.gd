@@ -331,7 +331,7 @@ func unirse_a_partida(id: int):
 
 var cancelada: bool
 var forzar_reanudar:bool
-func forzar_inicio_partida_set_true():
+func reanudar_partida_set_true():
 	forzar_reanudar = true
 func cancelar_busqueda():
 	cancelada = true
@@ -345,42 +345,45 @@ func espera_partida_cancelable(id:int,iniciar:Button,cancelar:Button):
 	forzar_reanudar = false
 	cancelada = false
 	iniciar.visible = true
-	iniciar.pressed.connect(forzar_inicio_partida_set_true)
+	iniciar.pressed.connect(reanudar_partida_set_true)
 	cancelar.pressed.connect(cancelar_busqueda)
 	await _espera_a_resultado(check_iniciar_partida_calncelable,\
 		base_url+partidas+"/"+str(id))
 	creado_partida = false
 	forzar_inicio_partida = false
 	iniciar.visible = false
-	iniciar.pressed.disconnect(forzar_inicio_partida_set_true)
+	iniciar.pressed.disconnect(reanudar_partida_set_true)
 	cancelar.pressed.disconnect(cancelar_busqueda)
 	return not cancelada
 func solo_inicia(id:int):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
 	return _respuesta_buena()
-func check_iniciar_partida_publica(res): 
+	
+
+func forzar_inicio_partida_set_true():
+	forzar_inicio_partida = true
+func check_iniciar_partida(res): 
 	var texto = "Oponentes en partida: "
 	if res is Array: texto += str(res.size() - 1)
 	else : texto += "0"
 	if (status_label != null):
 		status_label.text = texto
 	return forzar_inicio_partida or (res is Array and res.size() == maximos_jugadores)
-
 func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
-			 max_jugadores: int=3,)->void:
+			 max_jugadores: int=4,)->void:
 	maximos_jugadores = max_jugadores
 	status_label = status_busqueda
 	if creado_partida:
 		iniciar.visible = true
 		iniciar.pressed.connect(forzar_inicio_partida_set_true)
-		await _espera_a_resultado(check_iniciar_partida_publica,\
+		await _espera_a_resultado(check_iniciar_partida,\
 			base_url+participiaciones_por_partida+str(id))
 		if status_label != null:
 			status_label.text = "Iniciando partida"
 		await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
 		if status_label != null:
 			status_label.text = "Partida iniciada"
-		print(json.data)
+		print("RECIBIDO DE INICIAR PARTIDA",json.data)
 		creado_partida = false
 		forzar_inicio_partida = false
 		iniciar.visible = false
@@ -485,6 +488,8 @@ func get_adversarios(id: int) -> Array[Dictionary]:
 	await _awaiting_request_get(base_url+participiaciones_por_partida+str(id))
 	assert(_respuesta_buena())
 	var aux :Array[Dictionary] = []
+	for i in json.data.size():
+		print(i, " imagen ", json.data[i]["jugadorImagenPerfil"])
 	aux.assign( json.data.map(func(part)->Dictionary:
 		return {"nombre":part["jugadorNombre"], "icono":globales.get_avatar(part["jugadorImagenPerfil"]),
 				"id":part["idJugador"],"conectado":part["conectado"]}))
@@ -539,6 +544,7 @@ func get_turno(id: int):
 				print(data)
 				return true
 			if data[turno] != ultimo_turno: 
+				print("cambio de turno")
 				ultimo_turno = data[turno]
 				return true
 			else: 
@@ -556,7 +562,6 @@ func get_turno(id: int):
 	return res
 
 func subir_jugada(id:int, tablero: Array[Grupo_fichas]):
-	
 	var lista_tablero: Array = tablero.map(
 		func(grupo:Grupo_fichas)->Array:
 		return grupo.fichas.map(ficha_to_string)
@@ -565,11 +570,13 @@ func subir_jugada(id:int, tablero: Array[Grupo_fichas]):
 	{id_jugador:mi_id,jugar_tipo:jugar_tipo_cambio_tablero,
 	jugar_tablero:lista_tablero} ,
 	HTTPClient.METHOD_POST, header())
-	print(json.data)
+	print("RESPUESTA A SUBIR JUGADA",json.data)
 	return _respuesta_buena()
 
 func pasar_turno_servidor(id:int):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+partida_pasar,{},HTTPClient.METHOD_POST,header())
+	if _respuesta_buena(): print("TURNO PASADO CON EXITO")
+	else: print("TURNO NO PASADO")
 
 const num_fichas_robar = "cantidadRobar"
 func robar_fichas_sin_pasar(id:int, num_fichas: int = 1)->Array:
@@ -599,10 +606,6 @@ func robar_ficha(id: int)->Dictionary:
 		return string_to_ficha(aux[0])
 	else:
 		return {"color": Ficha.COLOR.BLANCO,"numero":1}
-		
-func pasa_turno(_id:int):
-	pass
-	# BUG desde donde llame a esto, hacer ultimo_turno = mi_turno
 #endregion
 #region perfil
 const num_monedas: String = "monedas"
@@ -656,7 +659,6 @@ func enviar_reto(id_amigo,id_partida):
 	await _awaiting_request(base_url+invitaciones,{"idPartida":id_partida,
 	"idInvitado":id_amigo},HTTPClient.METHOD_POST,header())
 	assert(_respuesta_buena())
-	
 @warning_ignore("shadowed_variable")
 func rechazar_reto(id_partida:int, id_emisor:int):
 	await _awaiting_request(

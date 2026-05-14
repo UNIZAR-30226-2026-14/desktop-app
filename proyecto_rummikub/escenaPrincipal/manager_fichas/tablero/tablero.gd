@@ -105,15 +105,18 @@ func insertar_grupos_fichas(grupos_insertar: Array[Grupo_fichas]) -> void:
 		iterador_posicion.x += 1 # para que no choque uno con el de al lado
 		_insertar_grupo(grupo, iterador_posicion)
 		iterador_posicion.x += tamano_grupo.x /2
-		await get_tree().physics_frame
-		await get_tree().physics_frame
+		if is_inside_tree():
+			await get_tree().physics_frame
+		if is_inside_tree():
+			await get_tree().physics_frame
 		while(grupo.chocando_con_grupo()):
 			grupo.position.x += Ficha.tamano_ficha_static().x / 2
 			if((grupo.position.x + (tamano_grupo.x/2) + Ficha.tamano_ficha_static().x) > esquina_superior_derecha.x): # se sale de la pantalla por la derecha
 				grupo.position.x = esquina_superior_izquierda.x
 				grupo.position.y += separacion_entre_filas
 				grupo.position.x += (tamano_grupo.x/2) + Ficha.tamano_ficha_static().x
-			await get_tree().physics_frame
+			if is_inside_tree():
+				await get_tree().physics_frame
 
 func _adaptar_posicion_a_grupo(grupo_adaptar: Grupo_fichas, posicion_inicial: Vector2) -> Vector2:
 	
