@@ -25,7 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://bvs76ue2w8evs" path="res://proyecto_rummikub/marcoIcono/marcoIcono.tscn" id="24_6ubox"]
 [ext_resource type="Script" uid="uid://da07fashj5efn" path="res://proyecto_rummikub/menuInicio/panel_creacion_partida_privada.gd" id="24_iak3s"]
 [ext_resource type="Script" uid="uid://djv3s0t0ehc44" path="res://proyecto_rummikub/menuInicio/fondo_lobby_clasico.gd" id="24_tfde3"]
-[ext_resource type="Script" path="res://proyecto_rummikub/menuInicio/fondo_lobby_reanudar.gd" id="25_6ubox"]
+[ext_resource type="Script" uid="uid://dsh35lqbxhcgk" path="res://proyecto_rummikub/menuInicio/fondo_lobby_reanudar.gd" id="25_6ubox"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iak3s"]
 bg_color = Color(0.17625213, 0.40654674, 0.19712326, 1)
@@ -596,18 +596,15 @@ corner_detail = 20
 
 [node name="MenuInicio" type="Control" unique_id=1337258946 node_paths=PackedStringArray("dinero", "botonAmigos", "botonCerrarPestanaAmigos")]
 layout_mode = 3
-anchor_top = 0.68200004
-anchor_right = 0.067
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -441.93604
-offset_right = 1074.816
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_87g63")
 dinero = NodePath("TiendaYDinero/Dinero")
 botonAmigos = NodePath("BarraSuperior/PanelIconoBotonAmigos/BotonSacarAmigos")
 botonCerrarPestanaAmigos = NodePath("MenuAmigos/BotonCerrarPestanaAmigos")
-metadata/_edit_use_anchors_ = true
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1176407704]
 z_index = -2
@@ -826,14 +823,10 @@ metadata/_edit_use_anchors_ = true
 [node name="ReanudarPartida" type="Button" parent="Fondo" unique_id=829801643]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.64897484
-anchor_top = 1.0808538
-anchor_right = 0.9059193
-anchor_bottom = 1.3478291
-offset_left = -315.61902
-offset_top = -245.39325
-offset_right = -315.61902
-offset_bottom = -245.39325
+anchor_left = 0.375
+anchor_top = 0.7021605
+anchor_right = 0.6319444
+anchor_bottom = 0.9691358
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
@@ -1167,6 +1160,8 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wvssi")
 
 [node name="FondoLobby" type="Panel" parent="." unique_id=361203403 node_paths=PackedStringArray("icono0", "icono1", "icono2", "icono3")]
+visible = false
+z_index = 3
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1372,7 +1367,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 
 [node name="PanelCreacionPartidaPrivada" type="Panel" parent="FondoLobby" unique_id=964690319]
-visible = false
 custom_minimum_size = Vector2(583, 552)
 layout_mode = 1
 anchors_preset = 8
@@ -1478,29 +1472,33 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
 text = "empezar"
 
 [node name="PanelSeleccionAmigos" type="Panel" parent="FondoLobby/PanelCreacionPartidaPrivada" unique_id=958247161]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.3680388
-anchor_top = 0.26313406
-anchor_right = 0.63196117
-anchor_bottom = 0.6644022
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_silre")
-metadata/_edit_use_anchors_ = true
-
-[node name="ScrollContainer" type="ScrollContainer" parent="FondoLobby/PanelCreacionPartidaPrivada/PanelSeleccionAmigos" unique_id=1567470089]
-custom_minimum_size = Vector2(276.75, 221.5)
+custom_minimum_size = Vector2(363, 224.75)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -138.375
-offset_top = -110.75
+offset_left = -181.5
+offset_top = -132.375
+offset_right = 181.5
+offset_bottom = 92.375
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_silre")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FondoLobby/PanelCreacionPartidaPrivada/PanelSeleccionAmigos" unique_id=1567470089]
+custom_minimum_size = Vector2(276.75, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -138.67188
+offset_top = -114.375
 offset_right = 138.375
-offset_bottom = 110.75
+offset_bottom = 115.625
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
@@ -2192,7 +2190,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 
 [node name="FondoLobbyReanudar" type="Panel" parent="." unique_id=650459654 node_paths=PackedStringArray("icono0", "icono1", "icono2", "icono3")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -2291,17 +2288,37 @@ theme_override_styles/normal = ExtResource("14_pnstj")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_45nqm")
 theme_override_styles/hover = SubResource("StyleBoxTexture_y0x6a")
 
-[node name="BotonEmpezar" type="Button" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=1903640957]
+[node name="BotonUnirse" type="Button" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=605652374]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -123.0
-offset_top = 157.0
-offset_right = 118.0
-offset_bottom = 251.0
+offset_left = -97.5
+offset_top = 159.0
+offset_right = 143.5
+offset_bottom = 253.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_22o8s")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_odu0a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
+text = "unirse"
+
+[node name="BotonEmpezar" type="Button" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=1903640957]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 65.5
+offset_top = 164.0
+offset_right = 289.5
+offset_bottom = 258.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 34
@@ -2309,6 +2326,27 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_22o8s")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_odu0a")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
 text = "empezar"
+
+[node name="BotonCancelar" type="Button" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=1005169328]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -238.5
+offset_top = 164.0
+offset_right = 2.5
+offset_bottom = 258.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_22o8s")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_odu0a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
+text = "cancelar
+"
 
 [node name="PanelSeleccionAmigos" type="Panel" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=345182270]
 layout_mode = 1

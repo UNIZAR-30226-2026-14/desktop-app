@@ -79,7 +79,6 @@ func fijar_tablero() -> void:
 						
 
 func insertar_tablero(misGrupos: Array[Grupo_fichas]):
-	
 	for grupo in grupos:
 		grupo.queue_free()
 	grupos = []

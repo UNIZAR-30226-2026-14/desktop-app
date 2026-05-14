@@ -1,6 +1,10 @@
 extends Panel
 
 var actualiza = true
+var iconos_jugadores
+
+func _ready():
+	iconos_jugadores = $PanelIconosJugadores/contenedorIconos.get_children()
 
 func mostrar(he_creado:bool, es_arcade: bool, id_partida: int):
 	$indicadorIdPartida/RichTextLabel.text = "RUM-"+str(id_partida)
@@ -16,23 +20,23 @@ func mostrar(he_creado:bool, es_arcade: bool, id_partida: int):
 	get_tree().change_scene_to_node(escena_juego)
 
 func actualiza_iconos():
-	var iconos_jugadores = $PanelIconosJugadores/contenedorIconos.get_children()
 	iconos_jugadores.map(func(icono): icono.cambiar_icono(null))
+	iconos_jugadores[0].cambiar_icono(globales.avatar)
 	while actualiza:
 		var adv = await ConectorRed.get_adversarios()
 		print(adv)
 		if actualiza:
-			
 			for i in range(adv.size()):
-				iconos_jugadores[i].cambiar_icono(adv[i]["icono"])
+				iconos_jugadores[i+1].cambiar_icono(adv[i]["icono"])
 			await get_tree().physics_frame
 		print("iconos actualizados")
 
-var amigos: Array[Amigo] = [Amigo.amigo(preload("res://imagenes/avatares_posibles/Miguel.png"), "Miguel"), Amigo.amigo(preload("res://imagenes/avatares_posibles/Dian.png"), "Dian")]
+var amigos: Array[Amigo] = []
 func actualizar_lista_amigos()->void:
 	amigos =$"../../MenuAmigos".get_amigos()
 	#poner icono retar
-	for amigo in amigos:
+	for amigo:Amigo in amigos:
+		amigo.sacar_boton_retar()
 		globales.apropiar_hijo($PanelSeleccionAmigos/ScrollContainer/contenedorAmigos, amigo)
 
 func _on_boton_cerrar_pressed() -> void:
@@ -41,3 +45,7 @@ func _on_boton_cerrar_pressed() -> void:
 	for icono in $PanelIconosJugadores/contenedorIconos.get_children():
 		icono.cambiar_icono(null)
 	visible = false
+	
+func _invitar(id_amigo:int):
+	ConectorRed.enviar_reto(id_amigo)
+	

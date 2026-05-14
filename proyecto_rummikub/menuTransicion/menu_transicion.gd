@@ -10,7 +10,7 @@ var es_arcade = false
 func _ready() -> void:
 	actualizar_puntos_suspensivos()
 	actualizar_circulo_carga()
-	await ConectorRed.buscar_partida($StatusBusqueda,$StatusBusqueda/IniciarPartida,es_arcade)
+	await ConectorRed.buscar_partida($StatusBusqueda,$IniciarPartida,es_arcade)
 	print("PARTIDA ENCONTRADA")
 	terminar = true
 	var escena_juego = preload("res://proyecto_rummikub/escenaPrincipal/escenaprincipal.tscn").instantiate()

@@ -9,19 +9,21 @@ class_name PartidaSeleccionable
 @export var jugador4: MarcoIcono
 
 signal partida_seleccionada
+signal partida_deseleccionada
 
 var mi_fecha: String 
 var mi_iconos_jugadores: Array[Texture2D]
+var id_partida :int
 
 static var escena_partida_seleccionable: PackedScene = preload("res://proyecto_rummikub/menuInicio/partidaSeleccionable/partidaSeleccionable.tscn")
 
 ## iconos_jugadores tiene que tener al menos 4 imagenes
-static func partida_seleccionable (fecha: String, iconos_jugadores: Array[Texture2D]) -> PartidaSeleccionable:
+static func partida_seleccionable (fecha: String, iconos_jugadores: Array[Texture2D], id:int) -> PartidaSeleccionable:
 	var nueva_partida_seleccionable: PartidaSeleccionable = escena_partida_seleccionable.instantiate()
-	
+	nueva_partida_seleccionable.id_partida = id
 	nueva_partida_seleccionable.fecha_partida.text = fecha
-	
 	nueva_partida_seleccionable.mi_fecha = fecha
+	nueva_partida_seleccionable.mi_iconos_jugadores.append(globales.avatar)
 	for i: Texture2D in iconos_jugadores:
 		nueva_partida_seleccionable.mi_iconos_jugadores.append(i)
 	
@@ -40,3 +42,5 @@ func _ready() -> void:
 func _procesar_toggle(toggled: bool) -> void:
 	if toggled:
 		partida_seleccionada.emit(self)
+	else:
+		partida_deseleccionada.emit(self)

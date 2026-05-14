@@ -6,3 +6,6 @@ func _ready() -> void:
 	$Fondo.modulate = globales.get_color_tablero()
 	$Fondo.visible = true
 	$PantallaPartidaPausada.visible = false
+	
+
+	

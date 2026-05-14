@@ -3,10 +3,10 @@ extends Panel
 @export var botonAmigos: Button
 @export var botonCerrarPestanaAmigos: Button
 
-var amigos: Array[Amigo] = [Amigo.amigo(preload("res://imagenes/avatares_posibles/Miguel.png"), "Miguel"), Amigo.amigo(preload("res://imagenes/avatares_posibles/Dian.png"), "Dian")]
-var enviadas: Array[SolicitudEnviada] = [SolicitudEnviada.solicitud("Miguel"), SolicitudEnviada.solicitud("Dian")]
-var pendientes: Array[SolicitudPendiente] = [SolicitudPendiente.solicitud("Miguel",-1), SolicitudPendiente.solicitud("Dian",-1)]
-var invitaciones: Array[RetoPendiente] = [RetoPendiente.solicitud("Dian",0,0), RetoPendiente.solicitud("Miguel",0,0)]
+@export var amigos: Array[Amigo] = []
+var enviadas: Array[SolicitudEnviada] = []
+var pendientes: Array[SolicitudPendiente] = []
+var invitaciones: Array[RetoPendiente] = []
 
 var accesoListas: Mutex = Mutex.new()
 

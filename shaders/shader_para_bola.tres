@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://vbx21shmswd3"]
 
-[ext_resource type="Shader" path="res://shaders/efecto_aura_magica.gdshader" id="1_8j0j1"]
+[ext_resource type="Shader" uid="uid://csemt0u8ce72v" path="res://shaders/efecto_aura_magica.gdshader" id="1_8j0j1"]
 [ext_resource type="Texture2D" uid="uid://f6de66goue38" path="res://textura_fueguito.tres" id="2_7kigt"]
 
 [sub_resource type="Gradient" id="Gradient_tw2xd"]

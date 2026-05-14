@@ -61,14 +61,9 @@ func _ready() -> void:
 	globales.estado_cursor = globales.ESTADO_CURSOR.TABLERO
 	fichas_en_mano_antes = []
 	grupos_en_tablero_antes = []
-<<<<<<< HEAD
-	printerr("Hay que modificar el uso de la variable abierto para que funcione con los datos llegados de otros jugadores")
 	abierto = true
 	adversarios = await ConectorRed.get_adversarios()
 	#botones
-=======
-	abierto = true
->>>>>>> origin/offline
 	robarCarta.pressed.connect(robar_carta)
 	pasarTurno.pressed.connect(hacer_jugada)
 	devolverFichas.pressed.connect(boton_devolver_fichas)
@@ -111,12 +106,9 @@ func terminar_turno() -> void:
 	termina_turno.emit()
 	if niebla.hay_humo():
 		quitar_bomba_de_humo()
-<<<<<<< HEAD
+	reiniciar_eventos()
 	await ConectorRed.espera_a_turno(llega_turno, terminar_partida,func():$"../PantallaPartidaPausada".visible = true)
 	if not partida_terminada: iniciar_turno()
-=======
-	reiniciar_eventos()
->>>>>>> origin/offline
 
 static var a:int = 0
 

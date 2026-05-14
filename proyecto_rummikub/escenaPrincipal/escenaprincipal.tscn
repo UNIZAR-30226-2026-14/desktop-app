@@ -19,11 +19,11 @@
 [ext_resource type="PackedScene" uid="uid://75ogdrmks05m" path="res://proyecto_rummikub/pantallaFinalPartida/pantallaFinalPartida.tscn" id="17_a1kqi"]
 [ext_resource type="PackedScene" uid="uid://5vgflyue4xto" path="res://proyecto_rummikub/poder/selectorAdversario/selectorAdversario.tscn" id="18_3k6q8"]
 [ext_resource type="Script" uid="uid://doo60kfoc4g6h" path="res://proyecto_rummikub/escenaPrincipal/boton_pausar.gd" id="19_yonda"]
-[ext_resource type="Shader" uid="uid://dq6ctxdq4ap7k" path="res://shaders/niebla.gdshader" id="19_yonda"]
-[ext_resource type="Script" uid="uid://83oj5ai3x75x" path="res://proyecto_rummikub/escenaPrincipal/niebla.gd" id="20_frcik"]
+[ext_resource type="Shader" path="res://shaders/niebla.gdshader" id="20_d6euy"]
+[ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/niebla.gd" id="20_frcik"]
 [ext_resource type="PackedScene" uid="uid://bmec450um0usm" path="res://proyecto_rummikub/poder/selectorFicha/selectorFicha.tscn" id="23_d6euy"]
 [ext_resource type="Texture2D" uid="uid://cioex7qh805iy" path="res://imagenes/imagenes_efectos/bola_de_cristal.png" id="23_tw2xd"]
-[ext_resource type="Script" uid="uid://dky3lcerwn4a" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
+[ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw2xd"]
 bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
@@ -135,7 +135,7 @@ seamless_blend_skirt = 0.3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tw2xd"]
 resource_local_to_scene = true
-shader = ExtResource("19_yonda")
+shader = ExtResource("20_d6euy")
 shader_parameter/pos = Vector2(0, 0)
 shader_parameter/textureResolution = 1280.0
 shader_parameter/moveDir = Vector2(0.5, 0.1)
@@ -422,6 +422,7 @@ grow_horizontal = 0
 theme_override_colors/font_color = Color(1, 0.6716436, 0.7448382, 1)
 text = "Pausar partida"
 script = ExtResource("19_yonda")
+
 [node name="Niebla" type="ColorRect" parent="." unique_id=1272716556]
 visible = false
 modulate = Color(1, 1, 1, 0.4117647)

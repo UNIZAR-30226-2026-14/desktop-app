@@ -125,54 +125,41 @@ func string_to_ficha(s:String) -> Dictionary:
 			res["color"] = Ficha.COLOR.NEGRO
 		NARANJA_RED:
 			res["color"] = Ficha.COLOR.AMARILLO
-	
 	res["numero"] = s.substr(1).to_int()
 	return res
 
 
 var codigo_respuesta: int
 var textura: ImageTexture = ImageTexture.new()
-func _recibe_respuesta_imagen(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray):
-	codigo_respuesta = response_code
-	if result != HTTPRequest.RESULT_SUCCESS:
-		assert(false,"codigo de error a get partidas: Error " + str(result))
-	var imagen = Image.new()
-	var err = imagen.load_png_from_buffer(body)
-	if err == OK:
-		print("Imagen cargada con éxito")		
-		textura = null
-		textura = ImageTexture.create_from_image(imagen)
-		if textura:
-			print("Textura creada.")
-		else:
-			print("Fallo al crear textura")
+
 var json = JSON.new()
 func _recibe_respuesta_json(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray):
-	print(result)
 	codigo_respuesta = response_code
 	if result != HTTPRequest.RESULT_SUCCESS:
-		assert(false,"codigo de error a get partidas: Error " + str(result))
+		assert(false,"codigo de error en http request: Error " + str(result))
 	if Error.OK != json.parse(body.get_string_from_utf8()):
-		assert(false,"Error al leer cuerpo de get partidas")
-
+		assert(false,"Error al leer cuerpo")
 @warning_ignore("shadowed_variable")
 func _awaiting_request_get(url:String, header:PackedStringArray = PackedStringArray()):
 	if $HTTPRequest.request(url, header) == ERR_BUSY:
 		await $HTTPRequest.request_completed
 		await _awaiting_request_get(url,header)
 	else:
+		ultima_request = url
 		await $HTTPRequest.request_completed
 
+var ultima_request
 ##Body puede ser diccionario o array, se convierte a string dentro de esta funcion
 @warning_ignore("shadowed_variable")
 func _awaiting_request(url:String, body, metodo:HTTPClient.Method, header:PackedStringArray = PackedStringArray(["Content-Type: application/json"])):
 	print("POST ", url, ", Cuerpo: ",JSON.stringify(body), ", Cabecera: ",header)
+	
 	if $HTTPRequest.request(url,header,metodo,JSON.stringify(body)) == ERR_BUSY:
 		await $HTTPRequest.request_completed
 		await _awaiting_request(url,body,metodo,header)
 	else:
+		ultima_request = url
 		await $HTTPRequest.request_completed
-
 
 ## acaba toma el valor de hacer get url y  debe devolver un bool que será true
 ## cuando se den las condiciones para acabar la espera
@@ -229,7 +216,7 @@ func categoriza_solicitudes(_aceptadas,_enviadas,_recibidas):
 ## Campos return: "icono", "nombre", "conectado"
 func get_amigos(_aceptadas,_enviadas,_recibidas):
 	await _awaiting_request_get(base_url+amigos)
-	assert(_respuesta_buena())
+	assert(_respuesta_buena(),json.data)
 	var aux_aceptadas = []; var aux_enviadas = []; var aux_recibidas = []
 	categoriza_solicitudes(aux_aceptadas,aux_enviadas,aux_recibidas)
 	
@@ -344,7 +331,10 @@ func unirse_a_partida(id: int):
 
 func forzar_inicio_partida_set_true():
 	forzar_inicio_partida = true
-
+	res_espera_partida_cancelable = true
+func cancelar_busqueda():
+	forzar_inicio_partida = true
+	res_espera_partida_cancelable = false
 var maximos_jugadores: int = 4
 var status_label: Label
 func check_iniciar_partida(res): 
@@ -354,6 +344,26 @@ func check_iniciar_partida(res):
 	if (status_label != null):
 		status_label.text = texto
 	return forzar_inicio_partida or (res is Array and res.size() == maximos_jugadores)
+# devuelve false si y solo si la busqueda de partida es cancelada
+var res_espera_partida_cancelable: bool
+func espera_partida_cancelable(id:int,iniciar:Button,cancelar:Button):
+	maximos_jugadores = 4
+	res_espera_partida_cancelable = true
+	iniciar.visible = true
+	iniciar.pressed.connect(forzar_inicio_partida_set_true)
+	cancelar.pressed.connect(cancelar_busqueda)
+	await _espera_a_resultado(check_iniciar_partida,\
+		base_url+participiaciones_por_partida+str(id))
+	creado_partida = false
+	forzar_inicio_partida = false
+	iniciar.visible = false
+	iniciar.pressed.disconnect(forzar_inicio_partida_set_true)
+	cancelar.pressed.disconnect(forzar_inicio_partida_set_true)
+	return res_espera_partida_cancelable
+func solo_inicia(id:int):
+	await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
+	return _respuesta_buena()
+
 func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 			 max_jugadores: int=3,)->void:
 	maximos_jugadores = max_jugadores
@@ -429,14 +439,26 @@ func crear_partida_publico(arcade: bool):
 	ultima_info_partida = json.data
 	return ultima_info_partida[id_partida]
 #endregion
-#region parar y continuar partida
-## Separado entre he_iniciado y me_he_unido
-func partidas_iniciadas()->Dictionary:
-	await _awaiting_request_get(base_url+partidas)
-	var body = json.data
-	for partida in body:
-		pass
-	return {}
+#region parar y reanudar partida
+const reanudables = "/api/invitaciones?idInvitado="
+const reanudables2 = "&includeInProgress=true"
+const conexion_reanudable = "/conexion"
+func get_reanudables():
+	await _awaiting_request_get(base_url+reanudables+str(mi_id)+reanudables2)
+	assert(_respuesta_buena(),json.data)
+	return json.data["partidasEnCurso"].map(func(partida):
+		return {"id":partida[id_partida],"fecha":partida[fecha]})
+	
+func unirse_a_reanudable(id:int):
+	await _awaiting_request(base_url+participaciones+"/"+str(mi_id)+"/"+str(id)+conexion_reanudable,
+	{"conectado":true},HTTPClient.METHOD_PATCH,header())
+	assert(_respuesta_buena(),json.data)
+
+func salirse_de_reanudable(id:int):
+	await _awaiting_request(base_url+participaciones+"/"+str(mi_id)+"/"+str(id)+conexion_reanudable,
+	{"conectado":false},HTTPClient.METHOD_PATCH,header())
+	assert(_respuesta_buena(),json.data)
+
 
 func parar_partida(id:int):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+"pausar",{},HTTPClient.METHOD_POST)
@@ -461,7 +483,7 @@ func get_adversarios(id: int) -> Array[Dictionary]:
 	var aux :Array[Dictionary] = []
 	aux.assign( json.data.map(func(part)->Dictionary:
 		return {"nombre":part["jugadorNombre"], "icono":globales.get_avatar(part["jugadorImagenPerfil"]),
-				"id":part["idJugador"]}))
+				"id":part["idJugador"],"conectado":part["conectado"]}))
 	return aux.filter(func(part): return part["id"] != mi_id)
 
 ##Devuelve la mano y el turno que tiene
@@ -625,6 +647,12 @@ func salir_de_partida(id: int) :
 #region retos
 const invitaciones = "/api/invitaciones"
 const invitaciones_por_invitado = "/api/invitaciones/invitado/"
+@warning_ignore("shadowed_variable")
+func enviar_reto(id_amigo,id_partida):
+	await _awaiting_request(base_url+invitaciones,{"idPartida":id_partida,
+	"idInvitado":id_amigo},HTTPClient.METHOD_POST,header())
+	assert(_respuesta_buena())
+	
 @warning_ignore("shadowed_variable")
 func rechazar_reto(id_partida:int, id_emisor:int):
 	await _awaiting_request(
