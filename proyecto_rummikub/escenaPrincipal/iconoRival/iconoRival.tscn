@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://dtc8dx8rb8nrm"]
+
+[ext_resource type="Script" uid="uid://dvl8ccexa3n0n" path="res://proyecto_rummikub/escenaPrincipal/iconoRival/icono_rival.gd" id="1_hwmqy"]
+[ext_resource type="PackedScene" uid="uid://bvs76ue2w8evs" path="res://proyecto_rummikub/marcoIcono/marcoIcono.tscn" id="2_gn233"]
+
+[node name="IconoRival" type="Control" unique_id=1382255193]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -683.0
+offset_bottom = -450.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hwmqy")
+
+[node name="MarcoIcono" parent="." unique_id=551917140 instance=ExtResource("2_gn233")]
+layout_mode = 1
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 13.0
+offset_top = 3.0
+offset_right = 13.0
+offset_bottom = 3.0
+grow_horizontal = 1
+grow_vertical = 1
+metadata/colorBorde = Color(0.32156864, 0.6509804, 0.3882353, 1)
+metadata/colorFondo = Color(0.101960786, 0.101960786, 0.101960786, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1766449302]
+layout_mode = 0
+offset_left = 63.0
+offset_top = 9.0
+offset_right = 187.0
+offset_bottom = 30.0
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 14
+text = "Jose Luis"
+vertical_alignment = 1

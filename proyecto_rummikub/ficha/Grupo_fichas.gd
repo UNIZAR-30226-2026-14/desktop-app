@@ -187,20 +187,11 @@ func grupo_correcto(abierto: bool) -> bool:
 				esMismoNumero = (ficha.numero == esperadoMismo and setColores.find(ficha.color) == -1) or ficha.color == Ficha.COLOR.COMODIN # el color no está en setColores
 				setColores.append(ficha.color)
 			if !es_escalera and !esMismoNumero: return false
-		
 	if esperadoMismo == -1 and esperadoMismo == -1: return true # todo comodines
 	if es_escalera:
-		if abierto: return true
-		else:
-			var baseEscalera = esperado_escalera - fichas.size()
-			var numTotal = range(baseEscalera, esperado_escalera).reduce(func(accum,number): return accum + number, 0)
-			return numTotal >= 30
+		return true
 	if esMismoNumero:
-		if abierto: return true
-		else:
-			var numTotal = esperado_mismo * fichas.size()
-			return numTotal >= 30
-	
+		return true
 	return false
 
 func contengo_ficha_fijada() -> bool:
@@ -237,3 +228,15 @@ func chocando_con_grupo() -> bool:
 		if area != $izquierda:
 			return true
 	return false
+
+func suma_grupo()->int:
+	var resultado: int = 0
+	for ficha: Ficha in fichas:
+		resultado += ficha.numero
+	return resultado
+
+func fijado() -> bool:
+	for ficha: Ficha in fichas:
+		if ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA:
+			return false
+	return true

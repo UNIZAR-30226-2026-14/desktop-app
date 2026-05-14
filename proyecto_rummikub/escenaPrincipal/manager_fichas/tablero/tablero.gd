@@ -2,7 +2,7 @@ extends Node2D
 
 @export var manager_fichas: Node2D
 @export var colision_mano: CollisionShape2D
-@export var manager_juego: Node2D
+@export var manager_juego: ManagerJuego
 #Responsabilidad: Guardar estado (grupos de fichas puestos en mesa) al principio de turno
 #					Durante el turno, lleva cuenta de qué fichas nuevas se colocan (para permitir al
 #					manager devolverlas a la mano y de los grupos de fichas actualizados.
@@ -13,10 +13,13 @@ var grupoFichas = preload("res://proyecto_rummikub/ficha/grupo_fichas.tscn")
 var grupos: Array[Grupo_fichas] = []
 
 func tablero_valido(abierto: bool) -> bool:
+	var suma: int = 0
 	for grupo in grupos:
-		if !grupo.grupo_correcto(abierto): 
-			print(grupo)
-			return false
+		if not grupo.fijado():
+			suma += grupo.suma_grupo()
+			if !grupo.grupo_correcto(true): return false
+	if (not abierto) and ((suma < 30) or combinando_fijadas_y_no_fijadas()):
+		return false
 	return true
 
 func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:
@@ -76,7 +79,6 @@ func fijar_tablero() -> void:
 				ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
 				ficha.desresaltar_aura()
 				manager_juego.puntuar_ficha(ficha.especial)
-						
 
 func insertar_tablero(misGrupos: Array[Grupo_fichas]):
 	for grupo in grupos:
@@ -151,4 +153,17 @@ func detectar_color_sin_fijar(color: Ficha.COLOR) -> bool:
 		for ficha: Ficha in grupo.fichas:
 			if (ficha.color == color) and (ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA):
 				return true
+	return false
+
+func combinando_fijadas_y_no_fijadas() -> bool:
+	for grupo: Grupo_fichas in grupos:
+		var ficha_fijada_encontrada: bool = false
+		var ficha_no_fijada_encontrada: bool = false
+		for ficha: Ficha in grupo.fichas:
+			if ficha.estado == globales.ESTADO_FICHA.TABLERO_FIJADA:
+				ficha_fijada_encontrada = true
+			else:
+				ficha_no_fijada_encontrada = true
+		if ficha_fijada_encontrada and ficha_no_fijada_encontrada:
+			return true
 	return false

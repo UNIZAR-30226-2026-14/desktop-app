@@ -19,11 +19,11 @@
 [ext_resource type="PackedScene" uid="uid://75ogdrmks05m" path="res://proyecto_rummikub/pantallaFinalPartida/pantallaFinalPartida.tscn" id="17_a1kqi"]
 [ext_resource type="PackedScene" uid="uid://5vgflyue4xto" path="res://proyecto_rummikub/poder/selectorAdversario/selectorAdversario.tscn" id="18_3k6q8"]
 [ext_resource type="Script" uid="uid://doo60kfoc4g6h" path="res://proyecto_rummikub/escenaPrincipal/boton_pausar.gd" id="19_yonda"]
-[ext_resource type="Shader" path="res://shaders/niebla.gdshader" id="20_d6euy"]
-[ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/niebla.gd" id="20_frcik"]
+[ext_resource type="Shader" uid="uid://dq6ctxdq4ap7k" path="res://shaders/niebla.gdshader" id="20_d6euy"]
+[ext_resource type="Script" uid="uid://83oj5ai3x75x" path="res://proyecto_rummikub/escenaPrincipal/niebla.gd" id="20_frcik"]
 [ext_resource type="PackedScene" uid="uid://bmec450um0usm" path="res://proyecto_rummikub/poder/selectorFicha/selectorFicha.tscn" id="23_d6euy"]
 [ext_resource type="Texture2D" uid="uid://cioex7qh805iy" path="res://imagenes/imagenes_efectos/bola_de_cristal.png" id="23_tw2xd"]
-[ext_resource type="Script" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
+[ext_resource type="Script" uid="uid://dky3lcerwn4a" path="res://proyecto_rummikub/escenaPrincipal/bola_de_cristal.gd" id="24_d6euy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tw2xd"]
 bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)

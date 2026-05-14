@@ -4,7 +4,8 @@ class_name TiendaFueraPartida extends Control
 
 @export var contador_dinero: PanelContadorMonedas
 @export var contenedor_botones: GridContainer
-@export var manager_juego: Node 
+@export var manager_juego: ManagerJuego 
+@export var contador_tiempo: ContadorTiempo
 
 signal interaccion_con_tienda
 
@@ -19,9 +20,9 @@ var lista_poderes: Array[BotonTienda] = []
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	self.visible = false
+	manager_juego.termina_turno.connect(_on_boton_cerrar_pressed)
 
 func abrir_tienda(ranura_quiere_comprar : Poder) -> Poder.PODER:
-	
 	if self.visible:
 		return ranura_quiere_comprar.poder
 	self.visible = true
@@ -43,12 +44,12 @@ func abrir_tienda(ranura_quiere_comprar : Poder) -> Poder.PODER:
 					contador_dinero.reducir_dinero(precio)
 					borrar_botones()
 					self.visible = false
-					return Poder.PODER.values()[anterior_pulsado]
+					return manager_juego.get_poderes_comprar()[anterior_pulsado]
 	return Poder.PODER.NINGUNO
 
 func sacar_botones() -> void:
 	var i: int = 0
-	for poder: Poder.PODER in manager_juego.poderes_disponibles_a_compra:
+	for poder: Poder.PODER in manager_juego.get_poderes_comprar():
 		var boton_nuevo = BotonTienda.new(poder, Poder.LISTA_TEXTURAS_PODERES[poder],i)
 		i += 1
 		globales.apropiar_hijo(contenedor_botones, boton_nuevo)
@@ -80,7 +81,6 @@ func _poder_pulsado(poder_pulsado: Poder.PODER, indice: int) -> void:
 		$Panel/botonComprar.text = " " + str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado] / 2)
 	else:
 		$Panel/botonComprar.text = " " + str(Poder.LISTA_PRECIOS_OBJETOS[poder_pulsado])
-		
 
 func aplicar_descuento() -> void:
 	descuento = true

@@ -81,3 +81,6 @@ func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():
 		hijo.get_parent().remove_child(hijo)
 	nuevo_padre.add_child(hijo)
+
+func get_color_ficha() -> Color:
+	return Color(0.408, 0.408, 0.408, 1.0)
