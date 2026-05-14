@@ -41,11 +41,7 @@ static func ElementoTienda (icono, precio: String, descripcion: String, tipo: TI
 	
 	match tipo:
 		TIPO_SKIN.FICHA:
-			var icono_aux: StyleBoxTexture = nuevo_elemento_tienda.icono_skin.get_theme_stylebox("panel").duplicate()
-			var ratio: float = icono.get_size().x /  icono.get_size().y 
-			icono_aux.texture = icono
-			nuevo_elemento_tienda.icono_skin.add_theme_stylebox_override("panel",icono_aux)
-			nuevo_elemento_tienda.icono_skin.size.x = ratio * ALTURA
+			nuevo_elemento_tienda.icono_skin.modulate = icono
 		TIPO_SKIN.TABLERO:
 			nuevo_elemento_tienda.icono_skin.modulate = icono
 	nuevo_elemento_tienda.boton_comprar.button_group = LISTA_BUTTON_GROUPS[tipo]

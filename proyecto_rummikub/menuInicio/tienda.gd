@@ -16,6 +16,13 @@ var lista_skins_tableros: Dictionary[String, tableroTienda] = {
 	"verde":       tableroTienda.tableroTienda("verde", ElementoTienda.EQUIPADO, "Verde oscuro"    , ElementoTienda.TIPO_SKIN.TABLERO),
 }
 
+var lista_skins_fichas: Dictionary[String, tableroTienda] = {
+	"gris":        tableroTienda.tableroTienda("gris",       "800"  ,"Gris oficina"           , ElementoTienda.TIPO_SKIN.FICHA),
+	"rosa":        tableroTienda.tableroTienda("rosa",       "2000","Divina"    , ElementoTienda.TIPO_SKIN.FICHA),
+	"blanco":       tableroTienda.tableroTienda("blanco", ElementoTienda.EQUIPADO, "Original"    , ElementoTienda.TIPO_SKIN.FICHA),
+}
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -32,6 +39,16 @@ func _ready() -> void:
 		if skin_tablero.color in globales.skin_tablero_equipada:
 			skin_tablero.boton_comprar.button_pressed = true
 			skin_tablero.set_precio(ElementoTienda.EQUIPADO)
+	
+	for skin_ficha: tableroTienda in lista_skins_fichas.values():
+		globales.apropiar_hijo(ContenedorSkinFichas, skin_ficha)
+		skin_ficha.interaccion_con_skin.connect(_interaccion_con_elemento_tienda)
+		if skin_ficha.color in globales.mis_skins_ficha:
+			#skin_tablero.boton_comprar.button_pressed = true
+			skin_ficha.set_precio(ElementoTienda.DESEQUIPADO)
+		if skin_ficha.color in globales.skin_ficha_equipada:
+			skin_ficha.boton_comprar.button_pressed = true
+			skin_ficha.set_precio(ElementoTienda.EQUIPADO)
 
 func sacar_tienda() -> void:
 	self.visible = true

@@ -155,7 +155,7 @@ editor_draw_limits = true
 
 [node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "tienda", "poder1", "poder2", "poder3", "niebla", "bola_de_cristal", "pantalla_partida_pausada", "boton_volver_partida_pausada")]
 self_modulate = Color(1, 1, 1, 0)
-position = Vector2(-859.99994, 65)
+position = Vector2(-11, -206)
 scale = Vector2(0.038, 0.038)
 script = ExtResource("2_pp26n")
 robarCarta = NodePath("robarCarta")
@@ -186,10 +186,10 @@ scale = Vector2(100, 100)
 metadata/_edit_use_anchors_ = true
 
 [node name="devolverFichas" type="Button" parent="managerJuego" unique_id=947377310]
-offset_left = 7973.6836
-offset_top = 1684.2106
-offset_right = 9005.684
-offset_bottom = 2716.2104
+offset_left = -14368.422
+offset_top = 8921.053
+offset_right = -13336.422
+offset_bottom = 9953.053
 theme_override_styles/normal = SubResource("StyleBoxFlat_tw2xd")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tw2xd")
 theme_override_styles/hover = SubResource("StyleBoxFlat_xqkyq")
@@ -198,10 +198,10 @@ icon = ExtResource("3_pp26n")
 metadata/_edit_use_anchors_ = true
 
 [node name="pasarTurno" type="Button" parent="managerJuego" unique_id=1250822187]
-offset_left = 8026.315
-offset_top = 236.84204
-offset_right = 10034.314
-offset_bottom = 2244.842
+offset_left = -14315.791
+offset_top = 7473.6846
+offset_right = -12307.791
+offset_bottom = 9481.685
 scale = Vector2(0.5, 0.5)
 theme_override_styles/normal = SubResource("StyleBoxFlat_tw2xd")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tw2xd")
@@ -211,10 +211,10 @@ icon = ExtResource("5_k1ots")
 metadata/_edit_use_anchors_ = true
 
 [node name="robarCarta" type="Button" parent="managerJuego" unique_id=532416471]
-offset_left = 8026.315
-offset_top = 3210.5264
-offset_right = 8546.314
-offset_bottom = 3730.5264
+offset_left = -14315.791
+offset_top = 10447.369
+offset_right = -13795.791
+offset_bottom = 10967.369
 scale = Vector2(2, 2)
 theme_override_styles/normal = SubResource("StyleBoxFlat_tw2xd")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_tw2xd")
@@ -224,7 +224,7 @@ icon = ExtResource("5_qada0")
 metadata/_edit_use_anchors_ = true
 
 [node name="ContadorTiempoTurno" parent="managerJuego" unique_id=334267871 node_paths=PackedStringArray("manager_juego") instance=ExtResource("11_naapq")]
-position = Vector2(36447.37, 4710.527)
+position = Vector2(14210.531, 11763.158)
 scale = Vector2(7.8947372, 7.8947372)
 manager_juego = NodePath("..")
 

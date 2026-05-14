@@ -59,7 +59,6 @@ const colores: Dictionary[String,Color] = {
 
 static var mis_skins_tablero: Array = ["verde"]
 static var  skin_tablero_equipada: String = "verde"
-static var skin_ficha_equipada: Texture2D
 
 func set_color_tablero(color):
 	if color is Color:
@@ -73,14 +72,35 @@ func set_color_tablero(color):
 		if color not in mis_skins_tablero:
 			mis_skins_tablero.push_back(color)
 
-		
 func get_color_tablero() -> Color:
 	return colores[skin_tablero_equipada]
+
+const colores_fichas: Dictionary[String,Color] = {
+	"blanco": Color(1.0, 1.0, 1.0, 1.0),
+	"gris": Color(0.271, 0.271, 0.271, 1.0),
+	"rosa": Color(0.792, 0.157, 0.592, 1.0)
+}
+
+
+static var mis_skins_ficha: Array = ["blanco"]
+static var  skin_ficha_equipada: String = "blanco"
+
+func set_color_ficha(color):
+	if color is Color:
+		for c in colores_fichas:
+			if colores_fichas[c] == color:
+				skin_tablero_equipada = c
+				if c not in mis_skins_ficha:
+					mis_skins_ficha.push_back(c)
+	elif color is String:
+		skin_ficha_equipada = color
+		if color not in mis_skins_ficha:
+			mis_skins_ficha.push_back(color)
+
+func get_color_ficha() -> Color:
+	return colores_fichas[skin_ficha_equipada]
 
 func apropiar_hijo(nuevo_padre: Node, hijo: Node) -> void:
 	if hijo.get_parent():
 		hijo.get_parent().remove_child(hijo)
 	nuevo_padre.add_child(hijo)
-
-func get_color_ficha() -> Color:
-	return Color(0.408, 0.408, 0.408, 1.0)

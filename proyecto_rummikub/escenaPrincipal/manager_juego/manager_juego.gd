@@ -28,17 +28,27 @@ var partida_terminada = false
 signal empieza_turno
 signal termina_turno
 
-class GrupoGuardado extends Node:
+class GrupoGuardado extends Node2D:
 	var grupo: Array[Ficha]
 	var posicion: Vector2
+	var posiciones: Array[Vector2]
 	
 	func _init(mgrupo: Array[Ficha], mposicion: Vector2) -> void:
+		posiciones = []
+		for ficha in mgrupo:
+			globales.apropiar_hijo(self, ficha)
 		grupo = mgrupo
 		posicion = mposicion
+		for ficha:Ficha in mgrupo:
+			posiciones.append(ficha.position)
 	
 	func creaGrupo()-> Grupo_fichas:
 		var res = Grupo_fichas.Grupo_fichas(grupo)
 		assert(grupo.all(func(fich):return fich != null))
+		var i = 0
+		for ficha in res.fichas:
+			ficha.position = posiciones[i]
+			i += 1
 		res.position = posicion
 		return res
 
@@ -101,7 +111,7 @@ func intenta_hacer_jugada() -> bool:
 		return false
 
 func terminar_turno() -> void:
-	_devolver_fichas()
+	_devolver_fichas() 
 	guardar_estado()
 	termina_turno.emit()
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
@@ -117,11 +127,12 @@ func terminar_turno() -> void:
 
 
 func iniciar_turno() -> void:
+	_devolver_fichas()
 	guardar_estado()
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
 	robarCarta.disabled = false
 	devolverFichas.disabled = true
-	pasarTurno.disabled = true	
+	pasarTurno.disabled = true
 	#aplicar evento o poder de rival
 	empieza_turno.emit()
 
@@ -232,9 +243,11 @@ func guardar_estado() -> void:
 		if !ficha.en_blanco:
 			fichas_no_blancas += 1
 	print("Guardo "+ str(fichas_no_blancas))
-	for grupo in tablero.grupos:
-		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
-	
+	for grupo: Grupo_fichas in tablero.grupos:
+		var grupo_aux: GrupoGuardado = GrupoGuardado.new(grupo.fichas,grupo.position)
+		globales.apropiar_hijo(self, grupo_aux)
+		grupos_en_tablero_antes.append(grupo_aux)
+
 
 func boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
@@ -468,7 +481,7 @@ func usar_trueque2(_adversario: String, _ficha_propia: Ficha, _ficha_rival: Fich
 	# set_ficha al adversario
 	pass
 
-#endregion
+#endregnion
 
 func get_fichas_mano() -> Array[Ficha]:
 	return mano.fichas_en_mano
