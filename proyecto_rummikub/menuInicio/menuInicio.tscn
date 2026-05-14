@@ -1082,8 +1082,7 @@ position = Vector2(-19.574219, 28)
 scale = Vector2(0.018616637, 0.019211804)
 texture = ExtResource("21_637k7")
 
-[node name="Tienda" type="Control" parent="." unique_id=846956217 node_paths=PackedStringArray("menuInicio", "botonTienda", "botonCerrarTienda", "ContenedorTableros")]
-visible = false
+[node name="Tienda" type="Control" parent="." unique_id=846956217 node_paths=PackedStringArray("menuInicio", "botonTienda", "botonCerrarTienda", "ContenedorTableros", "ContenedorSkinFichas")]
 layout_mode = 1
 anchor_left = -0.00086805556
 anchor_top = 0.16203703
@@ -1095,6 +1094,7 @@ menuInicio = NodePath("..")
 botonTienda = NodePath("../TiendaYDinero/BotonTienda")
 botonCerrarTienda = NodePath("BotonCerrar")
 ContenedorTableros = NodePath("ScrollTienda/VBoxContainer/GridContainerTableros")
+ContenedorSkinFichas = NodePath("ScrollTienda/VBoxContainer/GridContainerSkinDeFichas")
 metadata/_edit_use_anchors_ = true
 
 [node name="ScrollTienda" type="ScrollContainer" parent="Tienda" unique_id=1168490826]
