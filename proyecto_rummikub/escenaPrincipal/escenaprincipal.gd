@@ -11,7 +11,7 @@ func _ready() -> void:
 	#var nombres_rivales: Array[String] = ["Dian", "Miguel", "Daniel"]
 	
 	#inicializar_rivales(iconos_rivales, nombres_rivales)
-	
+	$managerJuego.es_arcade = es_arcade
 	if not es_arcade:
 		activar_modo_clasico()
 

@@ -16,6 +16,7 @@ class_name ManagerJuego extends Node2D
 @export var poder1: Poder 
 @export var poder2: Poder
 @export var poder3: Poder
+var poderes = [poder1,poder2,poder3]
 
 @export var niebla: Niebla
 @export var bola_de_cristal: BolaDeCristal
@@ -25,10 +26,12 @@ class_name ManagerJuego extends Node2D
 
 var partida_terminada = false
 
+var es_arcade
+
 signal empieza_turno
 signal termina_turno
 
-class GrupoGuardado extends Node:
+class GrupoGuardado:
 	var grupo: Array[Ficha]
 	var posicion: Vector2
 	
@@ -39,12 +42,12 @@ class GrupoGuardado extends Node:
 	func creaGrupo()-> Grupo_fichas:
 		var res = Grupo_fichas.Grupo_fichas(grupo)
 		assert(grupo.all(func(fich):return fich != null))
+		for ficha in grupo:
+			ficha.cancel_free()
 		res.position = posicion
 		return res
 
-var poderes_disponibles_a_compra: Array[Poder.PODER] = [
-	Poder.PODER.TRUEQUE, Poder.PODER.TECHO_CRISTAL, Poder.PODER.BOMBA_HUMO, Poder.PODER.BOLA_CRISTAL,
-	]
+var poderes_disponibles_a_compra: Array[Poder.PODER] = [Poder.PODER.TRUEQUE, Poder.PODER.TECHO_CRISTAL, Poder.PODER.BOMBA_HUMO, Poder.PODER.BOLA_CRISTAL]
 
 var fichas_en_mano_antes: Array[Ficha]
 var grupos_en_tablero_antes: Array[GrupoGuardado]
@@ -69,8 +72,13 @@ func _ready() -> void:
 	pasarTurno.pressed.connect(intenta_hacer_jugada)
 	devolverFichas.pressed.connect(boton_devolver_fichas)
 	@warning_ignore("shadowed_variable")
-	var mano_inicial:Array[Ficha] = await ConectorRed.inicializar_partida(manager_fichas.crear_ficha)
-	mano.insertar_mano(mano_inicial)
+	var info_inicial:Dictionary = await ConectorRed.inicializar_partida(manager_fichas.crear_ficha)
+	
+	(info_inicial["mano"])
+	if es_arcade:
+		for poder in info_inicial["poderes"]:
+			insertar_poder(poder)
+		
 	guardar_estado()
 	$ContadorTiempoTurno.proceso_contador()
 	terminar_turno()
@@ -117,15 +125,34 @@ func terminar_turno() -> void:
 
 
 func iniciar_turno() -> void:
+	if es_arcade:
+		printerr("a")
+		poderes_disponibles_a_compra = []
+		var efectos: Array
+		efectos = []
+		var poderes_nuevo_turno: Array
+		poderes_nuevo_turno = []
+		panel_contador_monedas.set_dinero(str(await ConectorRed.poderes(poderes_disponibles_a_compra,efectos,poderes_nuevo_turno)))
+		printerr("b")
+		for poder in efectos: 
+			if (angel_guarda_check()):
+				ConectorRed.angel()
+			else:
+				recibir_efecto(poder)
+		var evento = ConectorRed.evento_actual()
+		printerr("c")
+		lanzar_evento(evento[0],evento[1])
+		printerr("d")
 	guardar_estado()
+	printerr("e")
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
 	robarCarta.disabled = false
 	devolverFichas.disabled = true
-	pasarTurno.disabled = true	
+	pasarTurno.disabled = true
 	#aplicar evento o poder de rival
 	empieza_turno.emit()
 
-func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR.BLANCO) ->void:
+func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR.BLANCO) -> void:
 	evento_ocurriendo = evento
 	match (evento):
 		EVENTO.NO_EVENTO:
@@ -137,7 +164,9 @@ func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR
 			PopUp.popUp(" este turno no se puede usar \n el color " + Ficha.color_a_string(color_no_permitido) + "!",Vector2(-74.0, -300.0), escena_principal, true)
 			color_prohibido = color_no_permitido
 		EVENTO.ROBAR_OTRA_FICHA:
-			# hacer cosas 
+			var fich = await ConectorRed.robar_sin_pasar(manager_fichas.crear_ficha)
+			mano.devolver_ficha(fich[0])
+			fich[0].z_index = 0
 			PopUp.popUp(" te toca robar ficha \n mala suerte " + Ficha.color_a_string(color_no_permitido) + "!",Vector2(-74.0, -300.0), escena_principal, true)
 			evento_ocurriendo = EVENTO.NO_EVENTO
 
@@ -232,9 +261,9 @@ func guardar_estado() -> void:
 		if !ficha.en_blanco:
 			fichas_no_blancas += 1
 	print("Guardo "+ str(fichas_no_blancas))
+	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
 		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
-	
 
 func boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
@@ -276,6 +305,14 @@ var adversarios: Array[Dictionary] = [{"nombre":"debug", "icono": load("res://im
 func get_adversarios() -> Array[Dictionary]:
 	return adversarios
 
+func insertar_poder(poder:Poder.PODER):
+	if poder1.get_poder() == Poder.PODER.NINGUNO:
+		poder1.cambiar_poder(poder)
+	elif poder2.get_poder() == Poder.PODER.NINGUNO:
+		poder2.cambiar_poder(poder)
+	elif poder3.get_poder() == Poder.PODER.NINGUNO:
+		poder3.cambiar_poder(poder)
+
 func puntuar_ficha(especial: Ficha.ESPECIAL):
 	match(especial):
 		Ficha.ESPECIAL.NO:
@@ -286,14 +323,7 @@ func puntuar_ficha(especial: Ficha.ESPECIAL):
 			
 		Ficha.ESPECIAL.ARCOIRIS:
 			panel_contador_monedas.aumentar_dinero(1)
-			var poder_elegido: Poder.PODER = randi_range(1, 8) as Poder.PODER 
-			if poder1.get_poder() == Poder.PODER.NINGUNO:
-				poder1.cambiar_poder(poder_elegido)
-			elif poder2.get_poder() == Poder.PODER.NINGUNO:
-				poder2.cambiar_poder(poder_elegido)
-			elif poder3.get_poder() == Poder.PODER.NINGUNO:
-				poder3.cambiar_poder(poder_elegido)
-				
+			
 		Ficha.ESPECIAL.DORADARCOIRIS:
 			panel_contador_monedas.aumentar_dinero(2)
 			var poder_elegido: Poder.PODER = randi_range(1, 8) as Poder.PODER 
@@ -311,17 +341,24 @@ func _volver_menu_inicio()->void:
 	get_tree().change_scene_to_file.bind("res://proyecto_rummikub/menuInicio/menuInicio.tscn").call_deferred()
 
 #region Aplicar a uno mismo
+func recibir_efecto(poder: Poder.PODER):
+	match poder:
+		Poder.PODER.TRUEQUE:
+			trueque_mi()
+		Poder.PODER.GUANTE_BLANCO:
+			guante_blanco_mi()
+		Poder.PODER.MAS_CUATRO:
+			mas_cuatro_mi()
+		Poder.PODER.BOMBA_HUMO:
+			bomba_de_humo_mi()
+		Poder.PODER.REDUCIR_TIEMPO:
+			guindilla_en_el_culo_mi()
+		Poder.PODER.TECHO_CRISTAL:
+			techo_de_cristal_mi()
+
 func toque_de_midas_mi() -> void:
-	var fichas_totales = mano.fichas_en_mano.size()
-	var fichas_a_elegir: int = min(fichas_totales-mano.contar_blancas(), 4)
-	var cartas_elegidas: Array[int] = []
-	while cartas_elegidas.size() < fichas_a_elegir:
-		var numero_elegido: int = randi_range(0,fichas_totales-1)
-		if !cartas_elegidas.has(numero_elegido) and !mano.fichas_en_mano[numero_elegido].en_blanco:
-			cartas_elegidas.append(numero_elegido)
-	
-	for carta: int in cartas_elegidas:
-		mano.fichas_en_mano[carta].volver_dorada()
+	var mano_dorada : Array[Ficha] = await ConectorRed.midas()
+	mano.insertar_mano(mano_dorada)
 
 func angel_guarda_check() -> bool:
 	if poder1.get_poder() == Poder.PODER.ANGEL_GUARDA:
@@ -355,64 +392,21 @@ func bomba_de_humo_mi() -> void:
 
 func mas_cuatro_mi() -> void:
 	PopUp.popUp(" otro jugador te ha hecho \n robar 4 cartas! ",Vector2(-74.0, -300.0), escena_principal)
-	# hacer cosas
+	var fichs = await ConectorRed.robar_sin_pasar(manager_fichas.crear_ficha,4)
+	for fich in fichs:
+		mano.devolver_ficha(fich)
+		fich.z_index = 0
 
 func bola_de_cristal_mi()->void:
-	var fichas: Array[Ficha] = get_fichas_mano_no_blancas()
-	var poderes: Array[Poder.PODER] = [poder1.get_poder(),poder2.get_poder(),poder3.get_poder()]
-	# enviar a rival
+	pass #esta bien
 
-func trueque1_mi()->void:
-	var mis_fichas: Array[Ficha] = get_fichas_mano_no_blancas()
-	var fichas_a_tomar: int = min(mis_fichas.size(),3)
-	var indice1 = -1
-	var indice2 = -1
-	var indice3 = -1
-	
-	match(fichas_a_tomar):
-		1:
-			indice1 = randi_range(0, mis_fichas.size()-1)
-		2:
-			while((indice1 == indice2) or (indice1 == -1 or indice2 == -1)):
-				indice1 = randi_range(0, mis_fichas.size()-1)
-				indice2 = randi_range(0, mis_fichas.size()-1)
-		3:
-			while(indice1 == indice2 or indice2 == indice3 or indice3 == indice1 or (indice1 == -1 or indice2 == -1 or indice3 == -1)):
-				indice1 = randi_range(0, mis_fichas.size()-1)
-				indice2 = randi_range(0, mis_fichas.size()-1)
-				indice3 = randi_range(0, mis_fichas.size()-1)
-	
-	var fichas_devolver: Array[Ficha] = []
-	
-	fichas_devolver.append(get_fichas_mano_no_blancas()[indice1])
-	if indice2 != -1:
-		fichas_devolver.append(get_fichas_mano_no_blancas()[indice2])
-	if indice3 != -1:
-		fichas_devolver.append(get_fichas_mano_no_blancas()[indice3])
-	# enviar fichas_devolver
-
-func trueque2_mi()->void:
-	# get ficha suya que me quedo (siguiente linea de placeholder)
-	var ficha_suya: Ficha = Ficha.ficha(Ficha.COLOR.ROJO, 10, Ficha.ESPECIAL.ARCOIRIS)
-	# get ficha mia que se va (siguiente linea de placeholder)
-	var ficha_nuestra_se_va: Ficha = get_fichas_mano()[0]
-	
-	manager_fichas.conectar_ficha(ficha_suya)
-	mano.insertar_ficha(ficha_suya, ficha_nuestra_se_va)
+func trueque_mi()->void:
+	mano.insertar_mano(await ConectorRed.mano())
 
 func guante_blanco_mi()->void:
-	# get poder que se va
-	var poder_robado: Poder.PODER = Poder.PODER.ANGEL_GUARDA
-	PopUp.popUp(" te han robado \n un " + Poder.poder_a_string(poder_robado) + "! " ,Vector2(-74.0, -300.0), escena_principal)
-	if poder1.get_poder() == poder_robado:
-		poder1.cambiar_poder(Poder.PODER.NINGUNO)
-	elif poder2.get_poder() == poder_robado:
-		poder2.cambiar_poder(Poder.PODER.NINGUNO)
-	elif poder3.get_poder() == poder_robado:
-		poder3.cambiar_poder(Poder.PODER.NINGUNO)
+	pass #esta terminado
 
 #endregion
-
 func quitar_bomba_de_humo() -> void:
 	PopUp.popUp("el humo se disipa\n",Vector2(-74.0, -300.0), escena_principal)
 	niebla.terminar_niebla()
@@ -420,11 +414,13 @@ func quitar_bomba_de_humo() -> void:
 	tablero.revelar_numeros()
 
 #region Aplicar a los demas
-func usar_bola_de_cristal(_adversario: String) -> void:
+func usar_bola_de_cristal(adversario: String) -> void:
 	# get_cartas_adversario (siguientes dos lineas de placeholder)
-	var cartas_adversario: Array[Ficha] = [Ficha.ficha(Ficha.COLOR.ROJO,10,Ficha.ESPECIAL.NO), Ficha.ficha(Ficha.COLOR.NEGRO,3,Ficha.ESPECIAL.DORADO), Ficha.ficha(Ficha.COLOR.AMARILLO,8,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.NEGRO,4,Ficha.ESPECIAL.NO)]
-	var poderes_adversario: Array[Poder.PODER] = [Poder.PODER.NINGUNO,Poder.PODER.ANGEL_GUARDA,Poder.PODER.TOQUE_MIDAS] 
-	
+	var dict = await ConectorRed.bola_de_cristal(get_id_adversario(adversario))
+	var cartas_adversario: Array[Ficha]
+	cartas_adversario.assign(dict["fichas"])
+	var poderes_adversario: Array[Poder.PODER]
+	poderes_adversario.assign(dict["fichas"])
 	await bola_de_cristal.mostrar_bola(cartas_adversario, poderes_adversario)
 	await  get_tree().create_timer(7.0).timeout
 	bola_de_cristal.esconder_bola()
@@ -434,13 +430,13 @@ func lanzar_maldicion(adversario: String, maldicion: Poder.PODER) -> void:
 	match(maldicion):
 		# enviar mensaje a los demas
 		Poder.PODER.TECHO_CRISTAL:
-			pass
+			ConectorRed.techo(get_id_adversario(adversario))
 		Poder.PODER.BOMBA_HUMO:
-			pass
+			ConectorRed.bomba_de_humo(get_id_adversario(adversario))
 		Poder.PODER.REDUCIR_TIEMPO:
-			pass
+			ConectorRed.guindilla(get_id_adversario(adversario))
 		Poder.PODER.MAS_CUATRO:
-			pass
+			ConectorRed.mas_cuatro(get_id_adversario(adversario))
 
 func usar_guante_blanco(_adversario: String) -> Poder.PODER:
 	print(_adversario)
@@ -455,24 +451,48 @@ func usar_guante_blanco(_adversario: String) -> Poder.PODER:
 # esta funcion devuelve un array con 3 fichas de las cuales el jugador eligira una
 # sera entonces cuando se llame a usar_trueque2
 # si el adversario tiene menos de 3 fichas rellenar con nulls
-func usar_trueque1(_adversaro: String) -> Array[Ficha]:
-	# get_fichas de adversario
-	# pongo unas fichas de ejemplo:
+func usar_trueque1(adversario: String) -> Array[Ficha]:
+	var fichas = await ConectorRed.trueque(get_id_adversario(adversario))
 	mano.visible=false
-	return [Ficha.ficha(Ficha.COLOR.NEGRO,2), Ficha.ficha(Ficha.COLOR.ROJO,3,Ficha.ESPECIAL.ARCOIRIS), Ficha.ficha(Ficha.COLOR.AZUL,4,Ficha.ESPECIAL.DORADO)]
+	var fichas_a_tomar: int = min(fichas.size(),3)
+	var indice1 = -1
+	var indice2 = -1
+	var indice3 = -1
+	match(fichas_a_tomar):
+		1:
+			indice1 = randi_range(0, fichas.size()-1)
+		2:
+			while((indice1 == indice2) or (indice1 == -1 or indice2 == -1)):
+				indice1 = randi_range(0, fichas.size()-1)
+				indice2 = randi_range(0, fichas.size()-1)
+		3:
+			while(indice1 == indice2 or indice2 == indice3 or indice3 == indice1 or (indice1 == -1 or indice2 == -1 or indice3 == -1)):
+				indice1 = randi_range(0, fichas.size()-1)
+				indice2 = randi_range(0, fichas.size()-1)
+				indice3 = randi_range(0, fichas.size()-1)
+	var fichas_devolver: Array[Ficha] = []
+	fichas_devolver.append(get_fichas_mano_no_blancas()[indice1])
+	if indice2 != -1:
+		fichas_devolver.append(get_fichas_mano_no_blancas()[indice2])
+	if indice3 != -1:
+		fichas_devolver.append(get_fichas_mano_no_blancas()[indice3])
+	return fichas_devolver
 
 # esta funcion intercambia una ficha propia con una ficha del rival
-func usar_trueque2(_adversario: String, _ficha_propia: Ficha, _ficha_rival: Ficha) -> void:
-	manager_fichas.conectar_ficha(_ficha_rival)
-	mano.insertar_ficha(_ficha_rival, _ficha_propia)
-	# set_ficha al adversario
-	pass
+func usar_trueque2(adversario: String, ficha_propia: Ficha, ficha_rival: Ficha) -> void:
+	ConectorRed.confirma_trueque(get_id_adversario(adversario),ficha_propia,ficha_rival)
+	manager_fichas.conectar_ficha(ficha_rival)
+	mano.insertar_ficha(ficha_rival, ficha_propia)
 
 #endregion
 
 func get_fichas_mano() -> Array[Ficha]:
 	return mano.fichas_en_mano
-
+func get_id_adversario(s:String):
+	for adv in adversarios:
+		if s == adv["nombre"]:
+			return adv["id"]
+	assert(false,"pero keeeeee")
 func get_fichas_mano_no_blancas() -> Array[Ficha]:
 	var fichas: Array[Ficha] = []
 	for ficha: Ficha in get_fichas_mano():

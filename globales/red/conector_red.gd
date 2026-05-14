@@ -120,19 +120,21 @@ func hacer_jugada(tablero:Array[Grupo_fichas])->bool:
 func robar(receptor: Callable):
 	var robada = await $red.robar_ficha(id_partida)
 	$red.ultimo_turno = -1
-	return receptor.call(robada["color"],robada["numero"] ) 
+	if not receptor.is_null():
+		return receptor.call(robada["color"],robada["numero"],robada["especial"]) 
 
 func robar_sin_pasar(receptor: Callable, num_fichas : int = 1)->Array:
 	var robadas: Array = await $red.robar_fichas_sin_pasar(id_partida, num_fichas)
-	return robadas.map(func(ficha):
-		return receptor.call(ficha["color"],ficha["numero"]))
-
+	if not receptor.is_null():
+		return robadas.map(func(ficha):
+			return receptor.call(ficha["color"],ficha["numero"],ficha["especial"]) )
+	else: return []
 ## devuelve mano inicial
 func inicializar_partida(funcion_crea_fichas: Callable):
 	crea_ficha = funcion_crea_fichas
 	var info = await $red.info_inicial(id_partida, crea_ficha)
 	mi_turno = info["turno"]
-	return info["mano"]
+	return info
 
 func mano() -> Array[Ficha]:
 	return  await $red.mano(id_partida)
@@ -186,6 +188,8 @@ func get_adversarios_con_id(id,solo_conectados) -> Array[Dictionary]:
 	return res
 #endregion
 #region COSMETICO
+func get_id():
+	return $red.mi_id
 func cambia_perfil(icono: String):
 	globales.set_avatar(icono)
 	await $red.cambia_perfil(icono)
@@ -216,7 +220,10 @@ func cambiar_contrasena(contra_nueva: String, contra_vieja:String):
 #region BUSCAR PARTIDAS A MEDIAS
 func parar_partida():
 	if(partida_en_curso):
-		await $red.pausar_partida(id_partida)
+		if not await $red.pausar_partida(id_partida):
+			printerr("error al parar partida: ", id_partida)
+	else:
+		printerr("no hay partida en curso")
 func continuar_partida(id:int = id_partida):
 	$red.continuar_partida(id)
 	partida_en_curso = true
@@ -244,4 +251,77 @@ func salirse_de_reanudable(id:int):
 func unirse_a_reanudable(id:int):
 	id_partida = id
 	$red.unirse_a_reanudable(id)
+#endregion
+#region PODERES Y EVENTOS
+func poderes(poderes_disponibles_a_compra,efectos,mis_poderes):
+	printerr("a.1")
+	var dict = await $red.get_mercado() #mercado, monedas y efectos
+	printerr("a.2")
+	poderes_disponibles_a_compra.assign(dict["mercado"])
+	efectos.assign(dict["efectos"])
+	mis_poderes.assign(dict["poderes"])
+	printerr("a.3")
+	return dict["monedas"]
+
+func get_mis_poderes()->Array[Poder.PODER]:
+	return $red.get_mercado()["poderes"]
+
+const eventos_red =  {  "+pieza":[ManagerJuego.EVENTO.ROBAR_OTRA_FICHA,Ficha.COLOR.BLANCO],
+						"50porcien":[ManagerJuego.EVENTO.DESCUENTO,Ficha.COLOR.BLANCO],
+						"prohibido_rojo":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.ROJO],
+						"prohibido_naranja":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.AMARILLO],
+						"prohibido_negro":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.NEGRO],
+						"prohibido_azul":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.AZUL]
+					}
+
+func evento_actual()->Array:
+	return eventos_red[$red.get_evento()]
+
+
+func angel():
+	$red.activar_poder(id_partida,"GUARDIAN_ANGEL")
+
+func midas()->Array:
+	var mano = await $red.activar_poder(id_partida,"MIDAS_TOUCH")["manoActual"]
+	mano = Array(mano.split(","))
+	print("CARTAS TRAS MIDAS: ", mano)
+	var carta_arr: Array[Ficha]
+	carta_arr.assign(mano.map( func(s:String)->Ficha: 
+		var dict = $red.string_to_ficha(s)
+		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"]) ))
+	return carta_arr
+
+func bola_de_cristal(id: int):
+	var res_poder = $red.activar_poder(id_partida,"CRYSTAL_BALL", id)
+	var fichas:Array[Ficha]
+	fichas.assign(res_poder["fichasObjetivoVisibles"].split(",").map( func(s:String)->Ficha: 
+		var dict = $red.string_to_ficha(s)
+		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"])))
+	return {"fichas":fichas,"poderes":$red.string_to_poderes(res_poder["habilidadesObjetivoVisibles"])}
+
+func mas_cuatro(id: int):
+	$red.activar_poder(id_partida,"PLUS_FOUR", id)
+
+func trueque(id: int):
+	var opciones = $red.activar_poder(id_partida,"SWAP_ON_FAIL",id)
+	var fichas:Array[Ficha]
+	fichas.assign(opciones["fichasObjetivoVisibles"]
+	.split(",").map(
+	func(s:String)->Ficha: 
+		var dict = $red.string_to_ficha(s)
+		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"])))
+	return fichas
+
+func confirma_trueque(id:int,mi_ficha:Ficha,su_ficha:Ficha):
+	$red.final_trueque(id_partida,id,mi_ficha,su_ficha)
+func guante(id: int):
+	var dict = $red.activar_poder(id_partida,"WHITE_GLOVE",id)
+	
+func bomba_de_humo(id:int):
+	$red.activar_poder(id_partida,"SMOKE_BOMB",id)
+func guindilla(id:int):
+	$red.activar_poder(id_partida,"CHILI_PEPPER",id) 
+func techo(id:int):
+	$red.activar_poder(id_partida,"GLASS_CEILING",id)
+
 #endregion

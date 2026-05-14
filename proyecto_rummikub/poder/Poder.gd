@@ -109,7 +109,7 @@ func ejecutar_poder() -> void:
 		PODER.TRUEQUE:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
 			if adversaro_elegido != "":
-				var fichas_adversario: Array[Ficha] = manager_juego.usar_trueque1(adversaro_elegido)
+				var fichas_adversario: Array[Ficha] = await manager_juego.usar_trueque1(adversaro_elegido)
 				var intercambio: Array[Ficha] = await selector_ficha.sacar_selector(fichas_adversario)
 				if (intercambio[0]!=null) and (intercambio[1] != null):
 					manager_juego.usar_trueque2(adversaro_elegido,intercambio[1],intercambio[0])

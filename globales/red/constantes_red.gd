@@ -100,22 +100,49 @@ func string_to_grupos(s:String)->Array:
 	
 	return res
 
+func string_to_poder(s:String)->Poder.PODER:
+	match s:
+		"GUARDIAN_ANGEL": 
+			return Poder.PODER.ANGEL_GUARDA
+		"CRYSTAL_BALL": 
+			return Poder.PODER.BOLA_CRISTAL
+		"MIDAS_TOUCH": 
+			return Poder.PODER.TOQUE_MIDAS
+		"PLUS_FOUR": 
+			return Poder.PODER.MAS_CUATRO
+		"SWAP_ON_FAIL": 
+			return Poder.PODER.TRUEQUE
+		"WHITE_GLOVE": 
+			return Poder.PODER.GUANTE_BLANCO
+		"SMOKE_BOMB": 
+			return Poder.PODER.BOMBA_HUMO
+		"CHILI_PEPPER": 
+			return Poder.PODER.REDUCIR_TIEMPO
+		"GLASS_CEILING": 
+			return Poder.PODER.TECHO_CRISTAL
+	assert(false, "esto no debería pasar")
+	return Poder.PODER.NINGUNO
+
+func string_to_poderes(s:String)->Array:
+	var poderes : Array = s.split("|")
+	return poderes.map(string_to_poder)
+	
 ## Resultado con claves "color" y "numero"
 func string_to_ficha(s:String) -> Dictionary:
 	s=s.to_upper()
 	var res = {}
-	print(s)
-	if s[0]== DORADO_RED:
-		res["especial"] = Ficha.ESPECIAL.DORADO
-		s = s.substr(1)
-	elif s[0] == ARCOIRIS_RED:
-		res["especial"] = Ficha.ESPECIAL.ARCOIRIS
-		s = s.substr(1)
-	else:
-		res["especial"] = Ficha.ESPECIAL.NO
+	res["especial"] = Ficha.ESPECIAL.NO
+	if s.length() >= 4:
+		if s[3] == DORADO_RED:
+			res["especial"] = Ficha.ESPECIAL.DORADO
+		elif s[3] == ARCOIRIS_RED:
+			res["especial"] = Ficha.ESPECIAL.ARCOIRIS
 	
 	if s[0] == JOKER_RED:
-		return {"color":Ficha.COLOR.COMODIN, "numero":10}
+		res["color"] = Ficha.COLOR.COMODIN 
+		res["numero"] = 10
+		return res
+	
 	match s[0]:
 		ROJO_RED:
 			res["color"] = Ficha.COLOR.ROJO
@@ -125,7 +152,7 @@ func string_to_ficha(s:String) -> Dictionary:
 			res["color"] = Ficha.COLOR.NEGRO
 		NARANJA_RED:
 			res["color"] = Ficha.COLOR.AMARILLO
-	res["numero"] = s.substr(1).to_int()
+	res["numero"] = s.substr(1,2).to_int()
 	return res
 
 
@@ -504,13 +531,18 @@ func info_inicial(id: int, crea_ficha: Callable)->Dictionary:
 		
 		var res:Dictionary={}
 		res[turno]= campos[partic_turno]
+		print(campos)
+		res["poderes"] = []
+		if campos["habilidadesActuales"] != null and campos["habilidadesActuales"] != "":
+			res["poderes"] = string_to_poderes(campos["habilidadesActuales"])
 		
 		var cartas = campos[partic_mano]
 		cartas = Array(cartas.split(","))
+		print("CARTAS INICIALES: ", cartas)
 		var carta_arr: Array[Ficha]
 		carta_arr.assign(cartas.map( func(s:String)->Ficha: 
 			var dict = string_to_ficha(s)
-			return crea_ficha.call(dict["color"],dict["numero"]) ))
+			return crea_ficha.call(dict["color"],dict["numero"],dict["especial"]) ))
 		res["mano"]= carta_arr
 		return res
 	else:
@@ -647,7 +679,7 @@ func cambiar_contrasena(contra_nueva: String, contra_vieja: String)->bool:
 #region salir de partida
 func pausar_partida(id: int):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+"/pausar",{},HTTPClient.METHOD_POST,header())
-	
+	return _respuesta_buena()
 func salir_de_partida(id: int) :
 	await _awaiting_request(base_url+partidas+"/"+str(id)+"/salir",{},HTTPClient.METHOD_POST,header())
 #endregion
@@ -679,3 +711,44 @@ func get_retos():
 		return{"id_partida": solicitud["idPartida"],
 		"emisor_nom":solicitud["nombreEmisor"],"emisor_id":solicitud["idEmisor"]})
 #endregion
+#region eventos aleatorios
+func get_evento()->String:
+	return ultima_info_partida["eventoActual"]
+#endregion
+func get_mercado():
+	printerr("aaaaaa")
+	await _awaiting_request_get(partidas+"/"+str(mi_id)+"/mercado")
+	printerr("bbbbbb")
+	assert(_respuesta_buena(), json.data)
+	return {
+	"monedas":json.data["monedasJugador"],
+	"mercado":string_to_poderes(json.data["objetosMercado"]),
+	"efectos":json.data["efectosActivos"],
+	"poderes":string_to_poderes("habilidadesCompradas")
+	}
+func activar_poder(id:int, poder: String, objetivo:int = -1):
+	if objetivo >= 0:
+		await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+		{"codigoObjeto":poder, "idJugadorObjetivo":objetivo},
+		HTTPClient.METHOD_POST, header())
+	else:
+		await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+		{"codigoObjeto":poder},
+		HTTPClient.METHOD_POST, header())
+	assert(_respuesta_buena(),json.data)
+	return json.data
+func final_guante(id:int, objetivo:int,objeto: String):
+	await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+		{"codigoObjeto":"WHITE_GLOVE", "idJugadorObjetivo":objetivo,
+		"codigoObjetoObjetivo":objeto},
+		HTTPClient.METHOD_POST, header())
+	assert(_respuesta_buena(),json.data)
+
+func final_trueque(id:int,objetivo:int,mi_ficha:Ficha,su_ficha:Ficha):
+	await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+		{"codigoObjeto":"WHITE_GLOVE",
+		"idJugadorObjetivo":objetivo,
+		"fichaPropia":ficha_to_string(mi_ficha),
+		"fichaObjetivo":ficha_to_string(su_ficha)},
+		HTTPClient.METHOD_POST, header())
+	assert(_respuesta_buena(),json.data)

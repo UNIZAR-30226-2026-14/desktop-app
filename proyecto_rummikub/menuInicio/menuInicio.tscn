@@ -1758,7 +1758,6 @@ placeholder_text = "Id del usuario..."
 alignment = 1
 
 [node name="FondoEditarPerfil" type="Panel" parent="." unique_id=1997386250 node_paths=PackedStringArray("menuInicio")]
-visible = false
 layout_mode = 0
 anchor_top = 0.16203703
 anchor_right = 0.9982639
@@ -2148,12 +2147,12 @@ grow_vertical = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_kogys")
 max_length = 15
 
-[node name="PartidasGanadas" type="Panel" parent="FondoEditarPerfil/MarcoEditarPerfil/GridContainer2" unique_id=1258997758]
+[node name="id" type="Panel" parent="FondoEditarPerfil/MarcoEditarPerfil/GridContainer2" unique_id=1258997758]
 custom_minimum_size = Vector2(225, 68.5)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("12_pt8b4")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="FondoEditarPerfil/MarcoEditarPerfil/GridContainer2/PartidasGanadas" unique_id=2009735106]
+[node name="RichTextLabel" type="RichTextLabel" parent="FondoEditarPerfil/MarcoEditarPerfil/GridContainer2/id" unique_id=2009735106]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -2167,7 +2166,7 @@ theme_override_colors/default_color = Color(0.65882355, 0.78039217, 0.6392157, 1
 text = "ID"
 horizontal_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="FondoEditarPerfil/MarcoEditarPerfil/GridContainer2/PartidasGanadas" unique_id=304547973]
+[node name="RichTextLabel2" type="RichTextLabel" parent="FondoEditarPerfil/MarcoEditarPerfil/GridContainer2/id" unique_id=304547973]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2201,6 +2200,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_3s8i0")
 theme_override_styles/hover = SubResource("StyleBoxTexture_rn7sa")
 
 [node name="FondoLobbyReanudar" type="Panel" parent="." unique_id=650459654 node_paths=PackedStringArray("icono0", "icono1", "icono2", "icono3")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

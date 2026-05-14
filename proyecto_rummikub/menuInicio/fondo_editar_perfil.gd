@@ -14,7 +14,7 @@ func _ready() -> void:
 	nuevoIcono.texture = globales.avatar
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.add_theme_stylebox_override("panel",nuevoIcono)
 	$MarcoEditarPerfil/PanelIconoBotonAmigos2/IconoJugador.size.y = ratio * ANCHURA_AVATAR
-	
+	$MarcoEditarPerfil/GridContainer2/id/RichTextLabel2.text = str(ConectorRed.get_id())
 	$MarcoEditarPerfil/GridContainer2/NombreDeUsuario/EditarNombreUsuario.text = globales.nombre_usuario
 
 func _on_boton_cerrar_pressed() -> void:

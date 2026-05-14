@@ -203,3 +203,11 @@ static func color_a_string(color_in: COLOR) -> String:
 		COLOR.AMARILLO:
 			return "amarillo"
 	return "ERROR"
+
+func _notification(notification: int):
+	if notification == Ficha.NOTIFICATION_EXIT_TREE and self.en_blanco == false and self.miGrupo != null:
+		pass
+	if notification == Ficha.NOTIFICATION_UNPARENTED and not self.en_blanco:
+		pass
+	if notification == Ficha.NOTIFICATION_PARENTED and not self.en_blanco:
+		pass
