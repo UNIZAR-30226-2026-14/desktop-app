@@ -215,3 +215,9 @@ func suma_grupo()->int:
 	for ficha: Ficha in fichas:
 		resultado += ficha.numero
 	return resultado
+
+func fijado() -> bool:
+	for ficha: Ficha in fichas:
+		if ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA:
+			return false
+	return true

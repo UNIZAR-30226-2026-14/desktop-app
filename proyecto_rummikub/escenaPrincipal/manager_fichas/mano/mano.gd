@@ -42,6 +42,7 @@ func _ready() -> void:
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 1, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 10, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 10, Ficha.ESPECIAL.NO))
+	devolver_ficha(Ficha.ficha(Ficha.COLOR.NEGRO, 9, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.AZUL, 10, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.AMARILLO, 10, Ficha.ESPECIAL.NO))
 	devolver_ficha(Ficha.ficha(Ficha.COLOR.ROJO, 10, Ficha.ESPECIAL.NO))

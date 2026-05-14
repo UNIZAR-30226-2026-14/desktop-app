@@ -65,7 +65,8 @@ func _ready() -> void:
 	miTurno.pressed.connect(iniciar_turno)
 
 func intenta_hacer_jugada() -> bool:
-	
+	if (evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido)):
+		print("SSSSSSSSSSSSSS")
 	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and (not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
 		tablero.fijar_tablero()
 		guardar_estado()
@@ -73,8 +74,12 @@ func intenta_hacer_jugada() -> bool:
 		abierto = true
 		return true
 	else:
-		if tablero.tablero_valido(true):
-			PopUp.popUp("las fichas tienen \n que sumar 30 ",Vector2(-74.0, -300.0), escena_principal)
+		if tablero.combinando_fijadas_y_no_fijadas() and (not abierto):
+			PopUp.popUp(" no se pueden usar fichas \n del tablero si no has abierto ",Vector2(-74.0, -300.0), escena_principal)
+		elif tablero.combinando_fijadas_y_no_fijadas() and (hay_techo_de_cristal):
+			PopUp.popUp(" no se pueden usar fichas del tablero \n porque te han lanzado techo de cristal ",Vector2(-74.0, -300.0), escena_principal)
+		elif tablero.tablero_valido(true):
+			PopUp.popUp(" las fichas tienen \n que sumar 30 ",Vector2(-74.0, -300.0), escena_principal)
 		elif evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido):
 			PopUp.popUp(" este turno no se puede usar \n el color "+ Ficha.color_a_string(color_prohibido),Vector2(-74.0, -300.0), escena_principal)
 		else:
@@ -93,6 +98,7 @@ func terminar_turno() -> void:
 		quitar_bomba_de_humo()
 	reiniciar_eventos()
 
+static var a: int = 0
 
 func iniciar_turno() -> void:
 	guardar_estado()
@@ -102,8 +108,15 @@ func iniciar_turno() -> void:
 	devolverFichas.disabled = true
 	pasarTurno.disabled = true
 	
-	#aplicar evento o poder de rival
+	var fichas: Array[Ficha] = [Ficha.ficha(Ficha.COLOR.NEGRO,10), Ficha.ficha(Ficha.COLOR.NEGRO,11), Ficha.ficha(Ficha.COLOR.NEGRO,12) ]
+	var grupo: Array[Grupo_fichas] = [Grupo_fichas.Grupo_fichas(fichas)]
+	tablero.insertar_grupos_fichas(grupo)
 	
+	#aplicar evento o poder de rival
+	if a == 1:
+		techo_de_cristal_mi()
+	
+	a += 1
 	empieza_turno.emit()
 
 func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR.BLANCO) ->void:

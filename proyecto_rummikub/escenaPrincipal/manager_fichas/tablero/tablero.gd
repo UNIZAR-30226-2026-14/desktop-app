@@ -15,9 +15,10 @@ var grupos: Array[Grupo_fichas] = []
 func tablero_valido(abierto: bool) -> bool:
 	var suma: int = 0
 	for grupo in grupos:
-		suma += grupo.suma_grupo()
-		if !grupo.grupo_correcto(abierto): return false
-	if not abierto and suma < 30:
+		if not grupo.fijado():
+			suma += grupo.suma_grupo()
+			if !grupo.grupo_correcto(true): return false
+	if (not abierto) and ((suma < 30) or combinando_fijadas_y_no_fijadas()):
 		return false
 	return true
 
@@ -78,10 +79,8 @@ func fijar_tablero() -> void:
 				ficha.estado = globales.ESTADO_FICHA.TABLERO_FIJADA
 				ficha.desresaltar_aura()
 				manager_juego.puntuar_ficha(ficha.especial)
-						
 
 func insertar_tablero(misGrupos: Array[Grupo_fichas]):
-	
 	for grupo in grupos:
 		grupo.queue_free()
 	grupos = []
@@ -89,8 +88,6 @@ func insertar_tablero(misGrupos: Array[Grupo_fichas]):
 		anadir_grupo_fichas(grupo)
 
 func insertar_grupos_fichas(grupos_insertar: Array[Grupo_fichas]) -> void:
-	if grupos_insertar.size() > 0:
-		manager_juego.abierto = true
 	var canvas_transform = get_viewport().get_canvas_transform()
 	var esquina_superior_izquierda: Vector2 = -canvas_transform.origin 
 	var esquina_superior_derecha:   Vector2 = Vector2(-esquina_superior_izquierda.x, esquina_superior_izquierda.y)
@@ -157,4 +154,17 @@ func detectar_color_sin_fijar(color: Ficha.COLOR) -> bool:
 		for ficha: Ficha in grupo.fichas:
 			if (ficha.color == color) and (ficha.estado == globales.ESTADO_FICHA.TABLERO_NO_FIJADA):
 				return true
+	return false
+
+func combinando_fijadas_y_no_fijadas() -> bool:
+	for grupo: Grupo_fichas in grupos:
+		var ficha_fijada_encontrada: bool = false
+		var ficha_no_fijada_encontrada: bool = false
+		for ficha: Ficha in grupo.fichas:
+			if ficha.estado == globales.ESTADO_FICHA.TABLERO_FIJADA:
+				ficha_fijada_encontrada = true
+			else:
+				ficha_no_fijada_encontrada = true
+		if ficha_fijada_encontrada and ficha_no_fijada_encontrada:
+			return true
 	return false
