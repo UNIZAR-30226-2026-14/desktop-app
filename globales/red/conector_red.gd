@@ -184,11 +184,6 @@ func get_adversarios_con_id(id,solo_conectados) -> Array[Dictionary]:
 		res = res.filter(func(adv): return adv["conectado"])
 	return res
 #endregion
-#region CAMBIAR ESTADO PARTIDA
-func parar_partida():
-	if(partida_en_curso):
-		await $red.pausar_partida(id_partida)
-#endregion
 #region COSMETICO
 func cambia_perfil(icono: String):
 	globales.set_avatar(icono)
@@ -218,6 +213,13 @@ func cambiar_contrasena(contra_nueva: String, contra_vieja:String):
 	else: return false
 
 #region BUSCAR PARTIDAS A MEDIAS
+func parar_partida():
+	if(partida_en_curso):
+		await $red.pausar_partida(id_partida)
+func continuar_partida(id:int = id_partida):
+	$red.continuar_partida(id)
+	partida_en_curso = true
+
 func get_reanudables()->Array[PartidaSeleccionable]:
 	var partidas:Array[Dictionary]
 	var res: Array[PartidaSeleccionable]
@@ -241,3 +243,4 @@ func salirse_de_reanudable(id:int):
 func unirse_a_reanudable(id:int):
 	id_partida = id
 	$red.unirse_a_reanudable(id)
+#endregion

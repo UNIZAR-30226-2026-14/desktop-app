@@ -329,40 +329,42 @@ func unirse_a_partida(id: int):
 		return Error.ERR_CANT_CONNECT
 	return Error.ERR_BUG
 
+var cancelada: bool
+var forzar_reanudar:bool
 func forzar_inicio_partida_set_true():
-	forzar_inicio_partida = true
-	res_espera_partida_cancelable = true
+	forzar_reanudar = true
 func cancelar_busqueda():
-	forzar_inicio_partida = true
-	res_espera_partida_cancelable = false
+	cancelada = true
 var maximos_jugadores: int = 4
 var status_label: Label
-func check_iniciar_partida(res): 
+func check_iniciar_partida_calncelable(res): 
+	return forzar_reanudar or cancelada or (res[estado_partida]==ESTADO_PARTIDA_EMPEZADA )
+# devuelve false si y solo si la busqueda de partida es cancelada
+func espera_partida_cancelable(id:int,iniciar:Button,cancelar:Button):
+	maximos_jugadores = 4
+	forzar_reanudar = false
+	cancelada = false
+	iniciar.visible = true
+	iniciar.pressed.connect(forzar_inicio_partida_set_true)
+	cancelar.pressed.connect(cancelar_busqueda)
+	await _espera_a_resultado(check_iniciar_partida_calncelable,\
+		base_url+partidas+"/"+str(id))
+	creado_partida = false
+	forzar_inicio_partida = false
+	iniciar.visible = false
+	iniciar.pressed.disconnect(forzar_inicio_partida_set_true)
+	cancelar.pressed.disconnect(cancelar_busqueda)
+	return not cancelada
+func solo_inicia(id:int):
+	await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
+	return _respuesta_buena()
+func check_iniciar_partida_publica(res): 
 	var texto = "Oponentes en partida: "
 	if res is Array: texto += str(res.size() - 1)
 	else : texto += "0"
 	if (status_label != null):
 		status_label.text = texto
 	return forzar_inicio_partida or (res is Array and res.size() == maximos_jugadores)
-# devuelve false si y solo si la busqueda de partida es cancelada
-var res_espera_partida_cancelable: bool
-func espera_partida_cancelable(id:int,iniciar:Button,cancelar:Button):
-	maximos_jugadores = 4
-	res_espera_partida_cancelable = true
-	iniciar.visible = true
-	iniciar.pressed.connect(forzar_inicio_partida_set_true)
-	cancelar.pressed.connect(cancelar_busqueda)
-	await _espera_a_resultado(check_iniciar_partida,\
-		base_url+participiaciones_por_partida+str(id))
-	creado_partida = false
-	forzar_inicio_partida = false
-	iniciar.visible = false
-	iniciar.pressed.disconnect(forzar_inicio_partida_set_true)
-	cancelar.pressed.disconnect(forzar_inicio_partida_set_true)
-	return res_espera_partida_cancelable
-func solo_inicia(id:int):
-	await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
-	return _respuesta_buena()
 
 func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 			 max_jugadores: int=3,)->void:
@@ -371,7 +373,7 @@ func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 	if creado_partida:
 		iniciar.visible = true
 		iniciar.pressed.connect(forzar_inicio_partida_set_true)
-		await _espera_a_resultado(check_iniciar_partida,\
+		await _espera_a_resultado(check_iniciar_partida_publica,\
 			base_url+participiaciones_por_partida+str(id))
 		if status_label != null:
 			status_label.text = "Iniciando partida"
@@ -458,10 +460,12 @@ func salirse_de_reanudable(id:int):
 	await _awaiting_request(base_url+participaciones+"/"+str(mi_id)+"/"+str(id)+conexion_reanudable,
 	{"conectado":false},HTTPClient.METHOD_PATCH,header())
 	assert(_respuesta_buena(),json.data)
-
+func continuar_partida(id:int):
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/"+"reanudar",{},HTTPClient.METHOD_POST)
+	assert(_respuesta_buena(),json.data)
 
 func parar_partida(id:int):
-	await _awaiting_request(base_url+partidas+"/"+str(id)+"pausar",{},HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/"+"pausar",{},HTTPClient.METHOD_POST)
 	assert(_respuesta_buena(),json.data)
 #endregion
 #region partida

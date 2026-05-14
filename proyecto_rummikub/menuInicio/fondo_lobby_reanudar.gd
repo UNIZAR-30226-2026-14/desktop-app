@@ -24,7 +24,7 @@ func _ready() -> void:
 	self.visible = false
 	$PanelReanudarPartida/BotonCerrar.pressed.connect(_cerrar)
 	$PanelReanudarPartida/BotonEmpezar.pressed.connect(_iniciar_partida)
-	$PanelReanudarPartida/BotonCerrar.pressed.connect(_no_esperar_partida) 
+	$PanelReanudarPartida/BotonCancelar.pressed.connect(_no_esperar_partida) 
 	$PanelReanudarPartida/BotonUnirse.pressed.connect(_esperar_partida)
 	cambiar_icono(globales.avatar,0)
 	cambiar_icono(null,1)
@@ -38,7 +38,7 @@ func _cerrar() -> void:
 	id_partida = -1
 
 func mostrar() -> void:
-	$PanelReanudarPartida/BotonCerrar.visible = false 
+	$PanelReanudarPartida/BotonCancelar.visible = false 
 	$PanelReanudarPartida/BotonUnirse.visible = false
 	$PanelReanudarPartida/BotonEmpezar.visible = false
 	id_partida = -1
@@ -92,7 +92,7 @@ func _partida_presionada(partida: PartidaSeleccionable):
 	$PanelReanudarPartida/BotonUnirse.visible = true
 
 func _esperar_partida()->void:
-	$PanelReanudarPartida/BotonCerrar.visible = true 
+	$PanelReanudarPartida/BotonCancelar.visible = true 
 	$PanelReanudarPartida/BotonEmpezar.visible = true
 	$PanelReanudarPartida/BotonUnirse.visible = false
 	if (await ConectorRed.esperar_comienzo_cancelable(id_partida,
@@ -103,10 +103,11 @@ func _esperar_partida()->void:
 	
 
 func _no_esperar_partida()->void:
-	$PanelReanudarPartida/BotonCerrar.visible = false 
-	$PanelReanudarPartida/BotonUnirse.visible = false
-	$PanelReanudarPartida/BotonEmpezar.visible = true
+	$PanelReanudarPartida/BotonCancelar.visible = false 
+	$PanelReanudarPartida/BotonEmpezar.visible = false
+	$PanelReanudarPartida/BotonUnirse.visible = true
 	
 
 func _iniciar_partida() -> void:
+	ConectorRed.continuar_partida(id_partida)
 	printerr("iniciar partida presionado")

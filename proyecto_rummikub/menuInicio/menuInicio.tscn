@@ -2308,7 +2308,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
 text = "unirse"
 
 [node name="BotonEmpezar" type="Button" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=1903640957]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -2328,7 +2327,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_hgf5o")
 text = "empezar"
 
 [node name="BotonCancelar" type="Button" parent="FondoLobbyReanudar/PanelReanudarPartida" unique_id=1005169328]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
