@@ -229,7 +229,7 @@ func chocando_con_grupo() -> bool:
 			return true
 	return false
 
-func suma_grupo()->int:
+func suma_grupo()-> int:
 	var resultado: int = 0
 	for ficha: Ficha in fichas:
 		if ficha.color == Ficha.COLOR.COMODIN:

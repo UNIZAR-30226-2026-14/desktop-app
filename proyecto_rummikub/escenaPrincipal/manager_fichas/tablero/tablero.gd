@@ -17,8 +17,11 @@ func tablero_valido(abierto: bool) -> bool:
 	for grupo in grupos:
 		if not grupo.fijado():
 			suma += grupo.suma_grupo()
-			if !grupo.grupo_correcto(true): return false
-	if (not abierto) and ((suma < 30)): #or combinando_fijadas_y_no_fijadas()):
+			if !grupo.grupo_correcto(true): 
+				print("AAAAAAA")
+				return false
+	if (not abierto) and ((suma < 30) or combinando_fijadas_y_no_fijadas()):
+		print("suma: " + str(suma))
 		return false
 	return true
 

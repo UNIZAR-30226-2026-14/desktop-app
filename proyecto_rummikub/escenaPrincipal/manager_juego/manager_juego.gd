@@ -91,8 +91,7 @@ func _ready() -> void:
 
 #region gestion turnos
 func intenta_hacer_jugada() -> bool:
-	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and \
-			(not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
+	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and (not((evento_ocurriendo == EVENTO.SIN_COLOR) and (tablero.detectar_color_sin_fijar(color_prohibido)))):
 		
 		if(await ConectorRed.hacer_jugada(tablero.grupos)):
 			abierto = true
@@ -107,10 +106,10 @@ func intenta_hacer_jugada() -> bool:
 			PopUp.popUp(" no se pueden usar fichas \n del tablero si no has abierto ",Vector2(-74.0, -300.0), escena_principal)
 		elif tablero.combinando_fijadas_y_no_fijadas() and (hay_techo_de_cristal):
 			PopUp.popUp(" no se pueden usar fichas del tablero \n porque te han lanzado techo de cristal ",Vector2(-74.0, -300.0), escena_principal)
-		elif tablero.tablero_valido(true):
-			PopUp.popUp(" las fichas tienen \n que sumar 30 ",Vector2(-74.0, -300.0), escena_principal)
 		elif evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido):
 			PopUp.popUp(" este turno no se puede usar \n el color "+ Ficha.color_a_string(color_prohibido),Vector2(-74.0, -300.0), escena_principal)
+		elif tablero.tablero_valido(true):
+			PopUp.popUp(" las fichas tienen \n que sumar 30 ",Vector2(-74.0, -300.0), escena_principal)
 		else:
 			PopUp.popUp(" las fichas estan mal colocadas ",Vector2(-74.0, -300.0), escena_principal)
 		return false
