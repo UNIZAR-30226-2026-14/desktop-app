@@ -121,6 +121,7 @@ func robar(receptor: Callable):
 	var robada = await $red.robar_ficha(id_partida)
 	$red.ultimo_turno = -1
 	if not receptor.is_null():
+		print("creo ficha robada")
 		return receptor.call(robada["color"],robada["numero"],robada["especial"]) 
 
 func robar_sin_pasar(receptor: Callable, num_fichas : int = 1)->Array:
@@ -221,7 +222,7 @@ func get_perfil():
 	
 func set_skins():
 	await $red.set_perfil(globales.skin_ficha_equipada,
-		globales.skin_tablero_equipada, 10000)#globales.monedas)
+		globales.skin_tablero_equipada, globales.monedas)
 
 #endregion
 func cambiar_contrasena(contra_nueva: String, contra_vieja:String):
@@ -271,13 +272,10 @@ func unirse_a_reanudable(id:int):
 #region PODERES Y EVENTOS
 
 func poderes(poderes_disponibles_a_compra,efectos,mis_poderes):
-	printerr("a.1")
 	var dict = await $red.get_mercado(id_partida) #mercado, monedas y efectos
-	printerr("a.2")
 	poderes_disponibles_a_compra.assign(dict["mercado"])
 	efectos.assign(dict["efectos"])
 	mis_poderes.assign(dict["poderes"])
-	printerr("a.3")
 	return dict["monedas"]
 
 func get_mis_poderes()->Array[Poder.PODER]:

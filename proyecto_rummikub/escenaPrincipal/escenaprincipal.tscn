@@ -151,6 +151,7 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 script = ExtResource("1_k1ots")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=640937330]
+visible = false
 editor_draw_limits = true
 
 [node name="managerJuego" type="Node2D" parent="." unique_id=688404575 node_paths=PackedStringArray("robarCarta", "pasarTurno", "devolverFichas", "miTurno", "escena_principal", "tablero", "mano", "manager_fichas", "panel_contador_monedas", "tienda", "poder1", "poder2", "poder3", "niebla", "bola_de_cristal", "pantalla_partida_pausada", "boton_volver_partida_pausada")]

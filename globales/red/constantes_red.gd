@@ -312,8 +312,7 @@ func reinicia_sesion(nombre, contrasena):
 		mi_token = res[login_token]
 		mi_id = res[login_jugador][login_id]
 		var tiempo = Time.get_unix_time_from_datetime_string(res[login_expiracion]) - Time.get_unix_time_from_system()
-		login_timer.start(10)
-		#login_timer.start(tiempo)
+		login_timer.start(tiempo)
 		await login_timer.timeout
 		print(tiempo)
 
@@ -574,8 +573,10 @@ func mano(id: int, crea_ficha: Callable)->Array[Ficha]:
 ##Devuelve "turno" y "mesa"
 ## "mesa" es un array de arrays de fichas con los grupos que hay en el tablero 
 func get_turno(id: int):
+	print("espero")
 	await _espera_a_resultado(
 		func(data)->bool:
+			print("turno ", data[turno])
 			ultima_info_partida = data
 			if data[estado_partida] == ESTADO_PARTIDA_TERMINADA or \
 					data[estado_partida] == ESTADO_PARTIDA_PAUSADA:
@@ -588,7 +589,6 @@ func get_turno(id: int):
 				return true
 			else: 
 				print(data[turno])
-				print("esperando")
 				return false,
 		base_url+partidas+"/"+str(id), 0.3)
 	var datos = json.data
@@ -623,7 +623,9 @@ func robar_fichas_sin_pasar(id:int, num_fichas: int = 1)->Array:
 	if ultima_info_partida[bolsa_robar].split(",").size() >= num_fichas:
 		await _awaiting_request(base_url+partidas+"/"+str(id)+partida_robar_sin_pasar,dict_id,
 		HTTPClient.METHOD_POST,header())
+		print()
 		print("RECIBIDO DE PARTIDA ROBAR: ", json.data)
+		print()
 		assert(_respuesta_buena(),"Error en solo-robar request: "+str(json.data))
 		var aux = json.data["fichasRobadas"]
 		return aux.map(string_to_ficha)
@@ -642,6 +644,7 @@ func robar_ficha(id: int)->Dictionary:
 		var nueva_mano: String = json.data[fichas_mano]
 		var aux = nueva_mano.split(",")
 		aux.reverse()
+		print("FICHA ROBARDA: ", aux[0])
 		return string_to_ficha(aux[0])
 	else:
 		return {"color": Ficha.COLOR.BLANCO,"numero":1}

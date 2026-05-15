@@ -23,6 +23,7 @@ func tablero_valido(abierto: bool) -> bool:
 	if (not abierto) and ((suma < 30) or combinando_fijadas_y_no_fijadas()):
 		print("suma: " + str(suma))
 		return false
+	print("correcto")
 	return true
 
 func anadir_grupo_fichas(grupo: Grupo_fichas) -> void:

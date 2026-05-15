@@ -54,8 +54,6 @@ func sacar_tienda() -> void:
 
 func cerrar_tienda() -> void:
 	self.visible = false
-	globales.monedas = 10000
-	menuInicio.set_dinero()
 	ConectorRed.set_skins()
 
 func _interaccion_con_elemento_tienda(interactuado: tableroTienda, toggled: bool) -> void:
