@@ -235,7 +235,9 @@ func parar_partida():
 	if(partida_en_curso):
 		if not await $red.pausar_partida(id_partida):
 			printerr("error al parar partida: ", id_partida)
-		else: printerr("partida pausada")
+		else: 
+			printerr("partida pausada")
+			partida_en_curso = false
 	else:
 		printerr("no hay partida en curso")
 func continuar_partida(id:int = id_partida):
@@ -339,6 +341,8 @@ func confirma_trueque(id:int,mi_ficha:Ficha,su_ficha:Ficha):
 	$red.final_trueque(id_partida,id,mi_ficha,su_ficha)
 func guante(id: int):
 	var dict = await $red.activar_poder(id_partida,"WHITE_GLOVE",id)
+	if dict["habilidadesObjetivoVisibles"] == null:
+		return Poder.PODER.NINGUNO
 	return $red.string_to_poder(dict["habilidadesObjetivoVisibles"][0])
 func bomba_de_humo(id:int):
 	$red.activar_poder(id_partida,"SMOKE_BOMB",id)

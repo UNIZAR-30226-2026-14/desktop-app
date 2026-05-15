@@ -111,6 +111,8 @@ func ejecutar_poder() -> void:
 			if adversaro_elegido != "":
 				var fichas_adversario: Array[Ficha] = await manager_juego.usar_trueque1(adversaro_elegido)
 				var intercambio: Array[Ficha] = await selector_ficha.sacar_selector(fichas_adversario)
+				print(intercambio)
+				print((intercambio[0]!=null), (intercambio[1] != null))
 				if (intercambio[0]!=null) and (intercambio[1] != null):
 					manager_juego.usar_trueque2(adversaro_elegido,intercambio[1],intercambio[0])
 					cambiar_poder(PODER.NINGUNO)
@@ -130,7 +132,7 @@ func ejecutar_poder() -> void:
 		PODER.GUANTE_BLANCO:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)
 			if adversaro_elegido != "":
-				var poder_robado: PODER = manager_juego.usar_guante_blanco(adversaro_elegido)
+				var poder_robado: PODER = await manager_juego.usar_guante_blanco(adversaro_elegido)
 				cambiar_poder(poder_robado)
 			
 		PODER.TECHO_CRISTAL:

@@ -32,6 +32,7 @@ func _boton_cerrar()->void:
 
 ## primero ficha adversario segundo ficha propia
 func sacar_selector(lista_fichas: Array[Ficha]) -> Array[Ficha]:
+	cerrando = false
 	if lista_fichas[0] != null:
 		ficha0.visible = true
 		ficha0.cambiar_sprite(lista_fichas[0].color,lista_fichas[0].numero,lista_fichas[0].especial)
@@ -55,13 +56,13 @@ func sacar_selector(lista_fichas: Array[Ficha]) -> Array[Ficha]:
 	await ficha_seleccionada
 	print("ficha obtenida")
 	# primero ficha propia segundo ficha adversario
-	
 	if not cerrando:
 		var ficha_adversario: Ficha = lista_fichas[boton_pulsado]
 		var ficha_propia: Ficha = manager_juego.get_fichas_mano()[ficha_pulsada]
 		_quitar_selector()
 		return [ficha_adversario, ficha_propia]
 	else:
+		printerr("aaaaaaaaaaaaaaaaaaaaaaa")
 		_quitar_selector()
 		return [null, null]
 

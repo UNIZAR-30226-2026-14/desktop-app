@@ -793,7 +793,7 @@ func final_guante(id:int, objetivo:int,objeto: String):
 
 func final_trueque(id:int,objetivo:int,mi_ficha:Ficha,su_ficha:Ficha):
 	await _awaiting_request(base_url+partidas+"/"+str(id)+"/mercado/usar",
-		{"codigoObjeto":"WHITE_GLOVE",
+		{"codigoObjeto":"SWAP_ON_FAIL",
 		"idJugadorObjetivo":objetivo,
 		"fichaPropia":ficha_to_string(mi_ficha),
 		"fichaObjetivo":ficha_to_string(su_ficha)},

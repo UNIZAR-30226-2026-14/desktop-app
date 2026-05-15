@@ -178,6 +178,7 @@ func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR
 			var fich = await ConectorRed.robar_sin_pasar(manager_fichas.crear_ficha)
 			mano.devolver_ficha(fich[0])
 			fich[0].z_index = 0
+			guardar_estado()
 			PopUp.popUp(" te toca robar ficha \n mala suerte!",Vector2(-74.0, -300.0), escena_principal, true)
 			evento_ocurriendo = EVENTO.NO_EVENTO
 
@@ -414,7 +415,9 @@ func bola_de_cristal_mi()->void:
 	pass #esta bien
 
 func trueque_mi()->void:
-	mano.insertar_mano(await ConectorRed.mano())
+	var aux = await ConectorRed.mano()
+	print(aux)
+	mano.insertar_mano(aux)
 	guardar_estado()
 
 func guante_blanco_mi()->void:
@@ -455,7 +458,7 @@ func lanzar_maldicion(adversario: String, maldicion: Poder.PODER) -> void:
 func usar_guante_blanco(adversario: String) -> Poder.PODER:
 	print(adversario)
 	var poder_robado: Poder.PODER = Poder.PODER.ANGEL_GUARDA
-	ConectorRed.guante(get_id_adversario(adversario))
+	poder_robado = await ConectorRed.guante(get_id_adversario(adversario))
 	if poder_robado == Poder.PODER.NINGUNO:
 		PopUp.popUp(" el jugador al que has intentado robar \n no tiene ningun poder D: ",Vector2(-74.0, -300.0), escena_principal)
 	else:
@@ -465,8 +468,14 @@ func usar_guante_blanco(adversario: String) -> Poder.PODER:
 # esta funcion devuelve un array con 3 fichas de las cuales el jugador eligira una
 # sera entonces cuando se llame a usar_trueque2
 # si el adversario tiene menos de 3 fichas rellenar con nulls
+var fichas_trueque
 func usar_trueque1(adversario: String) -> Array[Ficha]:
+	fichas_trueque = []
 	var fichas = await ConectorRed.trueque(get_id_adversario(adversario))
+	fichas_trueque = fichas
+	for ficha in fichas:
+		globales.apropiar_hijo(self,ficha)
+		ficha.visible = false
 	mano.visible=false
 	var fichas_a_tomar: int = min(fichas.size(),3)
 	var indice1 = -1
@@ -494,9 +503,14 @@ func usar_trueque1(adversario: String) -> Array[Ficha]:
 
 # esta funcion intercambia una ficha propia con una ficha del rival
 func usar_trueque2(adversario: String, ficha_propia: Ficha, ficha_rival: Ficha) -> void:
+	ficha_propia.visible = false
+	ficha_rival.visible = true
 	ConectorRed.confirma_trueque(get_id_adversario(adversario),ficha_propia,ficha_rival)
 	manager_fichas.conectar_ficha(ficha_rival)
 	mano.insertar_ficha(ficha_rival, ficha_propia)
+	for ficha:Ficha in fichas_trueque:
+		if ficha != ficha_rival:
+			ficha.queue_free()
 	guardar_estado()
 #endregion
 
