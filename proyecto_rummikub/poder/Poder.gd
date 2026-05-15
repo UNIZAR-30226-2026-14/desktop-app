@@ -10,15 +10,15 @@ enum PODER {NINGUNO, ANGEL_GUARDA, BOLA_CRISTAL, TOQUE_MIDAS, MAS_CUATRO, TRUEQU
 
 const LISTA_PRECIOS_OBJETOS: Array[int] = [
 	0,
-	10,
-	10,
-	10,
-	10,
-	10,
-	10,
-	10,
-	10,
-	10,
+	6,
+	6,
+	3,
+	6,
+	6,
+	6,
+	6,
+	6,
+	6,
 ]
 
 const LISTA_DESCRIPCIONES_OBJETOS: Array[String] = [
@@ -104,7 +104,7 @@ func ejecutar_poder() -> void:
 			
 		PODER.TOQUE_MIDAS:
 			cambiar_poder(PODER.NINGUNO)
-			manager_juego.toque_de_midas()
+			manager_juego.toque_de_midas_mi()
 			
 		PODER.TRUEQUE:
 			var adversaro_elegido: String = await selector_adversario.sacar_selector_adversarios(poder)

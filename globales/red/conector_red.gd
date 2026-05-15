@@ -159,11 +159,13 @@ func crear_partida_privada(es_arcade: bool):
 	
 func esperar_comienzo_privada(status_busqueda:Label, iniciar: Button):
 	await $red.espera_a_comienzo_partida(id_partida, status_busqueda, iniciar)
+	partida_en_curso = true
 
 #devuelve false si cancelado se ha pulsado
 func esperar_comienzo_cancelable(id,iniciar:Button,cancelar:Button):
-	return await $red.espera_partida_cancelable(id,iniciar,cancelar)
-	
+	partida_en_curso = await $red.espera_partida_cancelable(id,iniciar,cancelar)
+	return partida_en_curso
+
 func solo_inicia(id:int):
 	if await $red.solo_inicia(id):
 		id_partida = id
@@ -200,15 +202,26 @@ func _parse_tableros(skins:String):
 			globales.mis_skins_tablero.push_back(globales.skin_tablero_equipada)
 		elif skin != "":
 			globales.mis_skins_tablero.push_back(skin)
+func _parse_fichas(skins:String):
+	for skin: String in skins.split(","):
+		if(skin != "" and skin[0] == "*"):
+			globales.skin_ficha_equipada = skin.substr(1,-1)
+			globales.mis_skins_ficha.push_back(globales.skin_ficha_equipada)
+		elif skin != "":
+			globales.mis_skins_ficha.push_back(skin)
 
 func get_perfil():
 	var perfil = await $red.get_perfil()
 	globales.set_avatar(perfil["avatar"])
 	globales.monedas = perfil["monedas"]
 	_parse_tableros(perfil["tableros"])
+	_parse_fichas(perfil["fichas"])
+	
 	perfil_actualizado.emit()
+	
 func set_skins():
-	await $red.set_perfil(globales.skin_tablero_equipada, globales.monedas)
+	await $red.set_perfil(globales.skin_ficha_equipada,
+		globales.skin_tablero_equipada, 10000)#globales.monedas)
 
 #endregion
 func cambiar_contrasena(contra_nueva: String, contra_vieja:String):
@@ -222,6 +235,7 @@ func parar_partida():
 	if(partida_en_curso):
 		if not await $red.pausar_partida(id_partida):
 			printerr("error al parar partida: ", id_partida)
+		else: printerr("partida pausada")
 	else:
 		printerr("no hay partida en curso")
 func continuar_partida(id:int = id_partida):
@@ -253,9 +267,10 @@ func unirse_a_reanudable(id:int):
 	$red.unirse_a_reanudable(id)
 #endregion
 #region PODERES Y EVENTOS
+
 func poderes(poderes_disponibles_a_compra,efectos,mis_poderes):
 	printerr("a.1")
-	var dict = await $red.get_mercado() #mercado, monedas y efectos
+	var dict = await $red.get_mercado(id_partida) #mercado, monedas y efectos
 	printerr("a.2")
 	poderes_disponibles_a_compra.assign(dict["mercado"])
 	efectos.assign(dict["efectos"])
@@ -265,7 +280,9 @@ func poderes(poderes_disponibles_a_compra,efectos,mis_poderes):
 
 func get_mis_poderes()->Array[Poder.PODER]:
 	return $red.get_mercado()["poderes"]
-
+func comprar(poder_comprar: Poder.PODER):
+	$red.comprar(id_partida,poder_comprar)
+	
 const eventos_red =  {  "+pieza":[ManagerJuego.EVENTO.ROBAR_OTRA_FICHA,Ficha.COLOR.BLANCO],
 						"50porcien":[ManagerJuego.EVENTO.DESCUENTO,Ficha.COLOR.BLANCO],
 						"prohibido_rojo":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.ROJO],
@@ -273,7 +290,6 @@ const eventos_red =  {  "+pieza":[ManagerJuego.EVENTO.ROBAR_OTRA_FICHA,Ficha.COL
 						"prohibido_negro":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.NEGRO],
 						"prohibido_azul":[ManagerJuego.EVENTO.SIN_COLOR,Ficha.COLOR.AZUL]
 					}
-
 func evento_actual()->Array:
 	return eventos_red[$red.get_evento()]
 
@@ -316,7 +332,7 @@ func confirma_trueque(id:int,mi_ficha:Ficha,su_ficha:Ficha):
 	$red.final_trueque(id_partida,id,mi_ficha,su_ficha)
 func guante(id: int):
 	var dict = $red.activar_poder(id_partida,"WHITE_GLOVE",id)
-	
+	return $red.string_to_poder(dict["habilidadesObjetivoVisibles"])
 func bomba_de_humo(id:int):
 	$red.activar_poder(id_partida,"SMOKE_BOMB",id)
 func guindilla(id:int):
@@ -324,4 +340,6 @@ func guindilla(id:int):
 func techo(id:int):
 	$red.activar_poder(id_partida,"GLASS_CEILING",id)
 
+func set_monedas(monedas: int):
+	$red.set_monedas(id_partida,monedas)
 #endregion

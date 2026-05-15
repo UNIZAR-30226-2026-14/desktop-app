@@ -39,7 +39,6 @@ func _ready() -> void:
 		if skin_tablero.color in globales.skin_tablero_equipada:
 			skin_tablero.boton_comprar.button_pressed = true
 			skin_tablero.set_precio(ElementoTienda.EQUIPADO)
-	
 	for skin_ficha: tableroTienda in lista_skins_fichas.values():
 		globales.apropiar_hijo(ContenedorSkinFichas, skin_ficha)
 		skin_ficha.interaccion_con_skin.connect(_interaccion_con_elemento_tienda)
@@ -55,28 +54,37 @@ func sacar_tienda() -> void:
 
 func cerrar_tienda() -> void:
 	self.visible = false
+	globales.monedas = 10000
 	menuInicio.set_dinero()
 	ConectorRed.set_skins()
 
-func _interaccion_con_elemento_tienda(interactuado: ElementoTienda, toggled: bool) -> void:
+func _interaccion_con_elemento_tienda(interactuado: tableroTienda, toggled: bool) -> void:
 	if toggled:
 		if (interactuado.get_precio() > -1) and (interactuado.get_precio() <= globales.monedas):
 			# Se consigue comprar el elemento de la tienda
 			globales.monedas = globales.monedas - interactuado.get_precio()
 			menuInicio.set_dinero()
-			globales.set_color_tablero(interactuado.get_skin())
+			if interactuado.tipo == ElementoTienda.TIPO_SKIN.TABLERO:
+				globales.set_color_tablero(interactuado.get_skin())
+			else:
+				globales.set_color_ficha(interactuado.get_skin())
 			interactuado.set_precio(ElementoTienda.EQUIPADO)
 			
 		elif interactuado.get_precio() == -1:
 			# Se equipa un objeto ya comprado
-			globales.set_color_tablero(interactuado.get_skin())
+			if interactuado.tipo == ElementoTienda.TIPO_SKIN.TABLERO:
+				globales.set_color_tablero(interactuado.get_skin())
+			else:
+				globales.set_color_ficha(interactuado.get_skin())
 			interactuado.set_precio(ElementoTienda.EQUIPADO)
 			
 		elif interactuado.get_precio() > globales.monedas:
 			# Demasiado caro no pasa nada
 			interactuado.boton_comprar.button_pressed = false
-			lista_skins_tableros[globales.skin_tablero_equipada].boton_comprar.button_pressed = true
-
+			if interactuado.tipo == ElementoTienda.TIPO_SKIN.TABLERO:
+				lista_skins_tableros[globales.skin_tablero_equipada].boton_comprar.button_pressed = true
+			else:
+				lista_skins_fichas[globales.skin_ficha_equipada].boton_comprar.button_pressed = true
 	else:
 		if (interactuado.get_precio() == -2):
 			#Se desequipa un objeto ya comprado

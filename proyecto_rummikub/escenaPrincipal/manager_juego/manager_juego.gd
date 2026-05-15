@@ -31,19 +31,14 @@ var es_arcade
 signal empieza_turno
 signal termina_turno
 
-<<<<<<< HEAD
 class GrupoGuardado:
-=======
-class GrupoGuardado extends Node2D:
->>>>>>> 6b8c28a6630d801cd83d387d2665a7b6e9ff080f
+
 	var grupo: Array[Ficha]
 	var posicion: Vector2
 	var posiciones: Array[Vector2]
 	
 	func _init(mgrupo: Array[Ficha], mposicion: Vector2) -> void:
 		posiciones = []
-		for ficha in mgrupo:
-			globales.apropiar_hijo(self, ficha)
 		grupo = mgrupo
 		posicion = mposicion
 		for ficha:Ficha in mgrupo:
@@ -52,15 +47,9 @@ class GrupoGuardado extends Node2D:
 	func creaGrupo()-> Grupo_fichas:
 		var res = Grupo_fichas.Grupo_fichas(grupo)
 		assert(grupo.all(func(fich):return fich != null))
-<<<<<<< HEAD
 		for ficha in grupo:
 			ficha.cancel_free()
-=======
-		var i = 0
-		for ficha in res.fichas:
-			ficha.position = posiciones[i]
-			i += 1
->>>>>>> 6b8c28a6630d801cd83d387d2665a7b6e9ff080f
+
 		res.position = posicion
 		return res
 
@@ -91,7 +80,7 @@ func _ready() -> void:
 	@warning_ignore("shadowed_variable")
 	var info_inicial:Dictionary = await ConectorRed.inicializar_partida(manager_fichas.crear_ficha)
 	
-	(info_inicial["mano"])
+	mano.insertar_mano(info_inicial["mano"])
 	if es_arcade:
 		for poder in info_inicial["poderes"]:
 			insertar_poder(poder)
@@ -107,6 +96,7 @@ func intenta_hacer_jugada() -> bool:
 		
 		if(await ConectorRed.hacer_jugada(tablero.grupos)):
 			abierto = true
+			ConectorRed.set_monedas(panel_contador_monedas.get_dinero())
 			guardar_estado()
 			terminar_turno()
 		else:
@@ -142,30 +132,23 @@ func terminar_turno() -> void:
 
 
 func iniciar_turno() -> void:
-<<<<<<< HEAD
 	if es_arcade:
-		printerr("a")
 		poderes_disponibles_a_compra = []
 		var efectos: Array
 		efectos = []
 		var poderes_nuevo_turno: Array
 		poderes_nuevo_turno = []
-		panel_contador_monedas.set_dinero(str(await ConectorRed.poderes(poderes_disponibles_a_compra,efectos,poderes_nuevo_turno)))
-		printerr("b")
+		await ConectorRed.set_monedas(100)
+		panel_contador_monedas.set_dinero(str(int(await ConectorRed.poderes(poderes_disponibles_a_compra,efectos,poderes_nuevo_turno))))
 		for poder in efectos: 
 			if (angel_guarda_check()):
 				ConectorRed.angel()
 			else:
 				recibir_efecto(poder)
 		var evento = ConectorRed.evento_actual()
-		printerr("c")
 		lanzar_evento(evento[0],evento[1])
-		printerr("d")
-=======
-	_devolver_fichas()
->>>>>>> 6b8c28a6630d801cd83d387d2665a7b6e9ff080f
+
 	guardar_estado()
-	printerr("e")
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
 	robarCarta.disabled = false
 	devolverFichas.disabled = true
@@ -188,7 +171,7 @@ func lanzar_evento(evento: EVENTO, color_no_permitido: Ficha.COLOR = Ficha.COLOR
 			var fich = await ConectorRed.robar_sin_pasar(manager_fichas.crear_ficha)
 			mano.devolver_ficha(fich[0])
 			fich[0].z_index = 0
-			PopUp.popUp(" te toca robar ficha \n mala suerte " + Ficha.color_a_string(color_no_permitido) + "!",Vector2(-74.0, -300.0), escena_principal, true)
+			PopUp.popUp(" te toca robar ficha \n mala suerte!",Vector2(-74.0, -300.0), escena_principal, true)
 			evento_ocurriendo = EVENTO.NO_EVENTO
 
 func reiniciar_eventos() -> void:
@@ -228,7 +211,7 @@ func llega_turno(nuevo_tablero: Array):
 		var array_fichas: Array[Ficha] = []
 		array_fichas.assign(grupo.map(
 			func(ficha)->Ficha: 
-				return manager_fichas.crear_ficha(ficha.color,ficha.numero))
+				return manager_fichas.crear_ficha(ficha.color,ficha.numero,ficha.especial))
 			)
 		return Grupo_fichas.Grupo_fichas(array_fichas)
 		)
@@ -282,17 +265,9 @@ func guardar_estado() -> void:
 		if !ficha.en_blanco:
 			fichas_no_blancas += 1
 	print("Guardo "+ str(fichas_no_blancas))
-<<<<<<< HEAD
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
 		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
-=======
-	for grupo: Grupo_fichas in tablero.grupos:
-		var grupo_aux: GrupoGuardado = GrupoGuardado.new(grupo.fichas,grupo.position)
-		globales.apropiar_hijo(self, grupo_aux)
-		grupos_en_tablero_antes.append(grupo_aux)
-
->>>>>>> 6b8c28a6630d801cd83d387d2665a7b6e9ff080f
 
 func boton_devolver_fichas() -> void:
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_PONIENDO_FICHAS
@@ -317,13 +292,13 @@ func robar_carta() -> void:
 	var fich: Ficha
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 	robarCarta.disabled = true
+	terminar_turno()
 	$ContadorTiempoTurno._termina_turno()
 	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
 	mano.devolver_ficha(fich)
 	fich.z_index = 0
 	print("Guardar estado y terminar turno")
 	guardar_estado()
-	terminar_turno()
 
 #endregion
 
@@ -513,7 +488,7 @@ func usar_trueque2(adversario: String, ficha_propia: Ficha, ficha_rival: Ficha) 
 	manager_fichas.conectar_ficha(ficha_rival)
 	mano.insertar_ficha(ficha_rival, ficha_propia)
 
-#endregnion
+#endregion
 
 func get_fichas_mano() -> Array[Ficha]:
 	return mano.fichas_en_mano

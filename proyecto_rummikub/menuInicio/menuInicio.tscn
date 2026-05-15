@@ -1758,6 +1758,7 @@ placeholder_text = "Id del usuario..."
 alignment = 1
 
 [node name="FondoEditarPerfil" type="Panel" parent="." unique_id=1997386250 node_paths=PackedStringArray("menuInicio")]
+visible = false
 layout_mode = 0
 anchor_top = 0.16203703
 anchor_right = 0.9982639

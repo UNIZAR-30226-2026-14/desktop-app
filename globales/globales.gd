@@ -89,7 +89,7 @@ func set_color_ficha(color):
 	if color is Color:
 		for c in colores_fichas:
 			if colores_fichas[c] == color:
-				skin_tablero_equipada = c
+				skin_ficha_equipada = c
 				if c not in mis_skins_ficha:
 					mis_skins_ficha.push_back(c)
 	elif color is String:

@@ -236,6 +236,7 @@ func suma_grupo()->int:
 			resultado += 13
 		else:
 			resultado += ficha.numero
+	print("num fichas,",resultado)
 	return resultado
 
 func fijado() -> bool:

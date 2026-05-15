@@ -69,7 +69,7 @@ func amigo_todos():
 func header()->PackedStringArray:
 	return PackedStringArray(["Authorization: Bearer "+mi_token, "Content-Type: application/json"])
 
-func ficha_to_string(ficha)->String:
+func ficha_to_string(ficha:Ficha)->String:
 	var res: String = ""
 	if ficha.color == Ficha.COLOR.COMODIN:
 		return JOKER_RED + "*"
@@ -82,7 +82,11 @@ func ficha_to_string(ficha)->String:
 			res = NEGRO_RED 
 		Ficha.COLOR.AMARILLO:
 			res = NARANJA_RED 
-	return res + str(ficha.numero)
+	var especial = ""
+	match ficha.especial:
+		Ficha.ESPECIAL.ARCOIRIS: especial = "A"
+		Ficha.ESPECIAL.DORADO: especial = "D"
+	return res + str(ficha.numero)+especial
 	
 
 ## Resultado arrays de arrays de Ficha.GuardaFicha
@@ -120,12 +124,13 @@ func string_to_poder(s:String)->Poder.PODER:
 			return Poder.PODER.REDUCIR_TIEMPO
 		"GLASS_CEILING": 
 			return Poder.PODER.TECHO_CRISTAL
-	assert(false, "esto no debería pasar")
-	return Poder.PODER.NINGUNO
+		_:
+			return Poder.PODER.NINGUNO
 
-func string_to_poderes(s:String)->Array:
-	var poderes : Array = s.split("|")
-	return poderes.map(string_to_poder)
+func string_to_poderes(poderes:Array)->Array:
+	var s_poderes : Array = poderes.map(
+		func(poder) : return poder["codigo"])
+	return s_poderes.map(string_to_poder)
 	
 ## Resultado con claves "color" y "numero"
 func string_to_ficha(s:String) -> Dictionary:
@@ -191,13 +196,13 @@ func _awaiting_request(url:String, body, metodo:HTTPClient.Method, header:Packed
 ## acaba toma el valor de hacer get url y  debe devolver un bool que será true
 ## cuando se den las condiciones para acabar la espera
 func _espera_a_resultado(acaba: Callable, url: String, polling_time: float = 0.5):
-	await _awaiting_request_get(url)
+	await _awaiting_request_get(url,header())
 	var timer = Timer.new()
 	self.add_child(timer)
 	while !acaba.call(json.data):
 		timer.start(polling_time)
 		await timer.timeout
-		await _awaiting_request_get(url)
+		await _awaiting_request_get(url,header())
 	timer.free()
 	
 func _respuesta_buena() -> bool:
@@ -242,12 +247,12 @@ func categoriza_solicitudes(_aceptadas,_enviadas,_recibidas):
 
 ## Campos return: "icono", "nombre", "conectado"
 func get_amigos(_aceptadas,_enviadas,_recibidas):
-	await _awaiting_request_get(base_url+amigos)
+	await _awaiting_request_get(base_url+amigos,header())
 	assert(_respuesta_buena(),json.data)
 	var aux_aceptadas = []; var aux_enviadas = []; var aux_recibidas = []
 	categoriza_solicitudes(aux_aceptadas,aux_enviadas,aux_recibidas)
 	
-	await _awaiting_request_get(base_url+jugadores+"/"+str(mi_id)+perfiles_de_amigos)
+	await _awaiting_request_get(base_url+jugadores+"/"+str(mi_id)+perfiles_de_amigos,header())
 	if _respuesta_buena():
 		@warning_ignore("shadowed_variable")
 		var amigos: Array[Dictionary]
@@ -300,24 +305,26 @@ func registrar_usuario(nombre: String, contrasena: String) -> Error:
 	else:
 		printerr("Error al registrar",json.data)
 		return Error.FAILED
+func reinicia_sesion(nombre, contrasena):
+	while true:
+		await _awaiting_request(base_url+inicio_sesion, {login_nom_usuario:nombre, login_passw:contrasena}, HTTPClient.METHOD_POST)
+		var res = json.data
+		mi_token = res[login_token]
+		mi_id = res[login_jugador][login_id]
+		var tiempo = Time.get_unix_time_from_datetime_string(res[login_expiracion]) - Time.get_unix_time_from_system()
+		login_timer.start(10)
+		#login_timer.start(tiempo)
+		await login_timer.timeout
+		print(tiempo)
 
 func inicia_sesion(nombre: String, contrasena: String) -> Error:
 	guarda_con = contrasena
 	guarda_nom = nombre
 	await _awaiting_request(base_url+inicio_sesion, {login_nom_usuario:nombre, login_passw:contrasena}, HTTPClient.METHOD_POST)
 	if _respuesta_buena():
-		var res = json.data
-		globales.set_avatar(res[login_jugador][imagen_perfil])
-		mi_token = res[login_token]
-		mi_id = res[login_jugador][login_id]
-
-		var tiempo = Time.get_unix_time_from_datetime_string(res[login_expiracion]) - Time.get_unix_time_from_system()
-		login_timer.start(tiempo)
-		login_timer.timeout.connect(func(): inicia_sesion(guarda_con,guarda_nom))
-		print(tiempo)
-		print("Bien: ", json.data)
+		globales.set_avatar(json.data[login_jugador][imagen_perfil])
+		reinicia_sesion(nombre,contrasena)
 		return Error.OK
-		
 	else:
 		printerr("Error al iniciar sesion",json.data)
 		return Error.FAILED
@@ -328,7 +335,7 @@ var ultimo_turno = -1
 #region iniciar partida
 func unirse_a_partida(id: int):
 	print("Busco partida: ", id)
-	await _awaiting_request_get(base_url+partidas+"/"+str(id))
+	await _awaiting_request_get(base_url+partidas+"/"+str(id),header())
 	if not _respuesta_buena():
 		printerr(json.data)
 		print("partida no existe")
@@ -340,7 +347,7 @@ func unirse_a_partida(id: int):
 		print("Me uno a partida")
 		ultima_info_partida = partida
 		var participacion = {id_jugador:mi_id, id_partida:partida[id_partida]}
-		await _awaiting_request(base_url+participaciones,participacion,HTTPClient.METHOD_POST)
+		await _awaiting_request(base_url+participaciones,participacion,HTTPClient.METHOD_POST,header())
 		if not _respuesta_buena():
 			push_error("Falla envio de participacion: ", json.data)
 			print(participacion)
@@ -383,7 +390,7 @@ func espera_partida_cancelable(id:int,iniciar:Button,cancelar:Button):
 	cancelar.pressed.disconnect(cancelar_busqueda)
 	return not cancelada
 func solo_inicia(id:int):
-	await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST,header())
 	return _respuesta_buena()
 	
 
@@ -407,7 +414,7 @@ func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 			base_url+participiaciones_por_partida+str(id))
 		if status_label != null:
 			status_label.text = "Iniciando partida"
-		await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST)
+		await _awaiting_request(base_url+partidas+"/"+str(id)+iniciar_partida,{},HTTPClient.METHOD_POST,header())
 		if status_label != null:
 			status_label.text = "Partida iniciada"
 		print("RECIBIDO DE INICIAR PARTIDA",json.data)
@@ -422,7 +429,7 @@ func espera_a_comienzo_partida(id: int, status_busqueda:Label, iniciar: Button,
 
 ##Busca partida y devuelve su id, que termine no asegura que la partida haya empezado
 func get_partidas(status_busqueda:Label, arcade: bool) -> int:
-	await _awaiting_request_get(base_url+partidas)
+	await _awaiting_request_get(base_url+partidas,header())
 	var body = json.data
 	creado_partida = false
 	if body is Array: # varias partidas
@@ -456,7 +463,7 @@ func _crear_partida(arcade:bool) -> Dictionary:
 	creado_partida = true
 	print("crear partida ")
 	var partida = {fecha:Time.get_date_string_from_system(), es_arcade:arcade,es_privada:false}
-	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST,header())
 	if not _respuesta_buena():
 		printerr("Error creando partida, recibido:", json.data)
 		assert(false, "Error creando partida")
@@ -466,7 +473,7 @@ func crear_partida_publico(arcade: bool):
 	creado_partida = true
 	print("crear partida ")
 	var partida = {fecha:Time.get_date_string_from_system(), es_arcade:arcade,es_privada:true}
-	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas,partida,HTTPClient.METHOD_POST,header())
 	assert(_respuesta_buena(), "Error creando partida, recibido: " + str(json.data) )
 	ultima_info_partida = json.data
 	return ultima_info_partida[id_partida]
@@ -476,7 +483,7 @@ const reanudables = "/api/invitaciones?idInvitado="
 const reanudables2 = "&includeInProgress=true"
 const conexion_reanudable = "/conexion"
 func get_reanudables():
-	await _awaiting_request_get(base_url+reanudables+str(mi_id)+reanudables2)
+	await _awaiting_request_get(base_url+reanudables+str(mi_id)+reanudables2,header())
 	assert(_respuesta_buena(),json.data)
 	return json.data["partidasEnCurso"].map(func(partida):
 		return {"id":partida[id_partida],"fecha":partida[fecha]})
@@ -491,11 +498,11 @@ func salirse_de_reanudable(id:int):
 	{"conectado":false},HTTPClient.METHOD_PATCH,header())
 	assert(_respuesta_buena(),json.data)
 func continuar_partida(id:int):
-	await _awaiting_request(base_url+partidas+"/"+str(id)+"/"+"reanudar",{},HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/"+"reanudar",{},HTTPClient.METHOD_POST,header())
 	assert(_respuesta_buena(),json.data)
 
 func parar_partida(id:int):
-	await _awaiting_request(base_url+partidas+"/"+str(id)+"/"+"pausar",{},HTTPClient.METHOD_POST)
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/"+"pausar",{},HTTPClient.METHOD_POST,header())
 	assert(_respuesta_buena(),json.data)
 #endregion
 #region partida
@@ -525,7 +532,7 @@ func get_adversarios(id: int) -> Array[Dictionary]:
 ##Devuelve la mano y el turno que tiene
 ##crea_ficha debe tomar como parametro 
 func info_inicial(id: int, crea_ficha: Callable)->Dictionary:
-	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
+	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id),header())
 	if _respuesta_buena():
 		var campos = json.data
 		
@@ -550,7 +557,7 @@ func info_inicial(id: int, crea_ficha: Callable)->Dictionary:
 		return {}
 
 func mano(id: int, crea_ficha: Callable)->Array[Ficha]:
-	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
+	await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id),header())
 	if _respuesta_buena():
 		var campos = json.data
 		
@@ -630,7 +637,7 @@ func robar_ficha(id: int)->Dictionary:
 		HTTPClient.METHOD_POST,header())
 		print("RECIBIDO DE PARTIDA ROBAR: ", json.data)
 		assert(_respuesta_buena(),"Error al robar ficha-roba request: "+str(json.data))
-		await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id))
+		await _awaiting_request_get(base_url+participaciones+"/"+str(mi_id)+"/"+str(id),header())
 		assert(_respuesta_buena(),"Error al robar ficha-mano request: "+str(json.data))
 		var nueva_mano: String = json.data[fichas_mano]
 		var aux = nueva_mano.split(",")
@@ -649,13 +656,13 @@ func get_perfil()->Dictionary:
 	assert(_respuesta_buena(),json.data)
 	var datos = json.data
 	return {"avatar":datos[imagen_perfil], "monedas": datos[num_monedas],
-	"tableros":datos[skins_tablero], "fichas":datos[skins_fichas]}
+	"tableros":datos[skins_tablero], "fichas":datos[skins_fichas],}
 
 func cambia_perfil(icono: String):
 	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,{imagen_perfil:icono},HTTPClient.METHOD_PATCH,header())
 	assert(_respuesta_buena(),json.data)
 
-func set_perfil(tablero_actual: String, monedas: int):
+func set_perfil(ficha_actual:String, tablero_actual: String, monedas: int):
 	var lista_tableros : String =  ""
 	for color: String in globales.mis_skins_tablero:
 		if color == tablero_actual and not color.is_subsequence_of(lista_tableros):
@@ -663,9 +670,19 @@ func set_perfil(tablero_actual: String, monedas: int):
 		elif  not color.is_subsequence_of(lista_tableros):
 			lista_tableros = lista_tableros + (color) + ","
 	lista_tableros = lista_tableros.left(-1)
+	var lista_fichas : String =  ""
+	printerr(globales.mis_skins_ficha)
+	for color: String in globales.mis_skins_ficha:
+		if color == ficha_actual and not color.is_subsequence_of(lista_fichas):
+			lista_fichas = lista_fichas + ("*"+color) + ","
+		elif  not color.is_subsequence_of(lista_fichas):
+			lista_fichas = lista_fichas + (color) + ","
+	lista_fichas = lista_fichas.left(-1)
+
 	print(lista_tableros)
 	await _awaiting_request(base_url+jugadores+"/"+str(mi_id)+perfil,
-		{skins_tablero:lista_tableros, num_monedas:monedas},HTTPClient.METHOD_PATCH,header())
+		{skins_tablero:lista_tableros, num_monedas:monedas,skins_fichas:lista_fichas},
+		HTTPClient.METHOD_PATCH,header())
 	assert(_respuesta_buena(),json.data)
 
 func cambiar_contrasena(contra_nueva: String, contra_vieja: String)->bool:
@@ -700,7 +717,7 @@ func rechazar_reto(id_partida:int, id_emisor:int):
 	printerr(json.data)
 
 func get_retos():
-	await _awaiting_request_get(base_url+invitaciones_por_invitado+str(mi_id))
+	await _awaiting_request_get(base_url+invitaciones_por_invitado+str(mi_id),header())
 	assert(_respuesta_buena(),json.data)
 	var dato
 	if json.data is Dictionary:
@@ -715,37 +732,66 @@ func get_retos():
 func get_evento()->String:
 	return ultima_info_partida["eventoActual"]
 #endregion
-func get_mercado():
+func comprar(id_partida,poder_comprar):
+	var poder
+	match poder_comprar:
+		Poder.PODER.ANGEL_GUARDA:
+			poder = "GUARDIAN_ANGEL"
+		Poder.PODER.BOLA_CRISTAL:
+			poder = "CRYSTAL_BALL"
+		Poder.PODER.TOQUE_MIDAS:
+			poder = "MIDAS_TOUCH"
+		Poder.PODER.MAS_CUATRO:
+			poder = "PLUS_FOUR"
+		Poder.PODER.TRUEQUE:
+			poder = "SWAP_ON_FAIL"
+		Poder.PODER.GUANTE_BLANCO:
+			poder = "WHITE_GLOVE"
+		Poder.PODER.BOMBA_HUMO:
+			poder = "SMOKE_BOMB"
+		Poder.PODER.REDUCIR_TIEMPO:
+			poder = "CHILI_PEPPER"
+		Poder.PODER.TECHO_CRISTAL:
+			poder = "GLASS_CEILING"
+	await _awaiting_request(base_url+partidas+"/"+str(id_partida)+"/mercado/comprar",
+	{"codigoObjeto":poder},HTTPClient.METHOD_POST,header())
+func set_monedas(id_partida,monedas):
+	await _awaiting_request(base_url+participaciones+"/"+str(mi_id)+"/"+str(id_partida)+"/monedas",
+	{"monedasPartida":monedas},HTTPClient.METHOD_PATCH,header())
+	assert(_respuesta_buena(),json.data)
+	print(json.data)
+func get_mercado(id):
 	printerr("aaaaaa")
-	await _awaiting_request_get(partidas+"/"+str(mi_id)+"/mercado")
+	await _awaiting_request_get(base_url+partidas+"/"+str(id)+"/mercado",header())
 	printerr("bbbbbb")
 	assert(_respuesta_buena(), json.data)
+	printerr("dinero: ", json.data["monedasPartida"])
 	return {
-	"monedas":json.data["monedasJugador"],
+	"monedas":json.data["monedasPartida"],
 	"mercado":string_to_poderes(json.data["objetosMercado"]),
 	"efectos":json.data["efectosActivos"],
-	"poderes":string_to_poderes("habilidadesCompradas")
+	"poderes":string_to_poderes(json.data["habilidadesCompradas"])
 	}
 func activar_poder(id:int, poder: String, objetivo:int = -1):
 	if objetivo >= 0:
-		await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+		await _awaiting_request(base_url+partidas+"/"+str(id)+"/mercado/usar",
 		{"codigoObjeto":poder, "idJugadorObjetivo":objetivo},
 		HTTPClient.METHOD_POST, header())
 	else:
-		await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+		await _awaiting_request(base_url+partidas+"/"+str(id)+"/mercado/usar",
 		{"codigoObjeto":poder},
 		HTTPClient.METHOD_POST, header())
 	assert(_respuesta_buena(),json.data)
 	return json.data
 func final_guante(id:int, objetivo:int,objeto: String):
-	await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/mercado/usar",
 		{"codigoObjeto":"WHITE_GLOVE", "idJugadorObjetivo":objetivo,
 		"codigoObjetoObjetivo":objeto},
 		HTTPClient.METHOD_POST, header())
 	assert(_respuesta_buena(),json.data)
 
 func final_trueque(id:int,objetivo:int,mi_ficha:Ficha,su_ficha:Ficha):
-	await _awaiting_request(partidas+"/"+str(id)+"/mercado/usar",
+	await _awaiting_request(base_url+partidas+"/"+str(id)+"/mercado/usar",
 		{"codigoObjeto":"WHITE_GLOVE",
 		"idJugadorObjetivo":objetivo,
 		"fichaPropia":ficha_to_string(mi_ficha),
