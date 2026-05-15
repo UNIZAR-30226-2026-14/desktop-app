@@ -755,6 +755,7 @@ func comprar(id_partida,poder_comprar):
 			poder = "GLASS_CEILING"
 	await _awaiting_request(base_url+partidas+"/"+str(id_partida)+"/mercado/comprar",
 	{"codigoObjeto":poder},HTTPClient.METHOD_POST,header())
+	assert(_respuesta_buena(),json.data)
 func set_monedas(id_partida,monedas):
 	await _awaiting_request(base_url+participaciones+"/"+str(mi_id)+"/"+str(id_partida)+"/monedas",
 	{"monedasPartida":monedas},HTTPClient.METHOD_PATCH,header())
@@ -769,8 +770,8 @@ func get_mercado(id):
 	return {
 	"monedas":json.data["monedasPartida"],
 	"mercado":string_to_poderes(json.data["objetosMercado"]),
-	"efectos":json.data["efectosActivos"],
-	"poderes":string_to_poderes(json.data["habilidadesCompradas"])
+	"efectos":json.data["efectosActivos"].map(string_to_poder),
+	"poderes":json.data["habilidadesCompradas"].map(string_to_poder)
 	}
 func activar_poder(id:int, poder: String, objetivo:int = -1):
 	if objetivo >= 0:

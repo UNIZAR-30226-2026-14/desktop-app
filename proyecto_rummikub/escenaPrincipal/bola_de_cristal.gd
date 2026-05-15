@@ -9,6 +9,9 @@ var shader_para_bola: Material = preload("res://shaders/shader_para_bola.tres")
 
 func mostrar_bola(fichas: Array[Ficha], poderes: Array[Poder.PODER]) -> void:
 	$AreaBolaDeCristal.visible = false
+	for ficha in fichas:
+		ficha.visible = false
+		
 	for ficha: FichaVision in $AreaBolaDeCristal/ContenedorFichas.get_children():
 		ficha.queue_free()
 		
@@ -21,6 +24,7 @@ func mostrar_bola(fichas: Array[Ficha], poderes: Array[Poder.PODER]) -> void:
 	for ficha: Ficha in fichas:
 		var ficha_vision: FichaVision = FichaVision.fichaVision(ficha.color, ficha.numero, ficha.especial)
 		globales.apropiar_hijo($AreaBolaDeCristal/ContenedorFichas, ficha_vision)
+		ficha.queue_free()
 	$AreaBolaDeCristal/Poder.cambiar_poder(poderes[0])
 	$AreaBolaDeCristal/Poder2.cambiar_poder(poderes[1])
 	$AreaBolaDeCristal/Poder3.cambiar_poder(poderes[2])

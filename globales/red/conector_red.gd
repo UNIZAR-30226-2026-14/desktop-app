@@ -281,7 +281,7 @@ func poderes(poderes_disponibles_a_compra,efectos,mis_poderes):
 func get_mis_poderes()->Array[Poder.PODER]:
 	return $red.get_mercado()["poderes"]
 func comprar(poder_comprar: Poder.PODER):
-	$red.comprar(id_partida,poder_comprar)
+	await $red.comprar(id_partida,poder_comprar)
 	
 const eventos_red =  {  "+pieza":[ManagerJuego.EVENTO.ROBAR_OTRA_FICHA,Ficha.COLOR.BLANCO],
 						"50porcien":[ManagerJuego.EVENTO.DESCUENTO,Ficha.COLOR.BLANCO],
@@ -298,7 +298,7 @@ func angel():
 	$red.activar_poder(id_partida,"GUARDIAN_ANGEL")
 
 func midas()->Array:
-	var mano = await $red.activar_poder(id_partida,"MIDAS_TOUCH")["manoActual"]
+	var mano = (await $red.activar_poder(id_partida,"MIDAS_TOUCH"))["manoActual"]
 	mano = Array(mano.split(","))
 	print("CARTAS TRAS MIDAS: ", mano)
 	var carta_arr: Array[Ficha]
@@ -308,21 +308,28 @@ func midas()->Array:
 	return carta_arr
 
 func bola_de_cristal(id: int):
-	var res_poder = $red.activar_poder(id_partida,"CRYSTAL_BALL", id)
+	var res_poder = await $red.activar_poder(id_partida,"CRYSTAL_BALL", id)
 	var fichas:Array[Ficha]
-	fichas.assign(res_poder["fichasObjetivoVisibles"].split(",").map( func(s:String)->Ficha: 
+	fichas.assign(res_poder["fichasObjetivoVisibles"].map( func(s:String)->Ficha: 
 		var dict = $red.string_to_ficha(s)
 		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"])))
-	return {"fichas":fichas,"poderes":$red.string_to_poderes(res_poder["habilidadesObjetivoVisibles"])}
+	var vector_poderes = []
+	var poderes_recibido = res_poder["habilidadesObjetivoVisibles"].map($red.string_to_poder)
+	for i in range(3):
+		if i < poderes_recibido.size():
+			vector_poderes.push_back(poderes_recibido[i])
+		else:
+			vector_poderes.push_back(Poder.PODER.NINGUNO)
+	return {"fichas":fichas,"poderes":vector_poderes}
 
 func mas_cuatro(id: int):
 	$red.activar_poder(id_partida,"PLUS_FOUR", id)
 
 func trueque(id: int):
-	var opciones = $red.activar_poder(id_partida,"SWAP_ON_FAIL",id)
+	var opciones = await $red.activar_poder(id_partida,"SWAP_ON_FAIL",id)
 	var fichas:Array[Ficha]
 	fichas.assign(opciones["fichasObjetivoVisibles"]
-	.split(",").map(
+	.map(
 	func(s:String)->Ficha: 
 		var dict = $red.string_to_ficha(s)
 		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"])))
@@ -331,8 +338,8 @@ func trueque(id: int):
 func confirma_trueque(id:int,mi_ficha:Ficha,su_ficha:Ficha):
 	$red.final_trueque(id_partida,id,mi_ficha,su_ficha)
 func guante(id: int):
-	var dict = $red.activar_poder(id_partida,"WHITE_GLOVE",id)
-	return $red.string_to_poder(dict["habilidadesObjetivoVisibles"])
+	var dict = await $red.activar_poder(id_partida,"WHITE_GLOVE",id)
+	return $red.string_to_poder(dict["habilidadesObjetivoVisibles"][0])
 func bomba_de_humo(id:int):
 	$red.activar_poder(id_partida,"SMOKE_BOMB",id)
 func guindilla(id:int):

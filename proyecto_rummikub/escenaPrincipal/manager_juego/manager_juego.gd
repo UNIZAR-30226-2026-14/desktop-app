@@ -363,6 +363,7 @@ func recibir_efecto(poder: Poder.PODER):
 func toque_de_midas_mi() -> void:
 	var mano_dorada : Array[Ficha] = await ConectorRed.midas()
 	mano.insertar_mano(mano_dorada)
+	guardar_estado()
 
 func angel_guarda_check() -> bool:
 	if poder1.get_poder() == Poder.PODER.ANGEL_GUARDA:
@@ -399,6 +400,7 @@ func mas_cuatro_mi() -> void:
 	var fichs = await ConectorRed.robar_sin_pasar(manager_fichas.crear_ficha,4)
 	for fich in fichs:
 		mano.devolver_ficha(fich)
+		guardar_estado()
 		fich.z_index = 0
 
 func bola_de_cristal_mi()->void:
@@ -406,6 +408,7 @@ func bola_de_cristal_mi()->void:
 
 func trueque_mi()->void:
 	mano.insertar_mano(await ConectorRed.mano())
+	guardar_estado()
 
 func guante_blanco_mi()->void:
 	pass #esta terminado
@@ -424,7 +427,7 @@ func usar_bola_de_cristal(adversario: String) -> void:
 	var cartas_adversario: Array[Ficha]
 	cartas_adversario.assign(dict["fichas"])
 	var poderes_adversario: Array[Poder.PODER]
-	poderes_adversario.assign(dict["fichas"])
+	poderes_adversario.assign(dict["poderes"])
 	await bola_de_cristal.mostrar_bola(cartas_adversario, poderes_adversario)
 	await  get_tree().create_timer(7.0).timeout
 	bola_de_cristal.esconder_bola()
@@ -442,10 +445,10 @@ func lanzar_maldicion(adversario: String, maldicion: Poder.PODER) -> void:
 		Poder.PODER.MAS_CUATRO:
 			ConectorRed.mas_cuatro(get_id_adversario(adversario))
 
-func usar_guante_blanco(_adversario: String) -> Poder.PODER:
-	print(_adversario)
+func usar_guante_blanco(adversario: String) -> Poder.PODER:
+	print(adversario)
 	var poder_robado: Poder.PODER = Poder.PODER.ANGEL_GUARDA
-	# cosas que devuelven el poder robado
+	ConectorRed.guante(get_id_adversario(adversario))
 	if poder_robado == Poder.PODER.NINGUNO:
 		PopUp.popUp(" el jugador al que has intentado robar \n no tiene ningun poder D: ",Vector2(-74.0, -300.0), escena_principal)
 	else:
@@ -475,11 +478,11 @@ func usar_trueque1(adversario: String) -> Array[Ficha]:
 				indice2 = randi_range(0, fichas.size()-1)
 				indice3 = randi_range(0, fichas.size()-1)
 	var fichas_devolver: Array[Ficha] = []
-	fichas_devolver.append(get_fichas_mano_no_blancas()[indice1])
+	fichas_devolver.append(fichas[indice1])
 	if indice2 != -1:
-		fichas_devolver.append(get_fichas_mano_no_blancas()[indice2])
+		fichas_devolver.append(fichas[indice2])
 	if indice3 != -1:
-		fichas_devolver.append(get_fichas_mano_no_blancas()[indice3])
+		fichas_devolver.append(fichas[indice3])
 	return fichas_devolver
 
 # esta funcion intercambia una ficha propia con una ficha del rival
@@ -487,7 +490,7 @@ func usar_trueque2(adversario: String, ficha_propia: Ficha, ficha_rival: Ficha) 
 	ConectorRed.confirma_trueque(get_id_adversario(adversario),ficha_propia,ficha_rival)
 	manager_fichas.conectar_ficha(ficha_rival)
 	mano.insertar_ficha(ficha_rival, ficha_propia)
-
+	guardar_estado()
 #endregion
 
 func get_fichas_mano() -> Array[Ficha]:

@@ -41,7 +41,7 @@ func abrir_tienda(ranura_quiere_comprar : Poder) -> Poder.PODER:
 				var dinero_disponible: int = contador_dinero.get_dinero()
 				var precio: int = Poder.LISTA_PRECIOS_OBJETOS[anterior_pulsado]
 				if  dinero_disponible >= precio:
-					ConectorRed.comprar(manager_juego.get_poderes_comprar()[anterior_pulsado])
+					await ConectorRed.comprar(manager_juego.get_poderes_comprar()[anterior_pulsado])
 					contador_dinero.reducir_dinero(precio)
 					borrar_botones()
 					self.visible = false
