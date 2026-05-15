@@ -769,7 +769,7 @@ func get_mercado(id):
 	return {
 	"monedas":json.data["monedasPartida"],
 	"mercado":string_to_poderes(json.data["objetosMercado"]),
-	"efectos":json.data["efectosActivos"],
+	"efectos":json.data["efectosActivos"].map(string_to_poder),
 	"poderes":string_to_poderes(json.data["habilidadesCompradas"])
 	}
 func activar_poder(id:int, poder: String, objetivo:int = -1):

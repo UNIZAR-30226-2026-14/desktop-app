@@ -310,7 +310,7 @@ func midas()->Array:
 func bola_de_cristal(id: int):
 	var res_poder = $red.activar_poder(id_partida,"CRYSTAL_BALL", id)
 	var fichas:Array[Ficha]
-	fichas.assign(res_poder["fichasObjetivoVisibles"].split(",").map( func(s:String)->Ficha: 
+	fichas.assign(res_poder["fichasObjetivoVisibles"].map( func(s:String)->Ficha: 
 		var dict = $red.string_to_ficha(s)
 		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"])))
 	return {"fichas":fichas,"poderes":$red.string_to_poderes(res_poder["habilidadesObjetivoVisibles"])}
@@ -322,7 +322,7 @@ func trueque(id: int):
 	var opciones = $red.activar_poder(id_partida,"SWAP_ON_FAIL",id)
 	var fichas:Array[Ficha]
 	fichas.assign(opciones["fichasObjetivoVisibles"]
-	.split(",").map(
+	.map(
 	func(s:String)->Ficha: 
 		var dict = $red.string_to_ficha(s)
 		return crea_ficha.call(dict["color"],dict["numero"],dict["especial"])))

@@ -17,7 +17,10 @@ func sacar_selector_adversarios(poder: Poder.PODER) -> String:
 	nuevo_style_box.texture = Poder.LISTA_TEXTURAS_PODERES[poder]
 	$iconoPoder.add_theme_stylebox_override("panel",nuevo_style_box)
 	self.visible = true
-	
+	for adversario: BotonAdversario in lista_adversarios:
+		adversario.queue_free()
+	lista_adversarios = []
+
 	for tupla: Dictionary in manager_juego.get_adversarios():
 		var nuevo_boton: BotonAdversario = BotonAdversario.new(tupla["nombre"], tupla["icono"])
 		lista_adversarios.append(nuevo_boton)
@@ -26,9 +29,6 @@ func sacar_selector_adversarios(poder: Poder.PODER) -> String:
 	
 	await s_adversario_elegido
 	
-	for adversario: BotonAdversario in lista_adversarios:
-		adversario.queue_free()
-	lista_adversarios = []
 	self.visible = false
 	return adversario_elegido
 
