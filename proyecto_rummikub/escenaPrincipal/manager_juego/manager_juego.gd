@@ -145,6 +145,13 @@ func iniciar_turno() -> void:
 				ConectorRed.angel()
 			else:
 				recibir_efecto(poder)
+		for i in range(3):
+			if poderes_nuevo_turno.size() <= i:
+				poderes_nuevo_turno.push_back(Poder.PODER.NINGUNO)
+		poder1.cambiar_poder(poderes_nuevo_turno[0])
+		poder2.cambiar_poder(poderes_nuevo_turno[1])
+		poder3.cambiar_poder(poderes_nuevo_turno[2])
+			
 		var evento = ConectorRed.evento_actual()
 		lanzar_evento(evento[0],evento[1])
 
