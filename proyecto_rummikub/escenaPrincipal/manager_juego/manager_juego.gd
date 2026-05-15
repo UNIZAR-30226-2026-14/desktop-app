@@ -94,6 +94,7 @@ func intenta_hacer_jugada() -> bool:
 	if  (tablero.tablero_valido(abierto and (not hay_techo_de_cristal))) and \
 			(not(evento_ocurriendo == EVENTO.SIN_COLOR and tablero.detectar_color_sin_fijar(color_prohibido))):
 		
+		print("subo tablero")
 		if(await ConectorRed.hacer_jugada(tablero.grupos)):
 			abierto = true
 			ConectorRed.set_monedas(panel_contador_monedas.get_dinero())
@@ -127,6 +128,7 @@ func terminar_turno() -> void:
 	if niebla.hay_humo():
 		quitar_bomba_de_humo()
 	reiniciar_eventos()
+	print("espero (manager juego)")
 	await ConectorRed.espera_a_turno(llega_turno, terminar_partida,func():$"../PantallaPartidaPausada".visible = true)
 	if not partida_terminada: iniciar_turno()
 
@@ -138,7 +140,6 @@ func iniciar_turno() -> void:
 		efectos = []
 		var poderes_nuevo_turno: Array
 		poderes_nuevo_turno = []
-		await ConectorRed.set_monedas(100)
 		panel_contador_monedas.set_dinero(str(int(await ConectorRed.poderes(poderes_disponibles_a_compra,efectos,poderes_nuevo_turno))))
 		for poder in efectos: 
 			if (angel_guarda_check()):
@@ -189,6 +190,7 @@ func reiniciar_eventos() -> void:
 
 ## nuevo_tablero es Array de Array[FichasGuardar]
 func llega_turno(nuevo_tablero: Array):
+	print("\n TURNO LLEGADO \n	")
 	var viejo_tablero: Array = tablero.grupos
 	var nuevos = [] ; var eliminados = []
 	nuevo_tablero.sort_custom(
@@ -272,7 +274,6 @@ func guardar_estado() -> void:
 	for ficha in fichas_en_mano_antes:
 		if !ficha.en_blanco:
 			fichas_no_blancas += 1
-	print("Guardo "+ str(fichas_no_blancas))
 	grupos_en_tablero_antes = []
 	for grupo in tablero.grupos:
 		grupos_en_tablero_antes.append(GrupoGuardado.new(grupo.fichas.duplicate(),grupo.position))
@@ -300,12 +301,13 @@ func robar_carta() -> void:
 	var fich: Ficha
 	globales.estado_juego = globales.ESTADO_JUEGO.NO_MI_TURNO
 	robarCarta.disabled = true
+	print("intento robar")
+	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
+	print("robado")
 	terminar_turno()
 	$ContadorTiempoTurno._termina_turno()
-	fich = await ConectorRed.robar(manager_fichas.crear_ficha)
 	mano.devolver_ficha(fich)
 	fich.z_index = 0
-	print("Guardar estado y terminar turno")
 	guardar_estado()
 
 #endregion
